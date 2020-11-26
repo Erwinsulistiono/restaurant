@@ -149,7 +149,7 @@
                     <div class="no-padding card thumbnail btn">
                       <a data-toggle="modal" data-target="#option_menu<?= $table_content['menu_id'] ?>">
                         <td>
-                          <img style="width:auto;height:12rem;border-radius:4px" class="width-1 img-responsive rounded" src="<?= base_url() . 'assets/gambar/' . $table_content['menu_gambar']; ?>" alt="" />
+                          <img loading="lazy" style="width:auto;height:12rem;border-radius:4px" class="width-1 img-responsive rounded" src="<?= base_url() . 'assets/gambar/' . $table_content['menu_gambar']; ?>" alt="" />
                         </td>
                         <div class="caption text-left no-padding">
                           <h5 class="text-light"><strong>&nbsp;<?= $table_content['menu_nama']; ?></strong></h5>
@@ -173,7 +173,7 @@
                       <div class="no-padding card thumbnail btn">
                         <a data-toggle="modal" data-target="#option_menu<?= $table_content['menu_id'] ?>">
                           <td>
-                            <img style="width:auto;height:12rem;border-radius:4px" class="width-1 img-responsive rounded" src="<?= base_url() . 'assets/gambar/' . $table_content['menu_gambar']; ?>" alt="" />
+                            <img loading="lazy" style="width:auto;height:12rem;border-radius:4px" class="width-1 img-responsive rounded" src="<?= base_url() . 'assets/gambar/' . $table_content['menu_gambar']; ?>" alt="" />
                           </td>
                           <div class="caption text-left no-padding">
                             <h5 class="text-light"> <strong>&nbsp;<?= $table_content['menu_nama']; ?></strong></h5>
@@ -575,7 +575,7 @@ foreach ($payment as $k) :
                 <div class="col-md-6">
                   <label class="col-sm-4 control-label">Meja</label>
                   <div class="col-sm-7">
-                    <input type="text" name="trx_meja" class="form-control" readonly>
+                    <input type="text" name="trx_meja" class="form-control paymentMeja" readonly>
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -638,7 +638,7 @@ foreach ($payment as $k) :
                 <div class="col-md-12">
                   <div class="col-sm-12 text-center">
                     <?php if ($k['payment_qrcode']) : ?>
-                      <img src="<?= base_url() . 'assets/img/' . $k['payment_qrcode']; ?>">
+                      <img loading="lazy" src="<?= base_url() . 'assets/img/' . $k['payment_qrcode']; ?>">
                     <?php endif ?>
                   </div>
                 </div>
@@ -663,7 +663,7 @@ foreach ($payment as $k) :
                 </div>
               </div>
               <div class="col-sm-2">
-                <a data-payment="<?= $k_id ?>" class="btn btn-success btn-raised"> Proses</a>
+                <a onclick="prosesKitchen(this)" data-paymentId="<?= $k_id ?>" class="btn btn-success btn-raised"> Proses</a>
               </div>
             </div>
           </div>
@@ -1047,6 +1047,7 @@ foreach ($payment as $k) :
     }
 
     $("#trx-info").html(`${activeCust.cust.nama} - ${activeCust.trxTipeIdentifier.nama}`)
+    $(".paymentMeja").val(activeCust.trxTipeIdentifier.nama)
   }
 
   function addOtherOrder(tipeTrx, namaTipeTrx) {
@@ -1118,10 +1119,29 @@ foreach ($payment as $k) :
     displayCart()
   }
 
-  function prosesKitchen() {
+  function prosesKitchen(el = false) {
     let discount = (clearFormating($("#discount")) ? clearFormating($("#discount")) : 0);
     let totalPph = clearFormating($("#totalPph"));
     let totalService = clearFormating($("#totalService"));
+    let paymentData = '';
+
+    if (el) {
+      console.log('this running');
+      let paymentId = $(el).data("paymentid");
+      let formPayment = document.querySelector(`#form_paid_${paymentId}`);
+      let getFormValue = () => {
+        let obj = {};
+        const formData = new FormData(formPayment);
+        for (var key of formData.keys()) {
+          obj[key] = formData.get(key);
+        }
+        console.log(obj)
+        return obj;
+      };
+      paymentData = getFormValue();
+      console.log(paymentData)
+    }
+
     let grandTotal = subTotal - discount + totalPph + totalService;
     let data = {
       cust: activeCust,
@@ -1134,8 +1154,11 @@ foreach ($payment as $k) :
       totalPph: totalPph,
       totalService: totalService,
       grandTotal: grandTotal,
+      payment: paymentData,
     }
 
+    console.log(data)
+    console.log(paymentData)
     const postKitchen = async () => {
       const response = await fetch('<?= base_url('pos/pos/proses_kitchen') ?>', {
         method: 'POST',
@@ -1149,10 +1172,6 @@ foreach ($payment as $k) :
       $('#base').html(result)
     }
     postKitchen()
-  }
-
-  function prosesBayar() {
-
   }
 </script>
 
@@ -1180,10 +1199,9 @@ foreach ($payment as $k) :
       }
     });
   };
-</script>
 
-<!-- CALCULATE PEMBAYARAN PELANGGAN -->
-<script type="text/javascript">
+
+  /* CALCULATE PEMBAYARAN PELANGGAN */
   var calculateDiscount = (percentage) => {
     assignFormatingValueToElement($("#percentageDiscount"), percentage);
     subTotal = clearFormating($("#subTotal"));
@@ -1202,6 +1220,14 @@ foreach ($payment as $k) :
     assignFormatingValueToElement($(".trx_grand_total"), grandTotal);
     assignFormatingValueToElement($(".grandTotalModal"), grandTotal);
   }
+
+  $('.inputPembayaran').keyup(function() {
+    console.log('Bayar');
+    let grandTotal = clearFormating($(".grandTotalModal"));
+    let paid = clearFormating($(this));
+    let change = paid - grandTotal;
+    assignFormatingValueToElement($(".valueKembalian"), change);
+  })
 
   displayCart();
 </script>

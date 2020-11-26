@@ -22,14 +22,15 @@ class Pos extends CI_Controller
 
     public function proses_kitchen()
     {
-        $input = json_decode(file_get_contents('php://input'), true);
-        if (!isset($input)) {
+        $inputedData = json_decode(file_get_contents('php://input'), true);
+        if (!isset($inputedData)) {
             $this->display_pos();
         }
 
-        $pelanggan = $this->prosesPelanggan($input['cust']); //Proses Pelanggan
-        $trxReffId = $this->createTrxHeader($pelanggan, $input); //Buat Trx Header 
-        $this->createOrder($trxReffId, $input); //Buat Orderan Baru
+        $pelanggan = $this->prosesPelanggan($inputedData['cust']); //Proses Pelanggan
+        (isset($pelanggan['plg_meja'])) && ($this->tandaiMejaTerpakai($pelanggan)); //Menandai meja dengan ID pelanggan yang duduk
+        $trxReffId = $this->createTrxHeader($pelanggan, $inputedData); //Buat Trx Header
+        $this->createOrder($trxReffId, $inputedData); //Buat Orderan Baru
 
         $this->M_crud->update('tbl_pelanggan', ['plg_order' => $trxReffId], 'plg_id', $pelanggan['plg_id']); //Update OrderId Pelanggan
         // $this->M_crud->delete('cust_order_' . $this->outlet, 'order_userid', $pelanggan['plg_id']); //Hapus Pesanan Pelanggan pada temporary order
@@ -60,16 +61,26 @@ class Pos extends CI_Controller
 
     function createTrxHeader($pelanggan, $input)
     {
-        (isset($pelanggan['plg_notelp'])) ? $trx_nama = $pelanggan['plg_notelp'] : '';
+        (isset($pelanggan['plg_notelp'])) ? $trxUniqueIdentifier = $pelanggan['plg_nama'] : '';
+        $tipe_trx = $this->M_crud->select('tbl_tipe_transaksi', 'tipe_transaksi_id', $input['cust']['trxTipe']['id']);
+
         if ($input['cust']['trxTipe']['id'] == 1) {
-            $trx_nama = $pelanggan['plg_meja'];
+            $trxUniqueIdentifier = $input['cust']['trxTipeIdentifier']['nama'];
         }
         if ($input['cust']['trxTipe']['id'] == 3) {
-            $trx_nama = $pelanggan['plg_platno'];
+            $trxUniqueIdentifier = $pelanggan['plg_platno'];
         }
         if ($input['cust']['trxTipe']['id'] == 4) {
-            $trx_nama = $pelanggan['plg_alamat'];
+            $trxUniqueIdentifier = $pelanggan['plg_alamat'];
         }
+        $trx_nama = $tipe_trx['tipe_transaksi_nama'] . ' - ' . $trxUniqueIdentifier;
+        $trx_notes = (isset($input['payment']['trx_notes'])) ? preg_replace('/[^0-9]/', '', $input['payment']['trx_notes']) : '';
+        $trx_cardno = (isset($input['payment']['trx_cardno'])) ? preg_replace('/[^0-9]/', '', $input['payment']['trx_cardno']) : '';
+        $trx_change = (isset($input['payment']['trx_change'])) ? preg_replace('/[^0-9]/', '', $input['payment']['trx_change']) : '';
+        $trx_nomor = (isset($input['payment']['trx_nomor'])) ? preg_replace('/[^0-9]/', '', $input['payment']['trx_nomor']) : '';
+        $trx_paid = (isset($input['payment']['trx_paid'])) ? preg_replace('/[^0-9]/', '', $input['payment']['trx_paid']) : '';
+        $trx_payment = (isset($input['payment']['trx_payment'])) ? preg_replace('/[^0-9]/', '', $input['payment']['trx_payment']) : '';
+        $trx_payreff = (isset($input['payment']['trx_payreff'])) ? preg_replace('/[^0-9]/', '', $input['payment']['trx_payreff']) : '';
 
         $dataTrx = array(
             'trx_table' => $trx_nama,
@@ -82,6 +93,13 @@ class Pos extends CI_Controller
             'trx_tax_service' => $input['totalService'],
             'trx_grand_total' => $input['grandTotal'],
             'trx_tipe' => $input['cust']['trxTipe']['id'],
+            'trx_notes' => $trx_notes,
+            'trx_cardno' => $trx_cardno,
+            'trx_change' => $trx_change,
+            'trx_nomor' => $trx_nomor,
+            'trx_paid' => $trx_paid,
+            'trx_payment' => $trx_payment,
+            'trx_payreff' => $trx_payreff,
         );
 
         if ((int)$pelanggan['plg_order'] == 0) {
@@ -115,6 +133,13 @@ class Pos extends CI_Controller
         $this->M_crud->insert('tbl_pelanggan', $dataPelanggan);
         $plg_id = $this->db->insert_id();
         return $this->M_crud->select('tbl_pelanggan', 'plg_id', $plg_id);
+    }
+
+    function tandaiMejaTerpakai($pelanggan)
+    {
+        $updateDataMeja['meja_pelanggan'] = $pelanggan['plg_id'];
+        $mejaId = $pelanggan['plg_meja'];
+        $this->M_crud->update('tbl_meja_' . $this->outlet, $updateDataMeja, 'meja_id', $mejaId);
     }
 
     function display_pos()
