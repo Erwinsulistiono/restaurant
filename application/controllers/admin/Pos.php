@@ -44,9 +44,9 @@ class Pos extends MY_Controller
 			$image = $this->input->post('old_payment_qrcode');
 		}
 
-		 if($this->upload->do_upload('payment_qrcode')){
-      		$data['payment_qrcode'] = $image;
-    	}
+		if ($this->upload->do_upload('payment_qrcode')) {
+			$data['payment_qrcode'] = $image;
+		}
 
 		$data = [
 			'payment_nama' => $this->input->post('payment_nama'),
@@ -94,29 +94,31 @@ class Pos extends MY_Controller
 		$data['outlet'] = $this->M_crud->read('tbl_outlet');
 		$this->render('admin/pos/saldo_kas_harian/v_index', $data);
 	}
-	
+
 
 	function saldo_kas_harian($pengguna_kasir = null, $tgl_awal = null, $tgl_akhir = null, $outlets = null)
 	{
 
-		$data = [			
-			'pengguna_kasir' => ($pengguna_kasir) ? $pengguna_kasir : $this->input->post('kas_nm_kasir'),
+		$data = [
+			'pengguna_kasir' => ($pengguna_kasir) ? $pengguna_kasir : $this->input->post('pengguna_kasir'),
 			'tgl_awal'  => ($tgl_awal) ? $tgl_awal : $this->input->post('tgl_awal'),
 			'tgl_akhir' => ($tgl_akhir) ? $tgl_akhir : $this->input->post('tgl_akhir'),
-			'outlets' => ($outlets) ? $outlets : $this->input->post('out_id'),
+			'outlets' => ($outlets) ? $outlets : $this->input->post('outlets'),
 			'data' => [],
 		];
-		$data['data'] = $this->getAllDataSaldo($data['tgl_awal'] , $data['tgl_akhir']);
-		
+
+
+		$data['data'] = $this->getAllDataSaldo($data['tgl_awal'], $data['tgl_akhir']);
+
 		if ($data['pengguna_kasir'] != 'all') {
 			$data['data'] = $this->filterByPengguna($data);
-
 		}
 		if ($data['outlets'] != 'all') {
 			$data['data'] = $this->filterByOutlets($data);
 		}
 
 		$data['outlet'] = $this->M_crud->read('tbl_outlet');
+		$data['pengguna'] = $this->M_crud->read('tbl_pengguna');
 
 		$this->render('admin/pos/saldo_kas_harian/v_saldo_kas_harian', $data);
 	}
@@ -140,22 +142,30 @@ class Pos extends MY_Controller
 
 			$this->M_log->simpan_log($reff_id, 'SALDO AWAL', null, $log_newval);
 			$this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>Saldo awal ' . $data['kas_saldo_awal'] . '</b> Berhasil ditambah.</div>');
-			redirect('admin/pos/pilih_saldo/'. $pengguna_kasir .'/'. $tgl_awal .'/'. $tgl_akhir .'/'. $outlets);
+			redirect('admin/pos/pilih_saldo/' . $pengguna_kasir . '/' . $tgl_awal . '/' . $tgl_akhir . '/' . $outlets);
 		}
 
 		$data_old = $this->M_crud->select('tbl_kas_harian_' . $out_id, 'kas_id', $kas_id);
 		$log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
 
-		$this->M_log->simpan_log($kas_id, $log_oldval, $log_newval);
 		$this->M_crud->update('tbl_kas_harian_' . $out_id, $data, 'kas_id', $kas_id);
+		$this->M_log->simpan_log($kas_id, 'SALDO AWAL', $log_oldval, $log_newval);
 		$this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>Saldo akhir ' . $data['kas_saldo_akhir'] . '</b> Berhasil di input.</div>');
-		redirect('admin/pos/pilih_saldo/'. $pengguna_kasir .'/'. $tgl_awal .'/'. $tgl_akhir .'/'. $outlets);
+		redirect('admin/pos/pilih_saldo/' . $pengguna_kasir . '/' . $tgl_awal . '/' . $tgl_akhir . '/' . $outlets);
 	}
 
 
 	public function pdf($pengguna_kasir, $tgl_awal, $tgl_akhir, $outlets)
 	{
-		$data['data'] = $this->getAllDataSaldo($tgl_awal , $tgl_akhir);
+		$data = [
+			'pengguna_kasir' => ($pengguna_kasir) ? $pengguna_kasir : $this->input->post('pengguna_kasir'),
+			'tgl_awal'  => ($tgl_awal) ? $tgl_awal : $this->input->post('tgl_awal'),
+			'tgl_akhir' => ($tgl_akhir) ? $tgl_akhir : $this->input->post('tgl_akhir'),
+			'outlets' => ($outlets) ? $outlets : $this->input->post('outlets'),
+			'data' => [],
+		];
+
+		$data['data'] = $this->getAllDataSaldo($tgl_awal, $tgl_akhir);
 		if ($pengguna_kasir != 'all') {
 			$data['data'] = $this->filterByPengguna($data);
 		}
@@ -168,7 +178,15 @@ class Pos extends MY_Controller
 
 	public function excel($pengguna_kasir, $tgl_awal, $tgl_akhir, $outlets)
 	{
-		$data['data'] = $this->getAllDataSaldo($tgl_awal , $tgl_akhir);
+		$data = [
+			'pengguna_kasir' => ($pengguna_kasir) ? $pengguna_kasir : $this->input->post('pengguna_kasir'),
+			'tgl_awal'  => ($tgl_awal) ? $tgl_awal : $this->input->post('tgl_awal'),
+			'tgl_akhir' => ($tgl_akhir) ? $tgl_akhir : $this->input->post('tgl_akhir'),
+			'outlets' => ($outlets) ? $outlets : $this->input->post('outlets'),
+			'data' => [],
+		];
+
+		$data['data'] = $this->getAllDataSaldo($tgl_awal, $tgl_akhir);
 		if ($pengguna_kasir != 'all') {
 			$data['data'] = $this->filterByPengguna($data);
 		}
@@ -183,7 +201,7 @@ class Pos extends MY_Controller
 	{
 		$arr = [];
 		foreach ($this->all_outlet as $out) {
-			$arr += $this->M_pos_admin->getSaldoHarianPerOutlet($out, $tgl_awal , $tgl_akhir);
+			$arr += $this->M_pos_admin->getSaldoHarianPerOutlet($out, $tgl_awal, $tgl_akhir);
 		}
 		return $arr;
 	}
@@ -206,5 +224,68 @@ class Pos extends MY_Controller
 			return ($var['out_id'] == $filterBy);
 		});
 		return $arr;
+	}
+
+	/*----------------- MODUL KITCHEN ---------------------*/
+
+	function pilih_kitchen()
+	{
+		$data['outlet'] = $this->M_crud->read('tbl_outlet');
+		$this->render('admin/pos/kitchen/v_pilih_kitchen', $data);
+	}
+
+	function kitchen($dataBase = null)
+	{
+		is_null($dataBase) ? $db = $this->input->post('selectDb') : $db = $dataBase;
+		$data = [
+			'dataBase' => $db,
+			'data' => $this->M_crud->read('tbl_kitchen_' . $db),
+		];
+		$this->render('admin/pos/kitchen/v_kitchen', $data);
+	}
+
+	function simpan_kitchen($dataBase)
+	{
+		$kitchen_id = $this->input->post('kitchen_id');
+		$data = [
+			'kitchen_nama' => $this->input->post('kitchen_nama'),
+			'kitchen_createdat' => date('Y-m-d H:i:s'),
+			'kitchen_updatedby' => $this->session->userdata('user_nama'),
+		];
+		$log_newval = strtr(json_encode($data), array(',' => ' | ', '{' => '', '}' => '', '"' => ' '));
+
+		$data2 = [
+			'kitchen_nama' => $this->input->post('kitchen_nama'),
+			'kitchen_updatedat' => date('Y-m-d H:i:s'),
+			'kitchen_updatedby' => $this->session->userdata('user_nama'),
+		];
+		$log_updateval = strtr(json_encode($data2), array(',' => ' | ', '{' => '', '}' => '', '"' => ' '));
+
+		if (!$kitchen_id) {
+			$this->M_crud->insert('tbl_kitchen_' . $dataBase, $data);
+			$reff_id = $this->db->insert_id();
+
+			$this->M_log->simpan_log($reff_id, 'KITCHEN ' . $dataBase, null, $log_newval);
+			$this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Kitchen <b>' . $data['kitchen_nama'] . '</b> Berhasil disimpan ke database.</div>');
+			redirect('admin/pos/kitchen/' . $dataBase);
+		}
+		$data_old = $this->M_crud->select('tbl_kitchen_' . $dataBase, 'kitchen_id', $kitchen_id);
+		$log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
+
+		$this->M_crud->update('tbl_kitchen_' . $dataBase, $data2, 'kitchen_id', $kitchen_id);
+		$this->M_log->simpan_log($kitchen_id, 'KITCHEN ' . $dataBase, $log_oldval, $log_updateval);
+		$this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Kitchen <b>' . $data2['kitchen_nama'] . '</b> Berhasil disimpan ke database.</div>');
+		redirect('admin/pos/kitchen/' . $dataBase);
+	}
+
+	function hapus_kitchen($dataBase, $kitchen_id)
+	{
+		$data_old = $this->M_crud->select('tbl_kitchen_' . $dataBase, 'kitchen_id', $kitchen_id);
+		$log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
+
+		$this->M_crud->delete('tbl_kitchen_' . $dataBase, 'kitchen_id', $kitchen_id);
+		$this->M_log->simpan_log($kitchen_id, 'KITCHEN ' . $dataBase, $log_oldval);
+		$this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Kitchen Berhasil dihapus dari database.</div>');
+		redirect('admin/pos/kitchen/' . $dataBase);
 	}
 }

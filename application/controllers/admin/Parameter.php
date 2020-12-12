@@ -26,29 +26,29 @@ class Parameter extends MY_Controller
   function simpan_profile_company()
   {
     $pt_id = $this->input->post('pt_id');
-    $this->form_validation->set_rules('out_email','Email','required|valid_email');
+    $this->form_validation->set_rules('out_email', 'Email', 'required|valid_email');
     if ($this->form_validation->run() == false) {
       $this->session->set_flashdata('msg', '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><b>Email tidak valid</b> Data tidak dapat disimpan</div>');
-      $this->profile_company();
+      redirect('admin/parameter/profile_company');
     } else {
-    $data = [
-      'pt_nama' => $this->input->post('pt_nama'),
-      'pt_npwp' => $this->input->post('pt_npwp'),
-      'pt_alamat' => $this->input->post('pt_alamat'),
-      'pt_negara' => $this->input->post('pt_negara'),
-      'pt_nama_pic' => $this->input->post('pt_nama_pic'),
-      'pt_telp_pic' => $this->input->post('pt_telp_pic'),
-      'pt_email' => $this->input->post('pt_email'),
-      'pt_website' => $this->input->post('pt_website'),
-    ];
-    $log_newval = strtr(json_encode($data), array(',' => ' | ', '{' => '', '}' => '', '"' => ' '));
-    $data_old = $this->M_crud->select('tbl_pt', 'pt_id', $pt_id);
-    $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
+      $data = [
+        'pt_nama' => $this->input->post('pt_nama'),
+        'pt_npwp' => $this->input->post('pt_npwp'),
+        'pt_alamat' => $this->input->post('pt_alamat'),
+        'pt_negara' => $this->input->post('pt_negara'),
+        'pt_nama_pic' => $this->input->post('pt_nama_pic'),
+        'pt_telp_pic' => $this->input->post('pt_telp_pic'),
+        'pt_email' => $this->input->post('pt_email'),
+        'pt_website' => $this->input->post('pt_website'),
+      ];
+      $log_newval = strtr(json_encode($data), array(',' => ' | ', '{' => '', '}' => '', '"' => ' '));
+      $data_old = $this->M_crud->select('tbl_pt', 'pt_id', $pt_id);
+      $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
 
-    $this->M_crud->update('tbl_pt', $data, 'pt_id', $this->input->post('pt_id'));
-    $this->M_log->simpan_log($pt_id, 'COMPANY PROFILE', $log_oldval, $log_newval);
-    $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>' . $data['pt_nama'] . '</b> Berhasil diupdate.</div>');
-    redirect('admin/parameter/profile_company');
+      $this->M_crud->update('tbl_pt', $data, 'pt_id', $this->input->post('pt_id'));
+      $this->M_log->simpan_log($pt_id, 'COMPANY PROFILE', $log_oldval, $log_newval);
+      $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>' . $data['pt_nama'] . '</b> Berhasil diupdate.</div>');
+      redirect('admin/parameter/profile_company');
     }
   }
 
@@ -69,34 +69,41 @@ class Parameter extends MY_Controller
       redirect('admin/parameter/wewenang_admin');
     }
 
-    $data = [
-      'level_desc' => $this->input->post('level_desc'),
-      'parameter' => ((array_search('1', $wewenang) ? "Y" : "Y")),
-      'katalog' => ((array_search('2', $wewenang) ? "Y" : "N")),
-      'pos' => ((array_search('3', $wewenang) ? "Y" : "N")),
-      'laporan' => ((array_search('4', $wewenang) ? "Y" : "N")),
-      'sistem' => ((array_search('5', $wewenang) ? "Y" : "N")),
-      'user' => ((array_search('6', $wewenang) ? "Y" : "N")),
-    ];
-    $log_newval = strtr(json_encode($data), array(',' => ' | ', '{' => '', '}' => '', '"' => ' '));
+    $this->form_validation->set_rules('level_desc', 'Deskripsi Jabatan', 'is_unique[tbl_level_admin.level_desc]');
+    if ($this->form_validation->run() == false) {
+      $this->session->set_flashdata('msg', '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><b>Deskripsi Jabatan sudah ada</b> Data tidak dapat disimpan</div>');
+      redirect('admin/parameter/wewenang_admin');
+    } else {
 
-    if (!$level_id) {
-      $this->M_crud->insert('tbl_level_admin', $data);
-      $reff_id = $this->db->insert_id();
+      $data = [
+        'level_desc' => $this->input->post('level_desc'),
+        'parameter' => ((array_search('1', $wewenang) ? "Y" : "N")),
+        'katalog' => ((array_search('2', $wewenang) ? "Y" : "N")),
+        'pos' => ((array_search('3', $wewenang) ? "Y" : "N")),
+        'laporan' => ((array_search('4', $wewenang) ? "Y" : "N")),
+        'sistem' => ((array_search('5', $wewenang) ? "Y" : "N")),
+        'user' => ((array_search('6', $wewenang) ? "Y" : "N")),
+      ];
+      $log_newval = strtr(json_encode($data), array(',' => ' | ', '{' => '', '}' => '', '"' => ' '));
 
-      $this->M_log->simpan_log($reff_id, 'WEWENANG MENU ADMIN', null, $log_newval);
+      if (!$level_id) {
+        $this->M_crud->insert('tbl_level_admin', $data);
+        $reff_id = $this->db->insert_id();
+
+        $this->M_log->simpan_log($reff_id, 'WEWENANG MENU ADMIN', null, $log_newval);
+        $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b> wewenang berhasil di update </div>');
+        redirect('admin/parameter/wewenang_admin');
+      }
+
+      $data_old = $this->M_crud->select('tbl_level_admin', 'level_id', $level_id);
+      $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
+      $reff_id = $level_id;
+
+      $this->M_log->simpan_log($reff_id, 'WEWENANG MENU ADMIN', $log_oldval, $log_newval);
+      $this->M_crud->update('tbl_level_admin', $data, 'level_id', $level_id);
       $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b> wewenang berhasil di update </div>');
       redirect('admin/parameter/wewenang_admin');
     }
-
-    $data_old = $this->M_crud->select('tbl_level_admin', 'level_id', $level_id);
-    $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
-    $reff_id = $level_id;
-
-    $this->M_log->simpan_log($reff_id, 'WEWENANG MENU ADMIN', $log_oldval, $log_newval);
-    $this->M_crud->update('tbl_level_admin', $data, 'level_id', $level_id);
-    $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b> wewenang berhasil di update </div>');
-    redirect('admin/parameter/wewenang_admin');
   }
 
   function hapus_wewenang($level_id)
@@ -180,40 +187,43 @@ class Parameter extends MY_Controller
   function simpan_outlet()
   {
     $out_id = $this->input->post('out_id');
-    $this->form_validation->set_rules('out_email','Email','required|valid_email');
-    if($this->form_validation->run() == false){
+    $this->form_validation->set_rules('out_email', 'Email', 'required|valid_email');
+    if ($this->form_validation->run() == false) {
       $this->session->set_flashdata('msg', '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><b>Email tidak valid</b> Data tidak dapat disimpan</div>');
-      $this->outlet();
-    }else{
-    $data =  [
-      'out_kode' => $this->input->post('out_kode'),
-      'out_nama' => $this->input->post('out_nama'),
-      'out_alamat' => $this->input->post('out_alamat'),
-      'out_telp' => $this->input->post('out_telp'),
-      'out_email' => $this->input->post('out_email'),
-      'out_nm_pic' => $this->input->post('out_nm_pic'),
-      'notes_receipt' => $this->input->post('out_notes'),
-    ];
-    $log_newval = strtr(json_encode($data), array(',' => ' | ', '{' => '', '}' => '', '"' => ' '));
+      redirect('admin/parameter/outlet');
+    } else {
+      $data =  [
+        'out_kode' => $this->input->post('out_kode'),
+        'out_nama' => $this->input->post('out_nama'),
+        'out_alamat' => $this->input->post('out_alamat'),
+        'out_telp' => $this->input->post('out_telp'),
+        'out_email' => $this->input->post('out_email'),
+        'out_opening_hours' => $this->input->post('out_opening_hours'),
+        'out_closing_hours' => $this->input->post('out_closing_hours'),
+        'out_nm_pic' => $this->input->post('out_nm_pic'),
+        'notes_receipt' => $this->input->post('out_notes'),
+      ];
+      $log_newval = strtr(json_encode($data), array(',' => ' | ', '{' => '', '}' => '', '"' => ' '));
 
-    if (!$out_id) {
-      $this->M_crud->insert('tbl_outlet', $data);
-      $reff_id = $this->db->insert_id();
-      $this->M_outlet->create_data_table_outlet($reff_id);
+      if (!$out_id) {
+        //create new outlet
+        $this->M_crud->insert('tbl_outlet', $data);
+        $reff_id = $this->db->insert_id();
+        $this->M_outlet->create_data_table_outlet($reff_id);
 
-      $this->M_log->simpan_log($reff_id, 'OUTLET', null, $log_newval);
+        $this->M_log->simpan_log($reff_id, 'OUTLET', null, $log_newval);
+        $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>' . $data['out_nama'] . '</b> Berhasil ditambah/diupdate.</div>');
+        redirect('admin/parameter/outlet');
+      }
+      //update outlet
+      $data_old = $this->M_crud->select('tbl_outlet', 'out_id', $out_id);
+      $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
+      $reff_id = $out_id;
+
+      $this->M_crud->update('tbl_outlet', $data, 'out_id', $this->input->post('out_id'));
+      $this->M_log->simpan_log($reff_id, 'OUTLET', $log_oldval, $log_newval);
       $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>' . $data['out_nama'] . '</b> Berhasil ditambah/diupdate.</div>');
       redirect('admin/parameter/outlet');
-    }
-
-    $data_old = $this->M_crud->select('tbl_outlet', 'out_id', $out_id);
-    $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
-    $reff_id = $out_id;
-
-    $this->M_crud->update('tbl_outlet', $data, 'out_id', $this->input->post('out_id'));
-    $this->M_log->simpan_log($reff_id, 'OUTLET', $log_oldval, $log_newval);
-    $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>' . $data['out_nama'] . '</b> Berhasil ditambah/diupdate.</div>');
-    redirect('admin/parameter/outlet');
     }
   }
 
@@ -245,38 +255,38 @@ class Parameter extends MY_Controller
     }
 
     $plg_id = $this->input->post('plg_id');
-    $this->form_validation->set_rules('plg_email','Email','required|valid_email');
+    $this->form_validation->set_rules('plg_email', 'Email', 'required|valid_email');
     if ($this->form_validation->run() == false) {
       $this->session->set_flashdata('msg', '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><b>Email tidak valid</b> Data tidak dapat disimpan</div>');
-      $this->pelanggan();
+      redirect('admin/parameter/pelangan');
     } else {
 
-    $data =  [
-      'plg_nama' => $this->input->post('plg_nama'),
-      'plg_alamat' => $this->input->post('plg_alamat'),
-      'plg_jenkel' => $this->input->post('plg_jenkel'),
-      'plg_notelp' => $this->input->post('plg_notelp'),
-      'plg_email' => $this->input->post('plg_email'),
-      'plg_whatsapp' => $this->input->post('plg_whatsapp'),
-      'plg_password' => md5($this->input->post('plg_password')),
-    ];
-    $log_newval = strtr(json_encode($data), array(',' => ' | ', '{' => '', '}' => '', '"' => ' '));
+      $data =  [
+        'plg_nama' => $this->input->post('plg_nama'),
+        'plg_alamat' => $this->input->post('plg_alamat'),
+        'plg_jenkel' => $this->input->post('plg_jenkel'),
+        'plg_notelp' => $this->input->post('plg_notelp'),
+        'plg_email' => $this->input->post('plg_email'),
+        'plg_whatsapp' => $this->input->post('plg_whatsapp'),
+        'plg_password' => md5($this->input->post('plg_password')),
+      ];
+      $log_newval = strtr(json_encode($data), array(',' => ' | ', '{' => '', '}' => '', '"' => ' '));
 
-    if (!$plg_id) {
-      $this->M_crud->insert('tbl_pelanggan', $data);
-      $reff_id = $this->db->insert_id();
-      $this->M_log->simpan_log($reff_id, 'PELANGGAN', null, $log_newval);
+      if (!$plg_id) {
+        $this->M_crud->insert('tbl_pelanggan', $data);
+        $reff_id = $this->db->insert_id();
+        $this->M_log->simpan_log($reff_id, 'PELANGGAN', null, $log_newval);
+        $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>' . $data['plg_nama'] . '</b> Berhasil ditambah/diupdate.</div>');
+        redirect('admin/parameter/pelanggan');
+      }
+      $data_old = $this->M_crud->select('tbl_pelanggan', 'plg_id', $plg_id);
+      $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
+      $reff_id = $plg_id;
+
+      $this->M_crud->update('tbl_pelanggan', $data, 'plg_id', $plg_id);
+      $this->M_log->simpan_log($reff_id, 'PELANGGAN', $log_oldval, $log_newval);
       $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>' . $data['plg_nama'] . '</b> Berhasil ditambah/diupdate.</div>');
       redirect('admin/parameter/pelanggan');
-    }
-    $data_old = $this->M_crud->select('tbl_pelanggan', 'plg_id', $plg_id);
-    $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
-    $reff_id = $plg_id;
-
-    $this->M_crud->update('tbl_pelanggan', $data, 'plg_id', $plg_id);
-    $this->M_log->simpan_log($reff_id, 'PELANGGAN', $log_oldval, $log_newval);
-    $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>' . $data['plg_nama'] . '</b> Berhasil ditambah/diupdate.</div>');
-    redirect('admin/parameter/pelanggan');
     }
   }
 
@@ -302,28 +312,36 @@ class Parameter extends MY_Controller
   public function simpan_tax()
   {
     $tax_id = $this->input->post('tax_id');
-    $data = [
-      'tax_nm' => $this->input->post('tax_nm'),
-      'tax_persen' => $this->input->post('tax_persen'),
-    ];
-    $log_newval = strtr(json_encode($data), array(',' => ' | ', '{' => '', '}' => '', '"' => ' '));
 
-    if (!$tax_id) {
-      $this->M_crud->insert('tbl_tax', $data);
-      $reff_id = $this->db->insert_id();
+    $this->form_validation->set_rules('tax_nm', 'Nama Tax', 'is_unique[tbl_tax.tax_nm]');
+    if ($this->form_validation->run() == false) {
+      $this->session->set_flashdata('msg', '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><b></b>Nama Tax ini sudah ada !</div>');
+      redirect('admin/parameter/tax');
+    } else {
 
-      $this->M_log->simpan_log($reff_id, 'TAX', null, $log_newval);
+      $data = [
+        'tax_nm' => $this->input->post('tax_nm'),
+        'tax_persen' => $this->input->post('tax_persen'),
+      ];
+      $log_newval = strtr(json_encode($data), array(',' => ' | ', '{' => '', '}' => '', '"' => ' '));
+
+      if (!$tax_id) {
+        $this->M_crud->insert('tbl_tax', $data);
+        $reff_id = $this->db->insert_id();
+
+        $this->M_log->simpan_log($reff_id, 'TAX', null, $log_newval);
+        $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>' . $data['tax_nm'] . '</b> Berhasil ditambah/diupdate.</div>');
+        redirect('admin/parameter/tax');
+      }
+      $data_old = $this->M_crud->select('tbl_tax', 'tax_id', $tax_id);
+      $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
+      $reff_id = $tax_id;
+
+      $this->M_log->simpan_log($reff_id, 'TAX', $log_oldval, $log_newval);
+      $this->M_crud->update('tbl_tax', $data, 'tax_id', $tax_id);
       $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>' . $data['tax_nm'] . '</b> Berhasil ditambah/diupdate.</div>');
       redirect('admin/parameter/tax');
     }
-    $data_old = $this->M_crud->select('tbl_tax', 'tax_id', $tax_id);
-    $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
-    $reff_id = $tax_id;
-
-    $this->M_log->simpan_log($reff_id, 'TAX', $log_oldval, $log_newval);
-    $this->M_crud->update('tbl_tax', $data, 'tax_id', $tax_id);
-    $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>' . $data['tax_nm'] . '</b> Berhasil ditambah/diupdate.</div>');
-    redirect('admin/parameter/tax');
   }
 
   public function hapus_tax($tax_id)
