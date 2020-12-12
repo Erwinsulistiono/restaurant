@@ -27,12 +27,10 @@ class Laporan extends MY_Controller
 			'tgl_awal' => $this->input->post('tgl_awal'),
 			'tgl_akhir' => $this->input->post('tgl_akhir'),
 			'outlet' => $this->outlet,
-			'name' => $this->session->userdata('pengguna_username'),
 		];
 		$data = [
 			'data' => $this->M_laporan->getLaporan($dataFilter),
 			'pesanan' => $this->M_crud->left_join('tbl_lap_trx_' . $this->outlet, 'tbl_lap_order_' . $this->outlet, 'tbl_lap_trx_' . $this->outlet . '.trx_id=tbl_lap_order_' . $this->outlet . '.order_trx_reff'),
-			'payment' => $this->M_crud->read('tbl_payment'),
 		];
 		$this->render('pos/laporan/v_laporan', $data);
 	}
