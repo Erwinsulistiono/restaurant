@@ -52,7 +52,7 @@
                   <div class="form-group">
                     <div class="col-md-12">
                       <label>Outlet</label>
-                      <select name="outlet" class="form-control" required>
+                      <select name="outlets" class="form-control" required>
                         <option value="">&nbsp;</option>
                         <option value="all">All</option>
                         <?php foreach ($outlet as $out) : ?>

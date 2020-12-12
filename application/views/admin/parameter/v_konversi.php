@@ -47,8 +47,7 @@
                       data-target="#modal_edit_konversi<?= $table_content['satuan_id']; ?>"><i
                         class="fa fa-pencil"></i></a>
                     <a href="<?= base_url('admin/konversi/hapus_konversi/') . $table_content['satuan_id'] ?>"
-                      class="btn btn-icon-toggle btn-raised" title="Delete row"><i onclick="return confirm('Apakah anda yakin?')"
-                        class="fa fa-trash-o text-danger"></i></a>
+                      class="btn btn-icon-toggle btn-raised" title="Delete row" onclick="return confirm('Apakah anda yakin?')"><i class="fa fa-trash-o text-danger"></i></a>
                   </td>
                 </tr>
                 <?php endforeach; ?>

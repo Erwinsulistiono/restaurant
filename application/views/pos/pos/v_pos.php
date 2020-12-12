@@ -525,41 +525,6 @@
   </div>
 <?php endforeach; ?>
 
-<!-- MODAL STATUS ORDER KITCHEN/WAITRESS/DONE -->
-<div class="modal fade" id="modal_status_order" tabindex="-1" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <div class="modal-header" style="padding-bottom:0">
-        <button type="button" class="close text-danger btn-raised" data-dismiss="modal" aria-hidden="true">
-          <span class="fa fa-times"></span></button>
-        <div class="tab-slider">
-          <div class="wrap">
-            <ul class="nav nav-tabs" id="menus" role="tablist" id="example-tabs" data-tabs style="white-space: nowrap;">
-              <li role="presentation" class="active"><a href="#status_kitchen" aria-controls="home" role="tab" data-toggle="tab">Kitchen</a></li>
-              <li role="presentation"><a href="#status_waitress" aria-controls="home" role="tab" data-toggle="tab">Waitress</a></li>
-              <li role="presentation"><a href="#status_done" aria-controls="home" role="tab" data-toggle="tab">Done</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="modal-body" style="overflow-y:scroll; height:40rem">
-        <div class="tabs-content" data-tabs-content="example-tabs">
-          <div role="tabpanel" class="tab-pane active" id="status_kitchen">
-          </div>
-          <div role="tabpanel" class="tab-pane" id="status_waitress">
-          </div>
-          <div role="tabpanel" class="tab-pane" id="status_done">
-          </div>
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <button class="btn btn-danger btn-raised" data-dismiss="modal" aria-hidden="true">Tutup</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 
 <!-- MODAL ADD VOUCHER DISCOUNT -->
 <div class="modal fade" id="modal_add_voucher" tabindex="-1" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
