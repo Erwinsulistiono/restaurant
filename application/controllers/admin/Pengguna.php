@@ -33,7 +33,6 @@ class Pengguna extends MY_Controller
 			'level' => $this->M_crud->read('tbl_level_admin'),
 			'level_pos' => $this->M_crud->read('tbl_level_pos'),
 			'data' => $this->M_pengguna->PenggunaOutlet($db),
-
 		];
 		$this->render('admin/user/v_pengguna', $data);
 	}

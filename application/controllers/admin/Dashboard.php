@@ -23,10 +23,10 @@ class Dashboard extends MY_Controller
 		$penjualan_now = 0;
 		$porsi_tot = 0;
 		$porsi_now = 0;
-		
+
 
 		$out_id = $this->M_crud->read('tbl_outlet');
-		foreach ($out_id as $id){
+		foreach ($out_id as $id) {
 			$penjualan_tot += (int)($this->M_dashboard->getTotalPenjualan($id['out_id']));
 			$penjualan_now += (int)($this->M_dashboard->getTotalPenjualanThisMonth($id['out_id']));
 			$porsi_tot += (int)($this->M_dashboard->getTotalPorsi($id['out_id']));

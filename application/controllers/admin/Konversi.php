@@ -25,11 +25,11 @@ class Konversi extends MY_Controller
   function simpan_konversi()
   {
     $satuan_id = $this->input->post('satuan_id');
-    $this->form_validation->set_rules('satuan_kode','Satuan Kode','is_unique[tbl_satuan.satuan_kode]');
+    $this->form_validation->set_rules('satuan_kode', 'Satuan Kode', 'is_unique[tbl_satuan.satuan_kode]');
     if ($this->form_validation->run() == false) {
       $this->session->set_flashdata('msg', '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><b></b>Nama Satuan Kode ini sudah ada !</div>');
-      redirect('admin/konversi');  
-    } else {
+      redirect('admin/konversi');
+    }
     $data = [
       'satuan_kode' => $this->input->post('satuan_kode'),
       'satuan_reff' => $this->input->post('satuan_reff'),
@@ -51,8 +51,7 @@ class Konversi extends MY_Controller
     $this->M_log->simpan_log($satuan_id, 'KONVERSI SATUAN', $log_oldval, $log_newval);
     $this->M_crud->update('tbl_satuan', $data, 'satuan_id', $satuan_id);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Satuan <b>' . $data['satuan_kode'] . '</b> Berhasil disimpan ke database.</div>');
-    redirect('admin/konversi');  
-    }
+    redirect('admin/konversi');
   }
 
   function hapus_konversi($satuan_id)
@@ -62,7 +61,7 @@ class Konversi extends MY_Controller
 
     $this->M_log->simpan_log($satuan_id, 'KONVERSI SATUAN', $log_oldval);
     $this->M_crud->delete('tbl_satuan', 'satuan_id', $satuan_id);
-    $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Satuan <b>'. $data_old['satuan_kode'].'</b> Berhasil dihapus dari database.</div>');
+    $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Satuan <b>' . $data_old['satuan_kode'] . '</b> Berhasil dihapus dari database.</div>');
     redirect('admin/konversi');
   }
 }

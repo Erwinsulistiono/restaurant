@@ -23,7 +23,7 @@ class Laporan extends MY_Controller
 
   public function laporan()
   {
-    $data = [
+    $input_data = [
       'tgl_awal' => $this->input->post('tgl_awal'),
       'tgl_akhir' => $this->input->post('tgl_akhir'),
       'outlet' => $this->input->post('outlet'),
@@ -32,87 +32,108 @@ class Laporan extends MY_Controller
       'rinci' => [],
     ];
 
-    if ($data['group'] == 'order') {
-      $data = $this->groupByOrder($data);
-      $this->render('admin/laporan/v_order', $data);
-    } elseif ($data['group'] == 'plg') {
-      $data = $this->groupByPlg($data);
-      $this->render('admin/laporan/v_pelanggan', $data);
-    } elseif ($data['group'] == 'trx') {
-      $data = $this->groupByTrx($data);
-      $this->render('admin/laporan/v_transaksi', $data);
-    } elseif ($data['group'] == 'menu') {
-      $data = $this->groupByMenu($data);
-      $this->render('admin/laporan/v_menu', $data);
-    } else {
-      $this->session->set_flashdata('msg', '<div class="alert alert-warning"><button type="button" class="close" data-dismiss="alert">&times;</button>pilih group.</div>');
-      redirect('admin/laporan/index');
+    switch ($input_data["group"]) {
+      case "order":
+        $return_data = $this->groupByOrder($input_data);
+        $this->render('admin/laporan/v_order', $return_data);
+        break;
+      case "plg":
+        $return_data = $this->groupByPlg($input_data);
+        $this->render('admin/laporan/v_pelanggan', $return_data);
+        break;
+      case "trx":
+        $return_data = $this->groupByTrx($input_data);
+        $this->render('admin/laporan/v_transaksi', $return_data);
+        break;
+      case "menu":
+        $return_data = $this->groupByMenu($input_data);
+        $this->render('admin/laporan/v_menu', $return_data);
+        break;
+      default:
+        $this->session->set_flashdata('msg', '<div class="alert alert-warning"><button type="button" class="close" data-dismiss="alert">&times;</button>pilih group.</div>');
+        $this->index();
     }
   }
 
   public function pdf($tgl_awal, $tgl_akhir, $outlet, $group)
   {
-    $data = [
+    $data_input = [
       'tgl_awal' => $tgl_awal,
       'tgl_akhir' => $tgl_akhir,
       'outlet' => $outlet,
       'group' => $group,
-      'pt' => $this->M_crud->select('tbl_pt', 'pt_id' , 1),
+      'pt' => $this->M_crud->select('tbl_pt', 'pt_id', 1),
       'data' => [],
       'rinci' => [],
     ];
 
-    if ($data['group'] == 'order') {
-      $data = $this->groupByOrder($data);
-      $this->load->view('admin/laporan/pdf/v_order', $data);
-    } elseif ($data['group'] == 'plg') {
-      $data = $this->groupByPlg($data);
-      $this->load->view('admin/laporan/pdf/v_pelanggan', $data);
-    } elseif ($data['group'] == 'trx') {
-      $data = $this->groupByTrx($data);
-      $this->load->view('admin/laporan/pdf/v_transaksi', $data);
-    } elseif ($data['group'] == 'menu') {
-      $data = $this->groupByMenu($data);
-      $this->load->view('admin/laporan/pdf/v_menu', $data);
-    } 
+    switch ($data_input['group']) {
+      case "order":
+        $return_data = $this->groupByOrder($data_input);
+        $this->load->view('admin/laporan/pdf/v_order', $return_data);
+        break;
+      case "plg":
+        $return_data = $this->groupByPlg($data_input);
+        $this->load->view('admin/laporan/pdf/v_pelanggan', $return_data);
+        break;
+      case "trx":
+        $return_data = $this->groupByTrx($data_input);
+        $this->load->view('admin/laporan/pdf/v_transaksi', $return_data);
+        break;
+      case "menu":
+        $return_data = $this->groupByMenu($data_input);
+        $this->load->view('admin/laporan/pdf/v_menu', $return_data);
+        break;
+      default:
+        $this->session->set_flashdata('msg', '<div class="alert alert-warning"><button type="button" class="close" data-dismiss="alert">&times;</button>Unknown Error.</div>');
+        $this->index();
+    }
   }
 
   public function excel($tgl_awal, $tgl_akhir, $outlet, $group)
   {
-    $data = [
+    $data_input = [
       'tgl_awal' => $tgl_awal,
       'tgl_akhir' => $tgl_akhir,
       'outlet' => $outlet,
       'group' => $group,
-      'pt' => $this->M_crud->select('tbl_pt', 'pt_id' , 1),
+      'pt' => $this->M_crud->select('tbl_pt', 'pt_id', 1),
       'data' => [],
       'rinci' => [],
     ];
 
-    if ($data['group'] == 'order') {
-      $data = $this->groupByOrder($data);
-      $this->load->view('admin/laporan/excel/v_order', $data);
-    } elseif ($data['group'] == 'plg') {
-      $data = $this->groupByPlg($data);
-      $this->load->view('admin/laporan/excel/v_pelanggan', $data);
-    } elseif ($data['group'] == 'trx') {
-      $data = $this->groupByTrx($data);
-      $this->load->view('admin/laporan/excel/v_transaksi', $data);
-    } elseif ($data['group'] == 'menu') {
-      $data = $this->groupByMenu($data);
-      $this->load->view('admin/laporan/excel/v_menu', $data);
+    switch ($data_input['group']) {
+      case "order":
+        $return_data = $this->groupByOrder($data_input);
+        $this->load->view('admin/laporan/excel/v_order', $return_data);
+        break;
+      case "plg":
+        $return_data = $this->groupByPlg($data_input);
+        $this->load->view('admin/laporan/excel/v_pelanggan', $return_data);
+        break;
+      case "trx":
+        $return_data = $this->groupByTrx($data_input);
+        $this->load->view('admin/laporan/excel/v_transaksi', $return_data);
+        break;
+      case "menu":
+        $return_data = $this->groupByMenu($data_input);
+        $this->load->view('admin/laporan/excel/v_menu', $return_data);
+        break;
+      default:
+        $this->session->set_flashdata('msg', '<div class="alert alert-warning"><button type="button" class="close" data-dismiss="alert">&times;</button>Unknown Error.</div>');
+        $this->index();
     }
   }
 
   public function groupByOrder($data)
   {
-    if ($data['outlet'] != 'all'){
+    if ($data['outlet'] != 'all') {
       $data['data'] = $this->M_laporan->getLaporanOrder($data);
       $data['rinci'] = $this->M_laporan->getLaporanTrx($data);
       return $data;
     }
 
-    foreach ($this->all_outlet as $o){
+    foreach ($this->all_outlet as $o) {
       $data['outlet'] = $o['out_id'];
       $data['data'] += $this->M_laporan->getLaporanOrder($data);
       $data['rinci'] += $this->M_laporan->getLaporanTrx($data);
@@ -122,13 +143,13 @@ class Laporan extends MY_Controller
 
   public function groupByMenu($data)
   {
-    if ($data['outlet'] != 'all'){
+    if ($data['outlet'] != 'all') {
       $data['data'] = $this->M_laporan->getLaporanMenu($data);
       $data['rinci'] = $this->M_laporan->getLaporanTrx($data);
       return $data;
     }
 
-    foreach ($this->all_outlet as $o){
+    foreach ($this->all_outlet as $o) {
       $data['outlet'] = $o['out_id'];
       $data['data'] += $this->M_laporan->getLaporanMenu($data);
       $data['rinci'] += $this->M_laporan->getLaporanTrx($data);
@@ -138,14 +159,14 @@ class Laporan extends MY_Controller
 
   public function groupByPlg($data)
   {
-    if($data['outlet'] != 'all'){
+    if ($data['outlet'] != 'all') {
       $data['data'] = $this->M_laporan->getLaporanPlg($data);
       $data['rinci'] = $this->M_laporan->getLaporanTrx($data);
       return $data;
     }
 
-    foreach ($this->all_outlet as $o){
-      $data['outlet'] = $o['out_id']; 
+    foreach ($this->all_outlet as $o) {
+      $data['outlet'] = $o['out_id'];
       $data['data'] += $this->M_laporan->getLaporanPlg($data);
       $data['rinci'] += $this->M_laporan->getLaporanTrx($data);
       return $data;
@@ -154,13 +175,13 @@ class Laporan extends MY_Controller
 
   public function groupByTrx($data)
   {
-    if ($data['outlet'] != 'all'){
+    if ($data['outlet'] != 'all') {
       $data['data'] = $this->M_laporan->getLaporan($data);
       $data['rinci'] = $this->M_laporan->getLaporanTrx($data);
       return $data;
     }
 
-    foreach ($this->all_outlet as $o){
+    foreach ($this->all_outlet as $o) {
       $data['outlet'] = $o['out_id'];
       $data['data'] += $this->M_laporan->getLaporan($data);
       $data['rinci'] += $this->M_laporan->getLaporanTrx($data);

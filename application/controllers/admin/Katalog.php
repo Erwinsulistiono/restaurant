@@ -32,26 +32,25 @@ class Katalog extends MY_Controller
     if ($this->form_validation->run() == false) {
       $this->session->set_flashdata('msg', '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><b></b>Nama Kategori ini sudah ada !</div>');
       redirect('admin/katalog/kategori_menu');
-    } else {
-      $data['kategori_nama'] = $this->input->post('kategori_nama');
-      $log_newval = strtr(json_encode($data), array(',' => ' | ', '{' => '', '}' => '', '"' => ' '));
+    }
+    $data['kategori_nama'] = $this->input->post('kategori_nama');
+    $log_newval = strtr(json_encode($data), array(',' => ' | ', '{' => '', '}' => '', '"' => ' '));
 
-      if (!$kategori_id) {
-        $this->M_crud->insert('tbl_kategori', $data);
-        $reff_id = $this->db->insert_id();
+    if (!$kategori_id) {
+      $this->M_crud->insert('tbl_kategori', $data);
+      $reff_id = $this->db->insert_id();
 
-        $this->M_log->simpan_log($reff_id, 'KATEGORI', null, $log_newval);
-        $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Kategori <b>' . $data['kategori_nama'] . '</b> Berhasil disimpan ke database.</div>');
-        redirect('admin/katalog/kategori_menu');
-      }
-      $data_old = $this->M_crud->select('tbl_kategori', 'kategori_id', $kategori_id);
-      $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
-
-      $this->M_crud->update('tbl_kategori', $data, 'kategori_id', $kategori_id);
-      $this->M_log->simpan_log($kategori_id, 'KATEGORI', $log_oldval, $log_newval);
+      $this->M_log->simpan_log($reff_id, 'KATEGORI', null, $log_newval);
       $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Kategori <b>' . $data['kategori_nama'] . '</b> Berhasil disimpan ke database.</div>');
       redirect('admin/katalog/kategori_menu');
     }
+    $data_old = $this->M_crud->select('tbl_kategori', 'kategori_id', $kategori_id);
+    $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
+
+    $this->M_crud->update('tbl_kategori', $data, 'kategori_id', $kategori_id);
+    $this->M_log->simpan_log($kategori_id, 'KATEGORI', $log_oldval, $log_newval);
+    $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Kategori <b>' . $data['kategori_nama'] . '</b> Berhasil disimpan ke database.</div>');
+    redirect('admin/katalog/kategori_menu');
   }
 
   function hapus_kategori_menu($kategori_id)
