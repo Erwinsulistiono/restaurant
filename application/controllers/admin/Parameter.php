@@ -26,6 +26,11 @@ class Parameter extends MY_Controller
   function simpan_profile_company()
   {
     $pt_id = $this->input->post('pt_id');
+    $this->form_validation->set_rules('out_email','Email','required|valid_email');
+    if ($this->form_validation->run() == false) {
+      $this->session->set_flashdata('msg', '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><b>Email tidak valid</b> Data tidak dapat disimpan</div>');
+      $this->profile_company();
+    } else {
     $data = [
       'pt_nama' => $this->input->post('pt_nama'),
       'pt_npwp' => $this->input->post('pt_npwp'),
@@ -44,6 +49,7 @@ class Parameter extends MY_Controller
     $this->M_log->simpan_log($pt_id, 'COMPANY PROFILE', $log_oldval, $log_newval);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>' . $data['pt_nama'] . '</b> Berhasil diupdate.</div>');
     redirect('admin/parameter/profile_company');
+    }
   }
 
 
@@ -65,7 +71,7 @@ class Parameter extends MY_Controller
 
     $data = [
       'level_desc' => $this->input->post('level_desc'),
-      'parameter' => ((array_search('1', $wewenang) ? "Y" : "N")),
+      'parameter' => ((array_search('1', $wewenang) ? "Y" : "Y")),
       'katalog' => ((array_search('2', $wewenang) ? "Y" : "N")),
       'pos' => ((array_search('3', $wewenang) ? "Y" : "N")),
       'laporan' => ((array_search('4', $wewenang) ? "Y" : "N")),
@@ -83,12 +89,12 @@ class Parameter extends MY_Controller
       redirect('admin/parameter/wewenang_admin');
     }
 
-    $this->M_crud->update('tbl_level_admin', $data, 'level_id', $level_id);
     $data_old = $this->M_crud->select('tbl_level_admin', 'level_id', $level_id);
     $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
     $reff_id = $level_id;
 
-    $this->M_log->simpan_log($reff_id, 'WEWENANG MENU ADMIN', $log_oldval);
+    $this->M_log->simpan_log($reff_id, 'WEWENANG MENU ADMIN', $log_oldval, $log_newval);
+    $this->M_crud->update('tbl_level_admin', $data, 'level_id', $level_id);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b> wewenang berhasil di update </div>');
     redirect('admin/parameter/wewenang_admin');
   }
@@ -174,6 +180,11 @@ class Parameter extends MY_Controller
   function simpan_outlet()
   {
     $out_id = $this->input->post('out_id');
+    $this->form_validation->set_rules('out_email','Email','required|valid_email');
+    if($this->form_validation->run() == false){
+      $this->session->set_flashdata('msg', '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><b>Email tidak valid</b> Data tidak dapat disimpan</div>');
+      $this->outlet();
+    }else{
     $data =  [
       'out_kode' => $this->input->post('out_kode'),
       'out_nama' => $this->input->post('out_nama'),
@@ -203,6 +214,7 @@ class Parameter extends MY_Controller
     $this->M_log->simpan_log($reff_id, 'OUTLET', $log_oldval, $log_newval);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>' . $data['out_nama'] . '</b> Berhasil ditambah/diupdate.</div>');
     redirect('admin/parameter/outlet');
+    }
   }
 
   function hapus_outlet($out_id)
@@ -233,6 +245,12 @@ class Parameter extends MY_Controller
     }
 
     $plg_id = $this->input->post('plg_id');
+    $this->form_validation->set_rules('plg_email','Email','required|valid_email');
+    if ($this->form_validation->run() == false) {
+      $this->session->set_flashdata('msg', '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><b>Email tidak valid</b> Data tidak dapat disimpan</div>');
+      $this->pelanggan();
+    } else {
+
     $data =  [
       'plg_nama' => $this->input->post('plg_nama'),
       'plg_alamat' => $this->input->post('plg_alamat'),
@@ -259,6 +277,7 @@ class Parameter extends MY_Controller
     $this->M_log->simpan_log($reff_id, 'PELANGGAN', $log_oldval, $log_newval);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>' . $data['plg_nama'] . '</b> Berhasil ditambah/diupdate.</div>');
     redirect('admin/parameter/pelanggan');
+    }
   }
 
   function hapus_pelanggan($plg_id)
@@ -285,13 +304,14 @@ class Parameter extends MY_Controller
     $tax_id = $this->input->post('tax_id');
     $data = [
       'tax_nm' => $this->input->post('tax_nm'),
-      'tax_persen' => $this->input->post('tax_persen')
+      'tax_persen' => $this->input->post('tax_persen'),
     ];
     $log_newval = strtr(json_encode($data), array(',' => ' | ', '{' => '', '}' => '', '"' => ' '));
 
     if (!$tax_id) {
       $this->M_crud->insert('tbl_tax', $data);
       $reff_id = $this->db->insert_id();
+
       $this->M_log->simpan_log($reff_id, 'TAX', null, $log_newval);
       $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>' . $data['tax_nm'] . '</b> Berhasil ditambah/diupdate.</div>');
       redirect('admin/parameter/tax');
@@ -300,8 +320,8 @@ class Parameter extends MY_Controller
     $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
     $reff_id = $tax_id;
 
-    $this->M_crud->update('tbl_tax', $data, 'tax_id', $tax_id);
     $this->M_log->simpan_log($reff_id, 'TAX', $log_oldval, $log_newval);
+    $this->M_crud->update('tbl_tax', $data, 'tax_id', $tax_id);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>' . $data['tax_nm'] . '</b> Berhasil ditambah/diupdate.</div>');
     redirect('admin/parameter/tax');
   }
@@ -313,7 +333,7 @@ class Parameter extends MY_Controller
 
     $this->M_log->simpan_log($tax_id, 'TAX', $log_oldval);
     $this->M_crud->delete('tbl_tax', 'tax_id', $tax_id);
-    $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Mater <b>' . $this->input->post('tax_nm') . '</b> Berhasil dihapus.</div>');
+    $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>' . $data_old['tax_nm'] . '</b> Berhasil dihapus.</div>');
     redirect('admin/parameter/tax');
   }
 }

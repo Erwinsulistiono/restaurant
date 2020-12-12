@@ -21,9 +21,10 @@
   <link type="text/css" rel="stylesheet" href="<?= base_url() . 'assets/css/DataTables/jquery.dataTables.css' ?>" />
   <link type="text/css" rel="stylesheet" href="<?= base_url() . 'assets/css/bootstrap-datepicker.css' ?>" />
   <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/bootstrap-select.css'); ?>">
-  <link type="text/css" rel="stylesheet" href="<?= base_url() . 'assets/css/DataTables/extensions/dataTables.colVis.css' ?>" />
-  <link type="text/css" rel="stylesheet" href="<?= base_url() . 'assets/css/DataTables/extensions/dataTables.tableTools.css' ?>" />
-  
+  <link type="text/css" rel="stylesheet"
+    href="<?= base_url() . 'assets/css/DataTables/extensions/dataTables.colVis.css' ?>" />
+  <link type="text/css" rel="stylesheet"
+    href="<?= base_url() . 'assets/css/DataTables/extensions/dataTables.tableTools.css' ?>" />
 
   <?php
   function limit_words($string, $word_limit)

@@ -1,3 +1,4 @@
+<div id="base">
   <div class="offcanvas">
   </div>
   <div id="content">
@@ -36,12 +37,14 @@
       </div>
     </section>
   </div>
+</div>
 
 <script type="text/javascript" src="<?= base_url('assets/js/jquery-3.4.1.min.js'); ?>"></script>
 <script type='text/javascript'>
 $('#lapSaldo').click(function(e) {
   e.preventDefault();
-  fetch_page('<?= base_url('pos/laporan/filter'); ?>')  
+  var win = window.open("<?= base_url('pos/laporan/filter'); ?>", '_blank');
+  (win) ? win.focus() : alert('Please allow popups for this website');
 });
 
 

@@ -19,7 +19,12 @@ class MY_Controller extends CI_Controller
 			$this->load->view('layouts/v_footer');
 		}
 		if ($this->session->userdata('pengguna_dashboard') == 2) {
+			$sidebar['data'] = $this->M_crud->select('tbl_level_pos', 'level_id', $this->session->userdata('pengguna_level'));
+			$this->load->view('layouts/v_head', $title);
+			$this->load->view('layouts/v_header');
 			$this->load->view($view, $data);
+			$this->load->view('layouts/v_sidebar_pos', $sidebar);
+			$this->load->view('layouts/v_footer');
 		}
 		if (!$this->session->userdata('pengguna_dashboard')) {
 			$this->load->view('layouts/v_head', $title);

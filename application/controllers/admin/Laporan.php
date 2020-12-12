@@ -64,16 +64,16 @@ class Laporan extends MY_Controller
 
     if ($data['group'] == 'order') {
       $data = $this->groupByOrder($data);
-      $this->render('admin/laporan/pdf/v_order', $data);
+      $this->load->view('admin/laporan/pdf/v_order', $data);
     } elseif ($data['group'] == 'plg') {
       $data = $this->groupByPlg($data);
-      $this->render('admin/laporan/pdf/v_pelanggan', $data);
+      $this->load->view('admin/laporan/pdf/v_pelanggan', $data);
     } elseif ($data['group'] == 'trx') {
       $data = $this->groupByTrx($data);
-      $this->render('admin/laporan/pdf/v_transaksi', $data);
+      $this->load->view('admin/laporan/pdf/v_transaksi', $data);
     } elseif ($data['group'] == 'menu') {
       $data = $this->groupByMenu($data);
-      $this->render('admin/laporan/pdf/v_menu', $data);
+      $this->load->view('admin/laporan/pdf/v_menu', $data);
     } 
   }
 
@@ -91,16 +91,16 @@ class Laporan extends MY_Controller
 
     if ($data['group'] == 'order') {
       $data = $this->groupByOrder($data);
-      $this->render('admin/laporan/excel/v_order', $data);
+      $this->load->view('admin/laporan/excel/v_order', $data);
     } elseif ($data['group'] == 'plg') {
       $data = $this->groupByPlg($data);
-      $this->render('admin/laporan/excel/v_pelanggan', $data);
+      $this->load->view('admin/laporan/excel/v_pelanggan', $data);
     } elseif ($data['group'] == 'trx') {
       $data = $this->groupByTrx($data);
-      $this->render('admin/laporan/excel/v_transaksi', $data);
+      $this->load->view('admin/laporan/excel/v_transaksi', $data);
     } elseif ($data['group'] == 'menu') {
       $data = $this->groupByMenu($data);
-      $this->render('admin/laporan/excel/v_menu', $data);
+      $this->load->view('admin/laporan/excel/v_menu', $data);
     }
   }
 

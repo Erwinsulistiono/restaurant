@@ -77,7 +77,7 @@
           <span class="fa fa-times"></span></button>
         <h3 class="modal-title" id="myModalLabel">Tambah Outlet</h3>
       </div>
-      <form class="form-horizontal" role="form" method="post" action="<?= base_url('admin/parameter/simpan_outlet'); ?>"
+      <form class="form-horizontal" role="form" method="post" action="<?= base_url('admin/konversi/simpan_konversi'); ?>"
         enctype="multipart/form-data">
         <div class="modal-body">
           <div class="form-group">
@@ -132,7 +132,7 @@
           <span class="fa fa-times"></span></button>
         <h3 class="modal-title" id="myModalLabel">Edit Outlet</h3>
       </div>
-      <form class="form-horizontal" role="form" method="post" action="<?= base_url('admin/parameter/simpan_outlet'); ?>"
+      <form class="form-horizontal" role="form" method="post" action="<?= base_url('admin/konversi/simpan_konversi'); ?>"
         enctype="multipart/form-data">
         <div class="modal-body">
           <div class="form-group">

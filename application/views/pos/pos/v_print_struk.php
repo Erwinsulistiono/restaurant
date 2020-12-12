@@ -20,16 +20,17 @@
         <h2><?= $outlet['out_nama']; ?></h2>
       </div>
     </center>
+
     <div id="mid">
       <div class="info">
         <p>
-          <?php if(isset($trx)) : ?>
+          <?php if (isset($trx)) : ?>
             <?= $trx['trx_table']; ?> </br>
             <?= $trx['trx_cust']; ?> </br>
             Tanggal : <?= $trx['trx_date']; ?> </br>
             Kasir : <?= $trx['trx_userid']; ?> </br>
           <?php else : ?>
-            <?= $trx_prop['trx_tipe']. ' - ' . $trx_prop['trx_tipe_nama']; ?> </br>
+            <?= $trx_prop['trx_tipe'] . ' - ' . $trx_prop['trx_tipe_nama']; ?> </br>
             Tanggal : <?= date('Y-m-d H:i:s'); ?> </br>
             Kasir : <?= $this->session->userdata('pengguna_username'); ?> </br>
           <?php endif; ?>
@@ -59,41 +60,41 @@
           $subTotal = 0;
           foreach ($order as $items) :
           ?>
-          <?php if(isset($trx)) : ?>
-            <tr class="service">
-              <td class="tableitem">
-                <p class="itemtext"><?= $items['order_menu']; ?>
-              </td>
-              <td class="tableitem">
-                <p class="itemtext"><?= number_format($items['order_harga'], 0, '', '.'); ?>
-              </td>
-              <td class="tableitem">
-                <p class="itemtext"><?= $items['order_qty']; ?>
-              </td>
-              <td class="tableitem">
-                <p class="itemtext"><?= number_format($items['order_subtotal'], 0, '', '.'); ?></p>
-              </td>
-            </tr>
-          <?php $subTotal += $items['order_subtotal']; ?>
-          <?php else : ?>
-            <tr class="service">
-              <td class="tableitem">
-                <p class="itemtext"><?= $items['name']; ?>
-              </td>
-              <td class="tableitem">
-                <p class="itemtext"><?= number_format($items['price'], 0, '', '.'); ?>
-              </td>
-              <td class="tableitem">
-                <p class="itemtext"><?= $items['qty']; ?>
-              </td>
-              <td class="tableitem">
-                <p class="itemtext"><?= number_format($items['subtotal'], 0, '', '.'); ?></p>
-              </td>
-            </tr>
-          <?php $subTotal += $items['subtotal']; ?>
-          <?php endif; ?>
+            <?php if (isset($trx)) : ?>
+              <tr class="service">
+                <td class="tableitem">
+                  <p class="itemtext"><?= $items['menu_nama']; ?>
+                </td>
+                <td class="tableitem">
+                  <p class="itemtext"><?= number_format($items['order_harga'], 0, '', '.'); ?>
+                </td>
+                <td class="tableitem">
+                  <p class="itemtext"><?= $items['order_qty']; ?>
+                </td>
+                <td class="tableitem">
+                  <p class="itemtext"><?= number_format($items['order_subtotal'], 0, '', '.'); ?></p>
+                </td>
+              </tr>
+              <?php $subTotal += $items['order_subtotal']; ?>
+            <?php else : ?>
+              <tr class="service">
+                <td class="tableitem">
+                  <p class="itemtext"><?= $items['name']; ?>
+                </td>
+                <td class="tableitem">
+                  <p class="itemtext"><?= number_format($items['price'], 0, '', '.'); ?>
+                </td>
+                <td class="tableitem">
+                  <p class="itemtext"><?= $items['qty']; ?>
+                </td>
+                <td class="tableitem">
+                  <p class="itemtext"><?= number_format($items['subtotal'], 0, '', '.'); ?></p>
+                </td>
+              </tr>
+              <?php $subTotal += $items['subtotal']; ?>
+            <?php endif; ?>
           <?php endforeach; ?>
-            
+
           <tr class="tabletitle">
             <td></td>
             <td></td>
@@ -105,7 +106,7 @@
             </td>
           </tr>
 
-          <?php if(isset($trx)) : ?>
+          <?php if (isset($trx)) : ?>
             <tr class="tabletitle">
               <td></td>
               <td></td>
@@ -173,7 +174,7 @@
               </td>
             </tr>
 
-          <?php else: ?>
+          <?php else : ?>
             <tr class="tabletitle">
               <td></td>
               <td></td>
@@ -192,7 +193,7 @@
                 <h2>Tax Ppn</h2>
               </td>
               <td class="Rate">
-                <?php $totalPph = $subTotal * ($trx_prop['totalPph'] / 100)?>
+                <?php $totalPph = $subTotal * ($trx_prop['totalPph'] / 100) ?>
                 <h2><?= number_format($totalPph, 0, '', '.'); ?></h2>
               </td>
             </tr>
@@ -204,7 +205,7 @@
                 <h2>Tax Service</h2>
               </td>
               <td class="Rate">
-                <?php $totalServiceCharge = $subTotal * ($trx_prop['totalService'] / 100)?>
+                <?php $totalServiceCharge = $subTotal * ($trx_prop['totalService'] / 100) ?>
                 <h2><?= number_format($totalServiceCharge, 0, '', '.'); ?></h2>
               </td>
             </tr>
@@ -231,7 +232,7 @@
       <div id="legalcopy">
         <center>
           <p class="legal"><strong>Thank you for coming</strong>
-          <p class="legal"><strong>See you!!!</strong>
+            <p class="legal"><strong>See you!!!</strong>
         </center>
       </div>
 
@@ -240,8 +241,10 @@
 </body>
 
 <script>
-window.print();
-window.onafterprint = function(event) {
-  window.close();
-};
+  window.print();
+  setTimeout(function() {
+    alert("OK");
+    alert('sudah print')
+    window.location.href = '<?= base_url() ?>pos/pos';
+  }, 4000);
 </script>

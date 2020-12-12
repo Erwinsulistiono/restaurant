@@ -54,10 +54,11 @@ class Menu extends MY_Controller
 
     $this->upload->initialize($config);
     $gbr = $this->upload->data();
+    $this->load->library('upload', $config);
 
     if (empty($_FILES['filefoto']['name']) && !$menu_id) {
       $this->session->set_flashdata('msg', '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>Menu tidak dapat ditambahkan, file gambar yang Anda masukkan terlalu besar.</div>');
-      redirect('admin/katalog/outlet' . $dataBase);
+      redirect('admin/menu/outlet' . $dataBase);
     }
 
     if (empty($_FILES['filefoto']['name'])) {
@@ -65,8 +66,12 @@ class Menu extends MY_Controller
       $gbr['file_name'] = $upload['menu_gambar'];
     }
 
+    if($this->upload->do_upload('filefoto')){
+      $data['menu_gambar'] = $nmfile;
+    }
+
     $data = [
-      'menu_gambar' => $gbr['file_name'],
+      'menu_gambar' => $nmfile,
       'menu_nama' => $this->input->post('menu_nama'),
       'menu_deskripsi' => $this->input->post('menu_deskripsi'),
       'menu_harga_lama' => $this->input->post('menu_harga_lama'),
@@ -81,8 +86,9 @@ class Menu extends MY_Controller
       $this->M_log->simpan_log($reff_id, 'MENU', null, $log_newval);
       $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Menu <b>' . $data['menu_nama'] . '</b> Berhasil disimpan ke database.</div>');
       $this->simpan_kategori($reff_id, $dataBase);
-      redirect('admin/katalog/menu/' . $dataBase);
+      redirect('admin/menu/outlet/' . $dataBase);
     }
+
     $data_old = $this->M_crud->select('tbl_menu_' . $dataBase, 'menu_id', $menu_id);
     $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
 

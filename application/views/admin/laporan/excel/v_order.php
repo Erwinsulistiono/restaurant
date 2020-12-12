@@ -25,7 +25,7 @@ header("Content-Disposition: attachment; filename=Data_Order.xls");
   <tbody>
   <?php
   $no = 0;
-  foreach ($order as $table_content) :
+  foreach ($data as $table_content) :
   $no++ ?>
     <tr>
       <td><?= $no; ?></td>

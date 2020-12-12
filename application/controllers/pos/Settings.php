@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Settings extends CI_Controller
+class Settings extends MY_Controller
 {
 	public function __construct()
 	{
@@ -30,7 +30,7 @@ class Settings extends CI_Controller
 			'tot_saldo' => $tot,
 			'cek_saldo' => $this->M_pos->getDataCashInSaldo($tgl_awal, $this->user, $this->outlet),
 		];
-		echo json_encode($this->load->view('pos/settings/v_closing_kasir', $data, true));
+		$this->render('pos/settings/v_closing_kasir', $data);
 	}
 
 	public function simpan_close_kasir()

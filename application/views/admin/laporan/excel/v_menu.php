@@ -18,7 +18,7 @@ header("Content-Disposition: attachment; filename=Data_Menu.xls");
   <tbody>
   <?php
   $no = 0;
-  foreach ($menu as $table_content) :
+  foreach ($data as $table_content) :
   $no++ ?>
     <tr>
       <td><?= $no; ?></td>

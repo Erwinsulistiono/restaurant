@@ -21,22 +21,23 @@ class M_pos extends CI_Model
 
 	public function getAllOrderPos($id, $outlet)
 	{
-		$query = $this->db->query('SELECT * FROM tbl_order_' . $outlet . ' WHERE order_trx_reff = ' . $id);
+		$this->db->select('*');
+		$this->db->from("tbl_order_$outlet as tbl1");
+		$this->db->where("order_trx_reff = $id");
+		$this->db->join("tbl_menu_$outlet as tbl2", "tbl1.order_menu=tbl2.menu_id", "left");
+		$query = $this->db->get();
+		// $query = $this->db->query('SELECT * FROM tbl_order_' . $outlet . ' WHERE order_trx_reff = ' . $id);
 		return $query->result_array();
 	}
 
 	public function getAllOrderFromMobilePos($id, $outlet)
 	{
-		$query = $this->db->query('SELECT * FROM cust_order_' . $outlet . ' WHERE order_userid = ' . $id);
-		return $query->result_array();
-	}
+		$this->db->select('*');
+		$this->db->from("cust_order_$outlet AS tbl1");
+		$this->db->join("tbl_menu_$outlet AS tbl2", "tbl1.order_menu=tbl2.menu_id", "left");
+		$this->db->where("order_userid = $id");
+		$query = $this->db->get();
 
-	public function get_qty_diff($id, $qty, $outlet)
-	{
-		$query = $this->db->query('SELECT a.stock_id, a.stock_nama, a.stock_qty - (b.ing_qty * c.satuan_val * ' . $qty . ') as stock_qty FROM tbl_stock_' . $outlet . ' a
-		INNER JOIN tbl_ingredient b ON a.stock_id=b.ing_inv_id
-		INNER JOIN tbl_satuan c ON b.ing_satuan_id=c.satuan_id 
-		WHERE b.ing_menu_id = ' . $id);
 		return $query->result_array();
 	}
 
@@ -58,6 +59,10 @@ class M_pos extends CI_Model
 	{
 		$this->db->query("TRUNCATE tbl_trx_pos_$outlet");
 		$this->db->query("TRUNCATE tbl_order_$outlet");
+		$this->db->query("UPDATE tbl_meja_$outlet SET meja_pelanggan = 0;");
+		$this->db->query("UPDATE tbl_pelanggan SET plg_order = 0;");
+		$this->db->query("UPDATE tbl_pelanggan SET plg_login_flg = 'N';");
+		$this->db->query("UPDATE tbl_pelanggan SET plg_meja = '';");
 	}
 
 	public function getById($tgl, $user, $outlet)
@@ -66,11 +71,11 @@ class M_pos extends CI_Model
 		return $query->row()->kas_id;
 	}
 
-	public function getAllOrderPrint($id, $outlet)
-	{
-		$query = $this->db->query('SELECT * FROM tbl_lap_order_' . $outlet . ' WHERE order_trx_reff = ' . $id);
-		return $query->result_array();
-	}
+	// public function getAllOrderPrint($id, $outlet)
+	// {
+	// 	$query = $this->db->query('SELECT * FROM tbl_lap_order_' . $outlet . ' WHERE order_trx_reff = ' . $id);
+	// 	return $query->result_array();
+	// }
 
 	public function getLastAutoIncrementId($outlet)
 	{
@@ -96,32 +101,14 @@ class M_pos extends CI_Model
 		return $query->result_array();
 	}
 
-	public function getIngredientAll($outlet)
+	public function joinMobileOrderPelangganMeja($outlet)
 	{
-		$query = $this->db->query("SELECT ing_id, ing_menu_id, ing_inv_id, ing_qty, satuan_val, stock_qty, b.*
-									FROM tbl_ingredient AS a
-									LEFT JOIN tbl_menu_$outlet AS b ON a.ing_menu_id=b.menu_id
-									LEFT JOIN tbl_stock_$outlet AS c ON a.`ing_inv_id` = c.`stock_id`
-									LEFT JOIN tbl_satuan AS d ON a.`ing_satuan_id`=d.`satuan_id`");
-		return $query->result_array();
-	}
-
-	public function updateStock($outlet, $id, $qty)
-	{
-		$this->db->query("UPDATE restaurant.tbl_stock_$outlet SET stock_qty = stock_qty - $qty WHERE stock_id = $id");
-	}
-
-	function insertBulkOrder($data, $outlet)
-	{
-		$this->db->insert_batch('tbl_order_' . $outlet, $data);
-		// return $this->db->affected_rows() > 0;
-	}
-
-	public function customerHadOrder()
-	{
-		$this->db->select('plg_id, plg_nama, plg_meja, plg_alamat, plg_notelp, plg_platno, plg_order');
-		$this->db->from('tbl_pelanggan');
-		$this->db->where('plg_order > ', 0);
+		$this->db->select('*');
+		$this->db->from('cust_order_' . $outlet);
+		$this->db->join('tbl_pelanggan', 'tbl_pelanggan.plg_id = cust_order_' . $outlet . '.order_userid', 'left');
+		$this->db->join('tbl_meja_' . $outlet, 'tbl_meja_' . $outlet . '.meja_id = tbl_pelanggan.plg_meja', 'left');
+		$this->db->join('tbl_area', 'tbl_area.area_id = tbl_meja_' . $outlet . '.meja_lokasi', 'left');
+		$this->db->group_by("order_userid");
 		$query = $this->db->get();
 		return $query->result_array();
 	}

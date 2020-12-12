@@ -1,3 +1,4 @@
+<div id="base">
   <div class="offcanvas">
   </div>
   <div id="content">
@@ -50,7 +51,7 @@
       </section>
     </section>
   </div>
-
+</div>
 
 <!-- Modal view pesanan -->
 <?php foreach ($data as $table_content) : ?>

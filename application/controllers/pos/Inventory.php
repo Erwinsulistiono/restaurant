@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Inventory extends CI_Controller
+class Inventory extends MY_Controller
 {
 
 	public function __construct()
@@ -12,14 +12,19 @@ class Inventory extends CI_Controller
 			redirect($url);
 		};
 		$this->load->model('M_crud');
+		$this->outlet = $this->session->userdata('pengguna_outlet');
 	}
 
 	public function index()
 	{
-		$database = $this->session->userdata('pengguna_outlet');
 		$data = [
-			'data' => $this->M_crud->read('tbl_stock_' . $database),
+			'data' => $this->M_crud->read("tbl_stock_$this->outlet"),
 		];
-		echo json_encode($this->load->view('pos/inventory/v_inventory', $data, TRUE));
+		$this->render('pos/inventory/v_inventory', $data);
+	}
+
+	public function reset_stock($stock_id)
+	{
+		$this->M_crud->update("tbl_stock_$this->outlet", ['stock_qty' => 0], 'stock_id', $stock_id);
 	}
 }

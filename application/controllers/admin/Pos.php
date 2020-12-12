@@ -32,9 +32,7 @@ class Pos extends MY_Controller
 
 		if ($image) {
 			$config['allowed_types'] = 'gif|jpg|png|jpeg|bmp';
-			$config['max_size'] = '1024';
-			$config['max_width']  = '900';
-			$config['max_height']  = '800';
+			$config['max_size'] = '2024';
 			$config['upload_path'] = './assets/img/';
 
 			$this->upload->initialize($config);
@@ -45,6 +43,10 @@ class Pos extends MY_Controller
 		if ((!$image) && ($payment_id)) {
 			$image = $this->input->post('old_payment_qrcode');
 		}
+
+		 if($this->upload->do_upload('payment_qrcode')){
+      		$data['payment_qrcode'] = $image;
+    	}
 
 		$data = [
 			'payment_nama' => $this->input->post('payment_nama'),
@@ -96,21 +98,26 @@ class Pos extends MY_Controller
 
 	function saldo_kas_harian($pengguna_kasir = null, $tgl_awal = null, $tgl_akhir = null, $outlets = null)
 	{
+
 		$data = [			
-			'pengguna_kasir' => ($pengguna_kasir) ? $pengguna_kasir : $this->input->post('pengguna_kasir'),
+			'pengguna_kasir' => ($pengguna_kasir) ? $pengguna_kasir : $this->input->post('kas_nm_kasir'),
 			'tgl_awal'  => ($tgl_awal) ? $tgl_awal : $this->input->post('tgl_awal'),
 			'tgl_akhir' => ($tgl_akhir) ? $tgl_akhir : $this->input->post('tgl_akhir'),
-			'outlets' => ($outlets) ? $outlets : $this->input->post('outlet'),
+			'outlets' => ($outlets) ? $outlets : $this->input->post('out_id'),
 			'data' => [],
 		];
 		$data['data'] = $this->getAllDataSaldo($data['tgl_awal'] , $data['tgl_akhir']);
 		
 		if ($data['pengguna_kasir'] != 'all') {
 			$data['data'] = $this->filterByPengguna($data);
+
 		}
 		if ($data['outlets'] != 'all') {
 			$data['data'] = $this->filterByOutlets($data);
 		}
+
+		$data['outlet'] = $this->M_crud->read('tbl_outlet');
+
 		$this->render('admin/pos/saldo_kas_harian/v_saldo_kas_harian', $data);
 	}
 

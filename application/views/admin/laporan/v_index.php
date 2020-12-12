@@ -1,8 +1,14 @@
+<!-- BEGIN BASE-->
 <div id="base">
 
+  <!-- BEGIN OFFCANVAS LEFT -->
   <div class="offcanvas">
 
   </div>
+  <!--end .offcanvas-->
+  <!-- END OFFCANVAS LEFT -->
+
+  <!-- BEGIN CONTENT-->
   <div id="content">
     <br />
     <section class="section-account">
@@ -62,7 +68,7 @@
                     </div>
                     <!--end .col -->
                     <div class="col-xs-6 text-right">
-                      <button class="btn btn-primary btn-raised nav-link" type="submit"> Pilih</button>
+                      <button class="btn btn-primary btn-raised" type="submit"> Pilih</button>
                     </div>
                     <!--end .col -->
                   </div>
@@ -70,10 +76,22 @@
                 <!--end .row -->
               </form>
             </div>
+            <!--end .col -->
 
           </div>
+          <!--end .row -->
         </div>
+        <!--end .card-body -->
       </div>
+      <!--end .card -->
     </section>
+    <!-- END LOGIN SECTION -->
+    <!-- END TABLE HOVER -->
+
   </div>
+  <!--end #content-->
+  <!-- END CONTENT -->
+
 </div>
+<!--end #base-->
+<!-- END BASE -->

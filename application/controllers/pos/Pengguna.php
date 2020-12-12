@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Pengguna extends CI_Controller
+class Pengguna extends MY_Controller
 {
 	function __construct()
 	{
@@ -26,7 +26,7 @@ class Pengguna extends CI_Controller
 			'level_pos' => $this->M_crud->read('tbl_level_pos'),
 			'data' => $this->M_pengguna->getPenggunaPerOutlet($this->outlet),
 		];
-		echo json_encode($this->load->view('pos/user/v_pengguna', $data, true));
+		$this->render('pos/user/v_pengguna', $data);
 	}
 
 	function simpan_pengguna()

@@ -46,7 +46,7 @@
                   <td><?= $table_content['voucher_discount'] . '%'; ?></td>
                   <td><?= $table_content['voucher_periode_awal'] . ' - ' . $table_content['voucher_periode_akhir']; ?>
                   </td>
-                  <td><?= $table_content['voucher_limit']; ?></td>
+                  <td><?= number_format($table_content['voucher_limit']); ?></td>
                   <td><?= $table_content['voucher_syarat']; ?></td>
                   <td class="text-right">
                     <a href="#" class="btn btn-icon-toggle btn-raised" title="Edit row" data-toggle="modal"
@@ -101,7 +101,7 @@
           <div class="form-group">
             <label class="col-sm-3 control-label">Diskon</label>
             <div class="col-sm-8">
-              <input name="voucher_diskon" class="form-control" required>
+              <input type="number" name="voucher_diskon" class="form-control" required>
             </div>
           </div>
           <div class="form-group">
@@ -118,10 +118,10 @@
             <label for="demo-date" class="col-sm-3 control-label">Periode</label>
             <div class="col-sm-8">
               <div class="input-group input-daterange">
-                <input type="text" name="voucher_periode_awal" class="datepicker input-group date form-control"
+                <input type="date" name="voucher_periode_awal" class="datepicker input-group date form-control"
                   id="demo-date-range">
                 <span class="input-group-addon">to</span>
-                <input type="text" name="voucher_periode_akhir" class="datepicker input-group date form-control"
+                <input type="date" name="voucher_periode_akhir" class="datepicker input-group date form-control"
                   id="demo-date-range">
                 <span class="input-group-addon"></span>
               </div>
@@ -130,7 +130,7 @@
           <div class="form-group">
             <label class="col-sm-3 control-label">Limit voucher</label>
             <div class="col-sm-8">
-              <input name="voucher_limit" class="form-control" required>
+              <input type="number" name="voucher_limit" class="form-control" required>
             </div>
           </div>
           <div class="form-group">
@@ -180,9 +180,9 @@
             <label class="col-sm-3 control-label">Diskon</label>
             <div class="col-sm-8">
               <?php if ($table_content['voucher_nominal'] !== '0') : ?>
-              <input name="voucher_diskon" value="<?= $table_content['voucher_nominal']; ?>" class="form-control" required>
+              <input name="voucher_diskon" type="number" value="<?= $table_content['voucher_nominal']; ?>" class="form-control" required>
               <?php else : ?>
-              <input name="voucher_diskon" value="<?= $table_content['voucher_discount']; ?>" class="form-control" required>
+              <input name="voucher_diskon" type="number" value="<?= $table_content['voucher_discount']; ?>" class="form-control" required>
               <?php endif; ?>
             </div>
           </div>
@@ -205,10 +205,10 @@
             <label for="demo-date" class="col-sm-3 control-label">Periode</label>
             <div class="col-sm-8">
               <div class="input-group input-daterange">
-                <input type="" name="voucher_periode_awal" value="<?= $table_content['voucher_periode_awal']; ?>"
+                <input type="date" name="voucher_periode_awal" value="<?= $table_content['voucher_periode_awal']; ?>"
                   class="datepicker date form-control" id="demo-date-range">
                 <span class="input-group-addon">to</span>
-                <input type="" name="voucher_periode_akhir" value="<?= $table_content['voucher_periode_akhir']; ?>"
+                <input type="date" name="voucher_periode_akhir" value="<?= $table_content['voucher_periode_akhir']; ?>"
                   class="datepicker date form-control" id="demo-date-range">
                 <span class="input-group-addon"></span>
               </div>
@@ -217,7 +217,7 @@
           <div class="form-group">
             <label class="col-sm-3 control-label">Limit voucher</label>
             <div class="col-sm-8">
-              <input name="voucher_limit" value="<?= $table_content['voucher_limit']; ?>" class="form-control" required>
+              <input name="voucher_limit" type="number" value="<?= $table_content['voucher_limit']; ?>" class="form-control" required>
             </div>
           </div>
           <div class="form-group">

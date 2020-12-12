@@ -22,7 +22,7 @@ header("Content-Disposition: attachment; filename=Data_Pelanggan.xls");
   <tbody>
   <?php
   $no = 0;
-  foreach ($plg as $table_content) :
+  foreach ($data as $table_content) :
   $no++ ?>
     <tr>
       <td><?= $no; ?></td>

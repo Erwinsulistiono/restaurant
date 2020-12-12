@@ -56,7 +56,7 @@ class Login extends CI_Controller
             redirect('admin/dashboard');
         }
         $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Welcome <b>' . $this->session->userdata('user_nama') . '</b> Selamat bekerja.</div>');
-        redirect('pos/main');
+        redirect('pos/dashboard');
     }
 
     public function gagallogin()

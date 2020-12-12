@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Dashboard extends CI_Controller
+class Dashboard extends MY_Controller
 {
 
 	public function __construct()
@@ -29,6 +29,6 @@ class Dashboard extends CI_Controller
 		$data['porsi_tot'] = $this->M_dashboard->getTotalPorsi($outlet);
 		$data['porsi_now'] = $this->M_dashboard->getTotalPorsiThisMonth($outlet);
 		
-		echo json_encode($this->load->view('pos/v_dashboard', $data, TRUE));
+		$this->render('pos/v_dashboard', $data);
 	}
 }

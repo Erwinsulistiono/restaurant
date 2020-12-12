@@ -19,28 +19,26 @@
 <img id="loading-screen" src="<?= base_url('assets/img/loading.svg') ?>" class="img-responsive" alt="" />
 <div id="base">
   <section class="style-default no-padding">
-    <div class="card">
-      <div class="card-head style-primary" style="position:sticky; top:0; z-index:10001">
-        <!-- <div class="tools pull-left">
-          <form class="navbar-search" role="search">
-            <div class="form-group">
-              <input type="text" class="form-control" name="contactSearch" placeholder="Search Outlet">
-            </div>
-            <button type="submit" class="btn btn-icon-toggle ink-reaction"><i class="fa fa-search"></i></button>
-          </form>
-        </div> -->
+    <div class="card" style="min-height:100vh">
+      <div class="card-head style-primary" style="position:fixed; top:0; left:0; right:0; z-index:10001">
       </div>
       <!--end .card-head -->
-      <div class="card-body" style="height:100vh">
+      <div class="card-body" style="min-height:89vh; padding-top:9vh">
         <div class="row">
           <div class="list-results">
             <?php foreach ($outlet as $o) : ?>
-              <a class="text-lg text-medium" href="<?= base_url('order/outlet/' . $o['out_id']) ?>">
+              <?php $closed = " - (closed)" ?>
+              <?php $disabled = 'style="pointer-events: none; opacity: 0.6"' ?>
+              <?php if (date("H:i:s") > $o['out_opening_hours'] && date("H:i:s") < $o['out_closing_hours']) : ?>
+                <?php $closed = "" ?>
+                <?php $disabled = "" ?>
+              <?php endif ?>
+              <a class="text-lg text-medium" href="<?= base_url('order/outlet/' . $o['out_id']) ?>" <?= $disabled ?>>
                 <div class="col-xs-12 col-lg-6 hbox-xs" style="border-bottom:solid; border-width:1px; border-color:#b6b6b6">
                   <div class="hbox-column v-top">
                     <div class="clearfix">
                       <div class="col-lg-12 margin-bottom-lg">
-                        <?= $o['out_nama'] ?>
+                        <?= $o['out_nama'] . $closed ?>
                       </div>
                     </div>
                     <div class="clearfix opacity-75">
@@ -61,33 +59,7 @@
                 <!--end .hbox-xs -->
               </a>
             <?php endforeach; ?>
-            <?php foreach ($outlet as $o) : ?>
-              <a class="text-lg text-medium" href="<?= base_url('order/outlet/' . $o['out_id']) ?>">
-                <div class="col-xs-12 col-lg-6 hbox-xs">
-                  <div class="hbox-column v-top">
-                    <div class="clearfix">
-                      <div class="col-lg-12 margin-bottom-lg">
-                        <?= $o['out_nama'] ?>
-                      </div>
-                    </div>
-                    <div class="clearfix opacity-75">
-                      <div class="col-md-5 text-caption no-margin">
-                        <?= $o['out_telp'] ?>
-                      </div>
-                      <div class="col-md-12 text-caption no-margin">
-                        <?= $o['out_alamat'] ?>
-                      </div>
-                    </div>
-                  </div>
-                  <!--end .hbox-column -->
-                  <div class="hbox-column width-3">
-                    <img class="img-circle img-responsive pull-left" src="<?= base_url('assets/img/outlet.svg') ?>" alt="" />
-                  </div>
-                  <!--end .hbox-column -->
-                </div>
-                <!--end .hbox-xs -->
-              </a>
-            <?php endforeach; ?>
+
           </div>
           <!--end .list-results -->
         </div>
@@ -96,6 +68,7 @@
   </section>
 </div>
 <script src="<?= base_url('assets/js/jquery-3.4.1.min.js'); ?>"></script>
+<script src="<?= base_url('assets/js/source/App.js'); ?>"></script>
 <script src="<?= base_url('assets/js/source/AppNavSearch.js'); ?>"></script>
 <script>
   $(() => {

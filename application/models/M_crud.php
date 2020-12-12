@@ -39,4 +39,10 @@ class M_crud extends CI_Model
         $query = $this->db->get();
         return $query->result_array();
     }
+
+    function insert_bulk($table, $data)
+    {
+        $this->db->insert_batch($table, $data);
+        return $this->db->affected_rows() > 0;
+    }
 }

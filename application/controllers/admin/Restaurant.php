@@ -20,7 +20,7 @@ class Restaurant extends MY_Controller
   function area()
   {
     $data['data'] = $this->M_crud->read('tbl_area');
-    $this->render('admin/point_of_sale/restaurant_mode/v_restaurant_area', $data);
+    $this->render('admin/pos/restaurant_mode/v_restaurant_area', $data);
   }
 
   public function simpan_area()
@@ -52,7 +52,7 @@ class Restaurant extends MY_Controller
   public function pilih_meja()
   {
     $data['outlet'] = $this->M_crud->read('tbl_outlet');
-    $this->render('admin/point_of_sale/restaurant_mode/v_pilih_meja', $data);
+    $this->render('admin/pos/restaurant_mode/v_pilih_meja', $data);
   }
 
   public function meja($dataBase = null)
@@ -60,10 +60,10 @@ class Restaurant extends MY_Controller
     is_null($dataBase) ? $db = $this->input->post('selectDb') : $db = $dataBase;
     $data = [
       'dataBase' => $db,
-      'data' => $this->M_crud->left_join('tbl_meja_' . $db, 'tbl_area', 'tbl_meja_'.$db.'.meja_lokasi = tbl_area.area_id'),
+      'data' => $this->M_crud->left_join('tbl_meja_' . $db, 'tbl_area', 'tbl_meja_' . $db . '.meja_lokasi = tbl_area.area_id'),
       'area' => $this->M_crud->read('tbl_area'),
     ];
-    $this->render('admin/point_of_sale/restaurant_mode/v_restaurant_meja', $data);
+    $this->render('admin/pos/restaurant_mode/v_restaurant_meja', $data);
   }
 
   function simpan_meja($dataBase)
@@ -79,7 +79,7 @@ class Restaurant extends MY_Controller
       $this->M_crud->insert('tbl_meja_' . $dataBase, $data);
       $reff_id = $this->db->insert_id();
 
-      $this->M_log->simpan_log($reff_id, 'MEJA OUT '. $dataBase, null, $log_newval);
+      $this->M_log->simpan_log($reff_id, 'MEJA OUT ' . $dataBase, null, $log_newval);
       $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Menu <b>' . $data['meja_nama'] . '</b> Berhasil disimpan ke database.</div>');
       redirect('admin/restaurant/meja/' . $dataBase);
     }
@@ -97,7 +97,7 @@ class Restaurant extends MY_Controller
     $data_old = $this->M_crud->select('tbl_meja_' . $dataBase, 'meja_id', $meja_id);
     $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
 
-    $this->M_log->simpan_log($meja_id, 'MEJA OUT '.$dataBase, $log_oldval);
+    $this->M_log->simpan_log($meja_id, 'MEJA OUT ' . $dataBase, $log_oldval);
     $this->M_crud->delete('tbl_meja_' . $dataBase, 'meja_id', $meja_id);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Meja Berhasil dihapus dari database.</div>');
     redirect('admin/restaurant/meja/' . $dataBase);

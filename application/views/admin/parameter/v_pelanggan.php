@@ -132,7 +132,7 @@
           <div class="form-group">
             <label class="col-sm-3 control-label">Kontak / No Telp</label>
             <div class="col-sm-8">
-              <input name="plg_notelp" class="form-control" required>
+              <input name="plg_notelp" type="number" class="form-control" required>
             </div>
           </div>
           <div class="form-group">
@@ -144,7 +144,7 @@
           <div class="form-group">
             <label class="col-sm-3 control-label">Whatsapp</label>
             <div class="col-sm-8">
-              <input name="plg_whatsapp" class="form-control" required>
+              <input name="plg_whatsapp" type="number" class="form-control" required>
             </div>
           </div>
           <div class="form-group">
@@ -156,7 +156,7 @@
           <div class="form-group">
             <label class="col-sm-3 control-label">Confirm Password</label>
             <div class="col-sm-8">
-              <input type="password" name="plg_password2" class="form-control" >
+              <input type="password" name="plg_password2" class="form-control" required>
             </div>
           </div>
 
@@ -219,9 +219,9 @@ foreach ($data as $table_content) :
             </div>
           </div>
           <div class="form-group">
-            <label class="col-sm-3 control-label">Kontak</label>
+            <label class="col-sm-3 control-label">Kontak / No Telp</label>
             <div class="col-sm-8">
-              <input type="" name="plg_notelp" class="form-control" 
+              <input type="number" name="plg_notelp" class="form-control" 
                 value="<?= $table_content['plg_notelp'] ?>" required>
             </div>
           </div>
@@ -235,7 +235,7 @@ foreach ($data as $table_content) :
           <div class="form-group">
             <label class="col-sm-3 control-label">Whatsapp</label>
             <div class="col-sm-8">
-              <input type="" name="plg_whatsapp" class="form-control" 
+              <input type="number" name="plg_whatsapp" class="form-control" 
                 value="<?= $table_content['plg_whatsapp'] ?>" required>
             </div>
           </div>
@@ -248,7 +248,7 @@ foreach ($data as $table_content) :
           <div class="form-group">
             <label class="col-sm-3 control-label">Confirm Password</label>
             <div class="col-sm-8">
-              <input type="password" name="plg_password2" class="form-control" >
+              <input type="password" name="plg_password2" class="form-control" required>
             </div>
           </div>
 

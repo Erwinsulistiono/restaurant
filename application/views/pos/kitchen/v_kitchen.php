@@ -1,11 +1,13 @@
+<div id="base" style="margin:0px;">
   <div id="content">
     <section>
-      <div class="section-header">
-        <h2><span class="fa fa-cutlery"></span> Kitchen</h2>
+      <div class="section-header  ">
+        <h2><span class="fa fa-cutlery"></span>&nbsp; <?= $kitchen['kitchen_nama'] ?></h2>
       </div>
-      <section class="card style-default no-padding no-margin">
+      <section class="style-default no-padding no-margin">
         <div class="container-fluid no-padding no-margin">
-          <div class="card no-margin">
+
+          <div class="card">
             <div class="card-body no-margin">
               <button id="getKitchen" href="#" class="btn btn-primary btn-raised"><span class="fa fa-refresh"></span> Refresh</button>
               <h1 id="timer" class="pull-right no-margin no-padding"></h1>
@@ -15,114 +17,390 @@
               </div>
             </div>
           </div>
+
         </div>
       </section>
     </section>
 
-    <script type="text/javascript">
-      var urlKitchen = '<?php echo base_url('pos/kitchen/'); ?>'
-      var buttonRefreshKitchen = document.querySelector("#getKitchen")
 
-      var printCardKitchen = data => {
-        let target = document.getElementById('target')
-        target.innerHTML = ''
-        let table = data.table
-        let order = data.order
-        table.forEach(t => {
-          let card = ''
-          let iteration = 0
-          let date = new Date(t.order_date)
-          let timerCard = ''
+    <!-- Modal Return Order -->
+    <form class="form-horizontal" id="form-return-order" action="<?= base_url('pos/kitchen/return_order/'); ?>" method="post">
+      <div class="modal fade" id="return_order" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close text-danger btn-raised" data-dismiss="modal" aria-hidden="true">
+                <span class="fa fa-times"></span></button>
+              <h3 class="modal-title" id="myModalLabel">Cancel Order</h3>
+            </div>
 
-          card +=
-            `<form role="form" id="form-${t.trx_id}" method="post">
-              <div class="col-md-2">
-              <div class="card">
-              <div class="card-head style-gray-light">
-              <h3 class="text-center text-light">${t.trx_table}</h3>
+            <div class="card no-margin">
+              <div class="card-body">
+
+                <div class="row">
+                  <div class="col-md-4">
+                    <label>Menu :</label>
+                  </div>
+                  <div class="col-md-7">
+                    <input class="form-control" id="return_menu" type="text" name="otherIngredient" readonly>
+                    <!-- <select name="return_order"  class="form-control" required>
+                      <option value="">&nbsp;</option>
+                    </select> -->
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4">
+                    <label>Stock Habis :</label>
+                  </div>
+                  <div class="col-md-7">
+                    <select name="stock_id" id="empty_stock" class="form-control">
+                      <option value="">&nbsp;</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row" id="otherIngredient">
+                  <div class="col-md-4">
+                    <label>Ingredient Lain :</label>
+                  </div>
+                  <div class="col-md-7">
+                    <input class="form-control" type="text" name="otherIngredient">
+                  </div>
+                </div>
+
               </div>
-              <div class="card-body">`;
+            </div>
 
-          order.forEach(o => {
-            if (((t.trx_id) === (o.order_trx_reff)) &&
-              ((t.order_date) === (o.order_date)) &&
-              ((o.order_kitchen_flg) == 'N')) {
-              card += `<div class="clearfix">
-                  <div class="pull-left">${o.order_menu}</div>
-                  <div class="pull-right">${o.order_qty}</div>
-                  </div>`;
-              card += ((o.order_notes)) ? `<div class="clearfix pull-left"> - ${o.order_notes}</div>` : '';
-              iteration++;
-            }
+            <div class="modal-footer">
+              <button class="btn btn-primary btn-raised btn-flat" id="close-modal" data-dismiss="modal" aria-hidden="true">Tutup</button>
+              <button class="btn btn-primary btn-raised" id="simpan-return-menu" type="submit">Simpan</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+
+    <script src="<?= base_url() . 'assets/js/jquery-3.4.1.min.js' ?>"></script>
+    <script type="text/javascript">
+      let kitchen_id = '<?= $kitchen['kitchen_id']; ?>'
+      let urlGetPesanan = '<?php echo base_url('pos/Pesanan/'); ?>'
+      let order = ''
+      let recipe = ''
+      let trx = ''
+      let setActiveTrx = ''
+      let orderId = ''
+      let canceledOrderHeader = []
+      let canceledOrder = 0;
+      let currTrxId = 0;
+      let iteration = 0;
+
+      /*------------------ GET DATA TRX ------------------*/
+      let getTrxKitchen = () => {
+        $.ajax({
+          type: 'GET',
+          url: `${urlGetPesanan}`,
+          dataType: 'json',
+          success: function(data) {
+            printCard(data);
+          }
+        })
+      }
+
+      /*------------------ PRINT CARD ------------------*/
+      let printCard = data => {
+        $('#target').html('');
+        trx = data.trx;
+        order = data.order;
+        recipe = data.recipe;
+        console.log(data)
+
+        trx.forEach(t => {
+          let card = '';
+          let timerCard = '';
+          let buttonAttribute = "";
+          let isTrxCanceledByKitchen = (t.trx_cancel_kitchen_flg);
+          let isOrderCanceledByKitchen = (t.order_cancel_flg);
+          iteration = 0;
+          // (isTrxCanceledByKitchen == 'N') && 
+          // if ((isOrderCanceledByKitchen == 'N')) {
+          card += printCardHeader(t);
+          card += printCardBody(t);
+          card += printCardFoot(t);
+
+          (iteration > 0) && $('#target').append(card);
+          // }
+        })
+      }
+
+      /*------------------ PRINT CARD HEADER ------------------*/
+      let printCardHeader = (t) => {
+        let headerStyle = "style-gray-light";
+        let headerText = "";
+        let buttonAttribute = "";
+        let card = "";
+        let isOrderCanceledByKitchen = t.order_cancel_flg;
+        let isTrxCanceledByKasir = t.trx_cancel_flg;
+
+        if (currTrxId != t.trx_id) {
+          currTrxId = t.trx_id;
+          canceledOrder = 0;
+        }
+
+        if (isOrderCanceledByKitchen == 'Y' || isTrxCanceledByKasir == 'Y') {
+          headerStyle = 'style-danger';
+          headerText = " - (Canceled)";
+          if (canceledOrder == 0 && currTrxId == t.trx_id) {
+            let form = document.querySelectorAll(`.form-${t.trx_id}`)
+            form.forEach(h => {
+              h.querySelector('.card-head').style.backgroundColor = '#f44336'
+              h.querySelector('h3').innerHTML = `${t.trx_table} - (Canceled)`
+              if (isTrxCanceledByKasir == 'N') {
+                h.querySelectorAll('a')[0].setAttribute('disabled', buttonAttribute)
+                h.querySelectorAll('a')[1].setAttribute('disabled', buttonAttribute)
+              }
+            })
+          }
+          canceledOrder++
+        }
+
+        if (canceledOrder > 0) {
+          headerStyle = 'style-danger';
+          headerText = " - (Canceled)";
+        }
+
+        card +=
+          `<form role="form" id="form-${t.order_id}" class="form-${t.trx_id}" method="post">
+        <div class="col-md-3 col-sm-4 col-xs-6">
+        <div class="card">
+        <div class="card-head ${headerStyle}">
+        <h3 class="text-center text-light">${t.trx_table}${headerText}</h3>
+        </div>
+        <div class="card-body">`;
+
+        return card;
+      }
+
+      /*------------------ PRINT CARD FOOT ------------------*/
+      let printCardFoot = (t) => {
+        let card = '';
+        let buttonAttribute = (canceledOrder) ? "disabled" : "";
+        let isTrxCanceledByKasir = t.trx_cancel_flg;
+
+        if (isTrxCanceledByKasir == 'Y') {
+          card += `<br/>
+            <div class="row">
+              <div class="col-xs-12 no-padding">
+                <a href="#" data-qty="${t.order_qty}" data-menuid="${t.order_menu}" onclick="updateFlgOrderAfterCancelation(${t.order_id},${t.trx_id});" 
+                class="btn btn-danger btn-raised btn-block">clear order</a>
+              </div>
+            </div>`;
+        } else {
+          card += `<br/>
+            <div class="row">
+              <div class="col-xs-6 no-padding">
+                <a href="#" onclick="updateFlgOrder(${t.order_id})" 
+                class="btn btn-success btn-raised btn-block" ${buttonAttribute}><i class="fa fa-check"></i></a>
+              </div>
+              <div class="col-xs-6 no-padding">
+                <a href="#" data-toggle="modal" data-target="#return_order" onclick="populateModalReturn(${t.order_id})" 
+                class="btn btn-danger btn-raised btn-block" ${buttonAttribute}><i class="fa fa-times"></i></a>
+              </div>
+            </div>`;
+        }
+
+        card += `
+        </div>
+        </div>
+        </div>
+        </div>
+        </form>`;
+
+        return card;
+      }
+
+      /*------------------ PRINT CARD BODY ------------------*/
+      let printCardBody = (t) => {
+        let date = new Date(t.order_date);
+        let isDoneCooking = t.order_kitchen_flg;
+        let isChoosenKitchen = (Number(t.menu_kitchen) == Number(kitchen_id));
+        let card = '';
+        let isTrxCanceledByKasir = t.trx_cancel_flg;
+        let isOrderCanceledByKitchen = t.order_cancel_flg;
+        console.log('t menu kitchen', t.menu_kitchen)
+        console.log(isChoosenKitchen)
+
+        if (isDoneCooking == 'N' && isChoosenKitchen && (isTrxCanceledByKasir == 'N' || isOrderCanceledByKitchen == 'N')) {
+          card += `<div class="clearfix">
+          <div class="pull-left">${t.menu_nama}</div>
+          <div class="pull-right">${t.order_qty}</div>
+          </div>`;
+          card += ((t.order_notes)) ? `<div class="clearfix pull-left"> - (${t.order_notes})</div>` : '';
+          iteration++;
+        }
+
+        card += `<br/>
+        <div class="text-center">
+        <div>${date.getDate()} / ${(date.getMonth()+1)} / ${date.getFullYear()}</div>
+        <h4 class="dispTime-${trx.trx_id}-${date.getTime()}"></h4>`;
+
+        setInterval(function() {
+          let today = new Date();
+          let dispTime = new Date((today - date));
+          let h = dispTime.getUTCHours();
+          let m = dispTime.getUTCMinutes();
+          let s = dispTime.getUTCSeconds();
+          m = (m < 10) ? `0${m}` : m;
+          s = (s < 10) ? `0${s}` : s;
+
+          timercard = `${h} : ${m} : ${s}`;
+          $(`.dispTime-${trx.trx_id}-${date.getTime()}`).html(timercard);
+        }, 1000);
+
+        return card;
+      }
+
+      let getdate = () => {
+        let today = new Date();
+        let h = today.getHours();
+        let m = today.getMinutes();
+        let s = today.getSeconds();
+        s = (s < 10) ? `0${s}` : s;
+        m = (m < 10) ? `0${m}` : m;
+
+        $("#timer").text(`${h} : ${m} : ${s}`);
+        setTimeout(function() {
+          getdate()
+        }, 1000);
+      }
+
+      let btn = document.getElementById("getKitchen");
+      setInterval(function() {
+        btn.click();
+      }, 60000);
+
+      let updateFlgOrder = (id) => {
+        event.preventDefault()
+        let form = $(`#form-${id}`)
+        let url = '<?= base_url('pos/kitchen/') ?>'
+        $.ajax({
+          type: 'POST',
+          url: `${url}end_proses_kitchen`,
+          data: {
+            orderId: id
+          },
+          dataType: 'json',
+          success: function(data) {
+            alert(data)
+            form.remove();
+          }
+        })
+      }
+
+      let updateFlgOrderAfterCancelation = (orderId, trxId) => {
+        event.preventDefault()
+        let form = $(`#form-${orderId}`)
+        let url = '<?= base_url('pos/kitchen/') ?>'
+        let qty = event.target.getAttribute('data-qty');
+        let menuId = event.target.getAttribute('data-menuid');
+        $.ajax({
+          type: 'POST',
+          url: `${url}return_order_after_cancelation`,
+          data: {
+            orderId: orderId,
+            menuId: menuId,
+            qty: qty,
+            trxId: trxId
+          },
+          dataType: 'json',
+          success: function(data) {
+            console.log(data)
+            form.remove();
+          }
+        })
+      }
+    </script>
+
+    <script>
+      var inputOptionRecipe = document.querySelector('#empty_stock')
+      var inputOptionMenu = document.querySelector('#return_menu')
+      var form = document.querySelector('#form-return-order')
+      var otherIngredient = document.querySelector('#otherIngredient')
+
+      let populateModalReturn = id => {
+        otherIngredient.style.display = 'none'
+        orderId = id;
+
+        ([...inputOptionRecipe.options]).forEach(opt => {
+          if (opt.value) {
+            opt.remove();
+          }
+        });
+
+        let selectedOrder = order.filter(o => o.order_id == id)
+        console.log('orders are', {
+          order
+        });
+        console.log(selectedOrder)
+        inputOptionMenu.value = selectedOrder[0].menu_nama;
+
+        recipe.filter(r => (r.order_id == id))
+          .forEach(item => {
+            let optChild = document.createElement("option");
+            optChild.value = item.stock_id;
+            optChild.innerHTML = item.stock_nama;
+            inputOptionRecipe.appendChild(optChild);
           })
 
-          card += `<br/>
-              <div class="text-center">
-              <div>${date.getDate()} / ${(date.getMonth()+1)} / ${date.getFullYear()}</div>
-              <h4 id="dispTime-${table.trx_id}-${date.getTime()}"></h4>`;
-          card += `<br/>
-              <a href="#" onclick="updateFlgKitchen(\'${t.order_date}\',\'${t.trx_id}\')" 
-              class="btn btn-primary-dark btn-raised" >Finish</a>
-              </div>
-              </div>
-              </div>
-              </div>
-              </form>`;
-
-          if (iteration > 0) {
-            var newEl = document.createElement('div');
-            newEl.innerHTML = card;
-            target.appendChild(newEl);
-          }
-
-          var cardTimerKitchen = document.getElementById(`dispTime-${table.trx_id}-${date.getTime()}`)
-          setInterval(function() {
-            let now = new Date();
-            let dispTime = new Date((now - date));
-            let h = dispTime.getUTCHours();
-            let m = dispTime.getUTCMinutes();
-            let s = dispTime.getUTCSeconds();
-            m = (m < 10) ? `0${m}` : m;
-            s = (s < 10) ? `0${s}` : s;
-
-            timercard = `${h} : ${m} : ${s}`;
-            (cardTimerKitchen) && (cardTimerKitchen.innerHTML = timercard);
-          }, 1000);
-        })
+        let optChild = document.createElement("option");
+        optChild.value = '0';
+        optChild.innerHTML = 'Lainnya';
+        inputOptionRecipe.appendChild(optChild);
       }
 
-      try {
-        var getTrxKitchen = async () => {
-          const response = await fetch(`${urlKitchen}getDataTrx`)
-          const result = await response.json()
-          await printCardKitchen(result);
+      inputOptionRecipe.addEventListener('change', () => {
+
+        let idRecipe = this.event.target.value
+        if (idRecipe == 0) {
+          otherIngredient.style.display = 'block'
+        } else {
+          otherIngredient.style.display = 'none'
         }
-      } catch (err) {
-        throw err
-      }
-
-      refreshPage =
-        setInterval(function() {
-          buttonRefreshKitchen.click();
-        }, 60000);
-
-
-      var updateFlgKitchen = async (date, id) => {
-        let data = new FormData()
-        data.append('groupOrder', date)
-        data.append('groupId', id)
-
-        const response = await fetch(`${urlKitchen}end_proses_kitchen`, {
-          method: 'POST',
-          body: data,
-        })
-        let form = document.querySelector(`#form-${id}`)
-        form.innerHTML = ''
-      }
-
-      buttonRefreshKitchen.addEventListener('click', function() {
-        getTrxKitchen();
       })
+
+      form.addEventListener('submit', () => {
+        event.preventDefault()
+        let formData = new FormData(this.event.target)
+        let objData = Object.fromEntries(formData)
+        // let menuText = (objData.stock_id) ? inputOptionMenu.innerHTML : otherIngredient.innerHTML
+        let recipeText = (Number(objData.stock_id)) ? inputOptionRecipe.options[inputOptionRecipe.selectedIndex].innerHTML : objData.otherIngredient;
+        let data = {
+          idStock: objData.stock_id,
+          menu: objData.return_order,
+          notes: `Stock ${recipeText} Habis`,
+          orderId: orderId,
+        }
+
+        let returnOrder = async () => {
+          const response = await fetch(this.event.target.action, {
+            method: 'POST',
+            header: {
+              'Accept': 'application/json, text/plain, */*',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+          })
+          const result = await response.json();
+          (result) && document.querySelector('#close-modal').click();
+          getTrxKitchen();
+        }
+
+        returnOrder()
+      })
+
+      $('#getKitchen').click(function() {
+        getdate();
+        getTrxKitchen();
+      });
 
       getdate();
       getTrxKitchen();

@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Saldo extends CI_Controller
+class Saldo extends MY_Controller
 {
 
   public function __construct()
@@ -25,7 +25,7 @@ class Saldo extends CI_Controller
     if ($cek_saldo) {
       redirect(base_url('pos/pos'));
     }
-    echo json_encode($this->load->view('pos/pos/v_saldo_awal', '', TRUE));
+    $this->render('pos/pos/v_saldo_awal');
   }
 
   public function simpan_saldo_outlet()
@@ -39,8 +39,9 @@ class Saldo extends CI_Controller
       'kas_saldo_akhir' => 0
     ];
     $this->M_crud->insert('tbl_kas_harian_' . $this->outlet, $data);
-
-    if (($date_last_insert_saldo + 1) != $data['kas_tgl']) {
+    
+    if (($date_last_insert_saldo + 1) != $data['kas_tgl'])
+    {
       $this->M_pos->resetNomorTransaksiHarian($this->outlet);
     }
     redirect(base_url('pos/pos'));

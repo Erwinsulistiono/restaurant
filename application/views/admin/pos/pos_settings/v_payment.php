@@ -123,7 +123,7 @@ foreach ($data as $table_content) :
           <span class="fa fa-times"></span></button>
         <h3 class="modal-title" id="myModalLabel">Edit Payment</h3>
       </div>
-      <form class="form-horizontal" role="form" method="post" action="<?= base_url('admin/pos/edit_payment'); ?>"
+      <form class="form-horizontal" role="form" method="post" action="<?= base_url('admin/pos/simpan_payment'); ?>"
         enctype="multipart/form-data">
         <div class="modal-body">
           <div class="form-group">

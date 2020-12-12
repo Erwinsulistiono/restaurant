@@ -92,7 +92,7 @@
           <div class="form-group">
             <label  class="col-sm-3 control-label">Persentase</label>
             <div class="col-sm-8">
-              <input name="tax_persen" class="form-control"  required>
+              <input name="tax_persen" type="number" class="form-control"  required>
             </div>
           </div>
 
@@ -132,9 +132,9 @@
             </div>
           </div>
           <div class="form-group">
-            <label  class="col-sm-3 control-label">Nama Barang</label>
+            <label  class="col-sm-3 control-label">Persentase</label>
             <div class="col-sm-8">
-              <input name="tax_persen" value="<?= $table_content['tax_persen']; ?>" class="form-control" 
+              <input name="tax_persen" type="number" value="<?= $table_content['tax_persen']; ?>" class="form-control" 
                 required>
             </div>
           </div>

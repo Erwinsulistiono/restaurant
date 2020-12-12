@@ -1,3 +1,4 @@
+<div id="base">
   <div class="offcanvas">
   </div>
   <div id="content">
@@ -62,6 +63,7 @@
       </section>
     </section>
   </div>
+</div>
 
 <!-- ============ MODAL ADD PENGGUNA =============== -->
 <div class="modal fade" id="modal_add_pengguna" tabindex="-1" role="dialog" aria-labelledby="largeModal"

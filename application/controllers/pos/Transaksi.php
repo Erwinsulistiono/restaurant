@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Transaksi extends CI_Controller
+class Transaksi extends MY_Controller
 {
 
 	public function __construct()
@@ -23,7 +23,7 @@ class Transaksi extends CI_Controller
 			'pesanan' => $this->M_crud->left_join('tbl_trx_pos_' . $outlet, 'tbl_order_' . $outlet, 'tbl_trx_pos_' . $outlet . '.trx_id=tbl_order_' . $outlet . '.order_trx_reff'),
 		];
 
-		echo json_encode($this->load->view('pos/transaksi/v_transaksi', $data, true));
+		$this->render('pos/transaksi/v_transaksi', $data);
 	}
 
 	public function hapus($id)

@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Waitress extends CI_Controller
+class Waitress extends MY_Controller
 {
 	public function __construct()
 	{
@@ -16,42 +16,47 @@ class Waitress extends CI_Controller
 		$this->outlet = $this->session->userdata('pengguna_outlet');
 	}
 
-	public function getDataTrx()
-	{
-		$data = [
-			'table' => $this->M_kitchen->getOrder($this->outlet),
-			'order' => $this->M_crud->read('tbl_order_' . $this->outlet),
-		];
-		echo json_encode($data);
-	}
-
 	public function index()
 	{
+		$tbl_order = 'tbl_order_' . $this->outlet;
+		$tbl_trx = 'tbl_trx_' . $this->outlet;
+		$tbl_menu = 'tbl_menu_' . $this->outlet;
 		$data = [
-			'order' => $this->M_crud->read('tbl_order_' . $this->outlet),
-			'trx' => $this->M_crud->read('tbl_trx_pos_' . $this->outlet),
+			'order' => $this->M_crud->left_join($tbl_order, $tbl_menu, "$tbl_order.order_menu=$tbl_menu.menu_id"),
 			'menu' => $this->M_crud->read('tbl_menu_' . $this->outlet),
 		];
-		echo json_encode($this->load->view('pos/waitress/v_waitress', $data, true));
+		$this->render('pos/waitress/v_waitress', $data);
 	}
 
 	public function end_proses_waitress()
 	{
-		$groupOrder = $this->input->post('groupOrder');
-		$groupId = $this->input->post('groupId');
-		$this->M_kitchen->updateFlgWaitress($this->outlet, $groupOrder, $groupId);
-		$this->getDataTrx();
+		$order_id = $this->input->post('orderId');
+		$this->M_crud->update("tbl_order_$this->outlet", ['order_waitress_flg' => 'Y'], 'order_id', $order_id);
+		redirect('pos/DataPesanan');
 	}
 
 	public function return_order()
 	{
-		$return_order = $this->input->post('return_order');
+		$return_order = $this->input->post('order_id');
 		$return_qty = $this->input->post('qty_potong');
 		$potong_stock = $this->input->post('potong_stock');
-		$stock_inv['stock_qty'] = $this->M_pos->get_qty_diff($potong_stock, $return_qty, $this->outlet)[0]['stock_qty'];
+
+		if (isset($potong_stock) && isset($return_qty)) {
+			$stock_inv['stock_qty'] = $this->M_stock->get_qty_diff($potong_stock, $return_qty, $this->outlet)[0]['stock_qty'];
+			$this->M_crud->update('tbl_stock_' . $this->outlet, $stock_inv, 'stock_id', $potong_stock);
+		}
+
 		$update_flg['order_kitchen_flg'] = 'N';
-		$this->M_crud->update('tbl_stock_' . $this->outlet, $stock_inv, 'stock_id', $potong_stock);
 		$this->M_crud->update('tbl_order_' . $this->outlet, $update_flg, 'order_id', $return_order);
 		$this->index();
+	}
+
+	public function return_order_after_cancelation()
+	{
+		$orderId = $this->input->post('orderId');
+		$trxId = $this->input->post('trxId');
+		$this->M_crud->update("tbl_order_$this->outlet", ['order_cancel_flg' => 'Y'], 'order_id', $orderId);
+
+		redirect('pos/pesanan/clear_transaksi/' . $trxId);
 	}
 }

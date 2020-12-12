@@ -4,22 +4,27 @@ class M_laporan extends CI_Model
 
 	public function getLaporan($data)
 	{
-		$tgl_awal = $data['tgl_awal']; $tgl_akhir = $data['tgl_akhir']; $outlet = $data['outlet'];
+		$tgl_awal = $data['tgl_awal'];
+		$tgl_akhir = $data['tgl_akhir'];
+		$outlet = $data['outlet'];
 		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
 		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
 		$out_nama = $this->db->query("SELECT `out_nama` FROM `tbl_outlet` WHERE `out_id` = $outlet ")->row('out_nama');
+		$nama_kasir = $data['name'];
 
 		$query = $this->db->query("SELECT *,
 								'$out_nama'  AS `out_nama` 
 								FROM tbl_lap_trx_$outlet 
-								WHERE DATE(trx_date) >= '$tgl_awal' AND DATE(trx_date) <= '$tgl_akhir' 
+								WHERE DATE(trx_date) >= '$tgl_awal' AND DATE(trx_date) <= '$tgl_akhir'
 								ORDER BY trx_date DESC");
 		return $query->result_array();
 	}
 
 	public function getLaporanTrx($data)
 	{
-		$tgl_awal = $data['tgl_awal']; $tgl_akhir = $data['tgl_akhir']; $outlet = $data['outlet'];
+		$tgl_awal = $data['tgl_awal'];
+		$tgl_akhir = $data['tgl_akhir'];
+		$outlet = $data['outlet'];
 		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
 		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
 		$out_nama = $this->db->query("SELECT `out_nama` FROM `tbl_outlet` WHERE `out_id` = $outlet ")->row('out_nama');
@@ -29,15 +34,17 @@ class M_laporan extends CI_Model
 								FROM `tbl_lap_trx_$outlet` 
 								LEFT JOIN `tbl_lap_order_$outlet` 
 								ON `tbl_lap_trx_$outlet`.`trx_id`=`tbl_lap_order_$outlet`.`order_trx_reff`
-								WHERE DATE(trx_date) >= ".$tgl_awal." AND DATE(trx_date) <= ".$tgl_akhir." 
+								WHERE DATE(trx_date) >= " . $tgl_awal . " AND DATE(trx_date) <= " . $tgl_akhir . " 
 								ORDER BY `tbl_lap_trx_$outlet`.`trx_date` DESC");
 		return $query->result_array();
 	}
 
 	public function getLaporanOrder($data)
 	{
-		$tgl_awal = $data['tgl_awal']; $tgl_akhir = $data['tgl_akhir']; $outlet = $data['outlet'];
-		
+		$tgl_awal = $data['tgl_awal'];
+		$tgl_akhir = $data['tgl_akhir'];
+		$outlet = $data['outlet'];
+
 		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
 		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
 		$out_nama = $this->db->query("SELECT `out_nama` FROM `tbl_outlet` WHERE `out_id` = $outlet ")->row('out_nama');
@@ -45,13 +52,15 @@ class M_laporan extends CI_Model
 		$query = $this->db->query("SELECT *, order_menu, '$out_nama' AS `out_nama` FROM `tbl_lap_order_$outlet` 
 			LEFT JOIN `tbl_lap_trx_$outlet` ON `tbl_lap_order_$outlet`.`order_trx_reff` = `tbl_lap_trx_$outlet`.`trx_id`
 			WHERE DATE(order_date) >= '$tgl_awal' AND DATE(order_date) <= '$tgl_akhir'
-			ORDER BY order_date DESC");	
-		return $query->result_array();	
+			ORDER BY order_date DESC");
+		return $query->result_array();
 	}
 
 	public function getLaporanPlg($data)
 	{
-		$tgl_awal = $data['tgl_awal']; $tgl_akhir = $data['tgl_akhir']; $outlet = $data['outlet'];
+		$tgl_awal = $data['tgl_awal'];
+		$tgl_akhir = $data['tgl_akhir'];
+		$outlet = $data['outlet'];
 
 		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
 		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
@@ -75,8 +84,10 @@ class M_laporan extends CI_Model
 
 	public function getLaporanMenu($data)
 	{
-		$tgl_awal = $data['tgl_awal']; $tgl_akhir = $data['tgl_akhir']; $outlet = $data['outlet'];
-		
+		$tgl_awal = $data['tgl_awal'];
+		$tgl_akhir = $data['tgl_akhir'];
+		$outlet = $data['outlet'];
+
 		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
 		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
 		$out_nama = $this->db->query("SELECT `out_nama` FROM `tbl_outlet` WHERE `out_id` = $outlet ")->row('out_nama');

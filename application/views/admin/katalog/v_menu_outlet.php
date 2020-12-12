@@ -78,7 +78,7 @@
 
 
 <!-- ================== Modal Add New Menu =======================-->
-<form class="form" role="form" action="<?= base_url('admin/menu/simpan_menu/'); ?>" method="post" enctype="multipart/form-data">
+<form class="form" role="form" action="<?= base_url('admin/menu/simpan_menu/'). $dataBase; ?>" method="post" enctype="multipart/form-data">
   <div class="modal fade" id="addNewModal" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -143,7 +143,7 @@
           </div>
 
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer">          
           <button class="btn btn-primary btn-raised" type="submit">Simpan</button>
         </div>
       </div>
@@ -156,13 +156,13 @@
 foreach ($data as $table_content) :
 ?>
   <!-- MODAL EDIT MENU -->
-  <form action="<?= base_url('admin/menu/simpan_menu/'); ?>" method="post">
+  <form action="<?= base_url('admin/menu/simpan_menu/'). $dataBase; ?>" method="post" enctype="multipart/form-data">
     <div class="modal fade" id="UpdateModal<?= $table_content['menu_id']; ?>" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close text-danger btn-raised" data-dismiss="modal" aria-hidden="true">
-              <span class="fa fa-times"></span></button>
+                <span class="fa fa-times"></span></button>
             <h3 class="modal-title" id="myModalLabel">Edit Menu</h3>
           </div>
 
@@ -337,28 +337,28 @@ foreach ($data as $table_content) :
     printNewIngLine();
   });
 
-  $(document).on('change', '.ing_qty', function() {
-    let qty = $(this).val();
-    ing_qty.push(qty);
-  })
+  $(document).on('change' , '.ing_qty', function() {
+      let qty = $(this).val();
+      ing_qty.push(qty);
+    })
 
-  $(document).on('change', '.sat-change', function() {
-    let satuan = $(this).val();
-    ing_satuan_id.push(satuan);
-  })
+  $(document).on('change' , '.sat-change' , function() {
+      let satuan = $(this).val();
+      ing_satuan_id.push(satuan);
+    })
 
-  $(document).on('click', '.remove_field', function(e) {
-    e.preventDefault();
-    const k = $(this).data("delete");
-    let deletedId = Number($('.ingId-' + k).val().replace(/[($)\s\._\-]+/g, ''));
-    let strdeletedId = '\"' + deletedId + '\"'
-    $(this).closest('div.additional').remove();
-    let deletedIndex = ing_inv_id.indexOf('' + deletedId + '');
-    ing_inv_id.splice(deletedIndex, 1);
-    (deletedIndex < ing_qty.length) && ing_qty.splice(deletedIndex, 1);
-    (deletedIndex < ing_satuan_id.length) && ing_satuan_id.splice(deletedIndex, 1);
-    removeIdAndAssignToSelect(deletedId);
-  })
+  $(document).on('click' , '.remove_field' , function(e) {
+      e.preventDefault();
+      const k = $(this).data("delete");
+      let deletedId = Number($('.ingId-' + k).val().replace(/[($)\s\._\-]+/g, ''));
+      let strdeletedId = '\"' + deletedId + '\"'
+      $(this).closest('div.additional').remove();
+      let deletedIndex = ing_inv_id.indexOf(''+deletedId+'');
+      ing_inv_id.splice(deletedIndex, 1);
+      (deletedIndex < ing_qty.length) && ing_qty.splice(deletedIndex, 1);
+      (deletedIndex < ing_satuan_id.length) && ing_satuan_id.splice(deletedIndex, 1);
+      removeIdAndAssignToSelect(deletedId);
+    })
 
   function printNewIngLine() {
     no++;
@@ -424,7 +424,7 @@ foreach ($data as $table_content) :
       for (let i in inventory) {
         if (data[j].ing_inv_id == inventory[i].stock_id) {
           ing_inv_id.push(inventory[i].stock_id);
-          repeatInput +=
+          repeatInput += 
             `<option value="${inventory[i].stock_id}" selected>${inventory[i].stock_nama} (${inventory[i].stock_satuan})</option>`;
         };
       };
@@ -504,7 +504,9 @@ foreach ($data as $table_content) :
       post_qty: ing_qty,
       post_satuan_id: ing_satuan_id,
     };
+    // let split_url = $(this).attr("action").split('/');
     let menu_id = $(this).data('menuid');
+    // let menu_id = split_url[split_url.length - 1];
     !isDuplicate(checkRecipeDuplicate) && alert("Duplicate Ingredient");
     isDuplicate(checkRecipeDuplicate) &&
       $.ajax({
@@ -514,11 +516,9 @@ foreach ($data as $table_content) :
         dataType: 'json',
         success: function(data) {
           ingredient = data;
-        },
-        error: function() {
+        }, error: function() {
           ingredient = Object.values(ingredient).filter(val => {
-            return val.ing_menu_id != menu_id
-          })
+            return val.ing_menu_id != menu_id})
         }
       })
     // $(`#close-recipe${menu_id}`).click();

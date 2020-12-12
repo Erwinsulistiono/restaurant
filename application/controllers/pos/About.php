@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class About extends CI_Controller
+class About extends MY_Controller
 {
 	function __construct()
 	{
@@ -14,6 +14,6 @@ class About extends CI_Controller
 
 	function index()
 	{
-		echo json_encode($this->load->view('admin/sistem/v_about','' , TRUE));
+		$this->render('admin/sistem/v_about');
 	}
 }
