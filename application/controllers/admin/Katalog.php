@@ -31,7 +31,7 @@ class Katalog extends MY_Controller
     $this->form_validation->set_rules('kategori_nama', 'Kategori', 'is_unique[tbl_kategori.kategori_nama]');
     if ($this->form_validation->run() == FALSE) {
       $this->session->set_flashdata('msg', '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><b></b>Nama Kategori ini sudah ada !</div>');
-      redirect('admin/katalog/kategori_menu');
+      $this->kategori_menu();
     }
     $data['kategori_nama'] = $this->input->post('kategori_nama');
     $log_newval = strtr(json_encode($data), array(',' => ' | ', '{' => '', '}' => '', '"' => ' '));
@@ -42,7 +42,7 @@ class Katalog extends MY_Controller
 
       $this->M_log->simpan_log($reff_id, 'KATEGORI', null, $log_newval);
       $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Kategori <b>' . $data['kategori_nama'] . '</b> Berhasil disimpan ke database.</div>');
-      redirect('admin/katalog/kategori_menu');
+      $this->kategori_menu();
     }
     $data_old = $this->M_crud->select('tbl_kategori', 'kategori_id', $kategori_id);
     $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
@@ -50,7 +50,7 @@ class Katalog extends MY_Controller
     $this->M_crud->update('tbl_kategori', $data, 'kategori_id', $kategori_id);
     $this->M_log->simpan_log($kategori_id, 'KATEGORI', $log_oldval, $log_newval);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Kategori <b>' . $data['kategori_nama'] . '</b> Berhasil disimpan ke database.</div>');
-    redirect('admin/katalog/kategori_menu');
+    $this->kategori_menu();
   }
 
   function hapus_kategori_menu($kategori_id)
@@ -63,7 +63,7 @@ class Katalog extends MY_Controller
     $this->M_crud->delete('tbl_kategori', 'kategori_id', $kategori_id);
     $this->M_crud->delete('tbl_menu_kat', 'kategori_id', $kategori_id);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>kategori <b>' . $this->input->post('kategori_nama') . '</b> Berhasil dihapus dari database.</div>');
-    redirect('admin/katalog/kategori_menu');
+    $this->kategori_menu();
   }
 
 
@@ -99,7 +99,7 @@ class Katalog extends MY_Controller
 
       $this->M_log->simpan_log($reff_id, 'VOUCHER', null,  $log_newval);
       $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>voucher <b>' . $data['voucher_nama'] . '</b> Berhasil disimpan ke database.</div>');
-      redirect('admin/katalog/voucher');
+      $this->voucher();
     }
     $data_old = $this->M_crud->select('tbl_voucher', 'voucher_id', $voucher_id);
     $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
@@ -107,7 +107,7 @@ class Katalog extends MY_Controller
     $this->M_crud->update('tbl_voucher', $data, 'voucher_id', $this->input->post('voucher_id'));
     $this->M_log->simpan_log($voucher_id, 'VOUCHER', $log_oldval, $log_newval);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>voucher <b>' . $data['voucher_nama'] . '</b> Berhasil disimpan ke database.</div>');
-    redirect('admin/katalog/voucher');
+    $this->voucher();
   }
 
   function hapus_voucher($voucher_id)
@@ -118,7 +118,7 @@ class Katalog extends MY_Controller
     $this->M_log->simpan_log($voucher_id, 'VOUCHER', $log_oldval);
     $this->M_crud->delete('tbl_voucher', 'voucher_id', $voucher_id);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>voucher <b>' . $data_old['voucher_nama'] . '</b> Berhasil dihapus dari database.</div>');
-    redirect('admin/katalog/voucher');
+    $this->voucher();
   }
 
 
@@ -145,7 +145,7 @@ class Katalog extends MY_Controller
 
     if (empty($_FILES['filefoto']['name']) || !$this->upload->do_upload('filefoto')) {
       $this->session->set_flashdata('msg', '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>Menu tidak dapat ditambahkan, gambar tidak dapat diupload</div>');
-      redirect('admin/katalog/gallery');
+      $this->gallery();
     }
 
     $data = [
@@ -161,7 +161,7 @@ class Katalog extends MY_Controller
 
       $this->M_log->simpan_log($reff_id, 'GALLERY', null, $log_newval);
       $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Gallery <b>' . $data['galeri_judul'] . '</b> Berhasil disimpan ke database.</div>');
-      redirect('admin/katalog/gallery');
+      $this->gallery();
     }
     $data_old = $this->M_crud->select('tbl_galeri', 'galeri_id', $galeri_id);
     $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
@@ -169,7 +169,7 @@ class Katalog extends MY_Controller
     $this->M_crud->update('tbl_galeri', $data, 'galeri_id', $galeri_id);
     $this->M_log->simpan_log($galeri_id, 'GALLERY', $log_oldval, $log_newval);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Gallery <b>' . $data['galeri_judul'] . '</b> Berhasil disimpan ke database.</div>');
-    redirect('admin/katalog/gallery');
+    $this->gallery();
   }
 
   function hapus_gallery($galeri_id)
@@ -180,6 +180,6 @@ class Katalog extends MY_Controller
     $this->M_log->simpan_log($galeri_id, 'GALLERY', $log_oldval);
     $this->M_crud->delete('tbl_galeri', 'galeri_id', $galeri_id);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Gallery Berhasil dihapus dari database.</div>');
-    redirect('admin/katalog/gallery');
+    $this->gallery();
   }
 }

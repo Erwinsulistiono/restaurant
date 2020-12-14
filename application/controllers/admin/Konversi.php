@@ -26,9 +26,9 @@ class Konversi extends MY_Controller
   {
     $satuan_id = $this->input->post('satuan_id');
     $this->form_validation->set_rules('satuan_kode', 'Satuan Kode', 'is_unique[tbl_satuan.satuan_kode]');
-    if ($this->form_validation->run() == false) {
+    if ($this->form_validation->run() == FALSE) {
       $this->session->set_flashdata('msg', '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><b></b>Nama Satuan Kode ini sudah ada !</div>');
-      $this->index;
+      $this->index();
     }
     $data = [
       'satuan_kode' => $this->input->post('satuan_kode'),
@@ -43,7 +43,7 @@ class Konversi extends MY_Controller
 
       $this->M_log->simpan_log($reff_id, 'KONVERSI SATUAN', null, $log_newval);
       $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Satuan <b>' . $data['satuan_kode'] . '</b> Berhasil disimpan ke database.</div>');
-      $this->index;
+      $this->index();
     }
     $data_old = $this->M_crud->select('tbl_satuan', 'satuan_id', $satuan_id);
     $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
@@ -51,7 +51,7 @@ class Konversi extends MY_Controller
     $this->M_log->simpan_log($satuan_id, 'KONVERSI SATUAN', $log_oldval, $log_newval);
     $this->M_crud->update('tbl_satuan', $data, 'satuan_id', $satuan_id);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Satuan <b>' . $data['satuan_kode'] . '</b> Berhasil disimpan ke database.</div>');
-    $this->index;
+    $this->index();
   }
 
   function hapus_konversi($satuan_id)
@@ -62,6 +62,6 @@ class Konversi extends MY_Controller
     $this->M_log->simpan_log($satuan_id, 'KONVERSI SATUAN', $log_oldval);
     $this->M_crud->delete('tbl_satuan', 'satuan_id', $satuan_id);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Satuan <b>' . $data_old['satuan_kode'] . '</b> Berhasil dihapus dari database.</div>');
-    $this->index;
+    $this->index();
   }
 }

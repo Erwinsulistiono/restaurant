@@ -24,11 +24,11 @@ class Dashboard extends MY_Controller
 		$data['user'] = $this->M_crud->select('tbl_pengguna', 'pengguna_id', $id);
 		$data['title'] = 'Home';
 
-		$data['penjualan_tot'] = $this->M_dashboard->getTotalPenjualan($outlet);
-		$data['penjualan_now'] = $this->M_dashboard->getTotalPenjualanThisMonth($outlet);
-		$data['porsi_tot'] = $this->M_dashboard->getTotalPorsi($outlet);
-		$data['porsi_now'] = $this->M_dashboard->getTotalPorsiThisMonth($outlet);
-		
+		$data['penjualan_tot'] = $this->M_dashboard->get_total_penjualan($outlet);
+		$data['penjualan_now'] = $this->M_dashboard->get_total_penjualan_bulan_ini($outlet);
+		$data['porsi_tot'] = $this->M_dashboard->get_total_porsi($outlet);
+		$data['porsi_now'] = $this->M_dashboard->get_total_porsi_bulan_ini($outlet);
+
 		$this->render('pos/v_dashboard', $data);
 	}
 }

@@ -27,10 +27,10 @@ class Dashboard extends MY_Controller
 
 		$out_id = $this->M_crud->read('tbl_outlet');
 		foreach ($out_id as $id) {
-			$penjualan_tot += (int)($this->M_dashboard->getTotalPenjualan($id['out_id']));
-			$penjualan_now += (int)($this->M_dashboard->getTotalPenjualanThisMonth($id['out_id']));
-			$porsi_tot += (int)($this->M_dashboard->getTotalPorsi($id['out_id']));
-			$porsi_now += (int)($this->M_dashboard->getTotalPorsiThisMonth($id['out_id']));
+			$penjualan_tot += (int)($this->M_dashboard->get_total_penjualan($id['out_id']));
+			$penjualan_now += (int)($this->M_dashboard->get_total_penjualan_bulan_ini($id['out_id']));
+			$porsi_tot += (int)($this->M_dashboard->get_total_porsi($id['out_id']));
+			$porsi_now += (int)($this->M_dashboard->get_total_porsi_bulan_ini($id['out_id']));
 		}
 		$data['penjualan_tot'] = $penjualan_tot;
 		$data['penjualan_now'] = $penjualan_now;

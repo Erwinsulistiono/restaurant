@@ -21,9 +21,10 @@ class Profile extends MY_Controller
 
 	function update()
 	{
-		if ($this->input->post('password') !== $this->input->post('password2')) {
+
+		if ($this->input->post('password') !== $this->input->post('password_confirmation')) {
 			$this->session->set_flashdata('msg', '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>Password dan Ulangi Password yang Anda masukan tidak sama.</div>');
-			redirect('admin/profile');
+			$this->index();
 		}
 		$data = [
 			'pengguna_username' => $this->input->post('username'),

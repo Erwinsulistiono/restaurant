@@ -29,7 +29,7 @@ class Parameter extends MY_Controller
     $this->form_validation->set_rules('out_email', 'Email', 'required|valid_email');
     if ($this->form_validation->run() == FALSE) {
       $this->session->set_flashdata('msg', '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><b>Email tidak valid</b> Data tidak dapat disimpan</div>');
-      redirect('admin/parameter/profile_company');
+      $this->profile_company();
     }
     $data = [
       'pt_nama' => $this->input->post('pt_nama'),

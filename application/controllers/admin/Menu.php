@@ -59,11 +59,11 @@ class Menu extends MY_Controller
 
     if (empty($_FILES['filefoto']['name']) && !$menu_id) {
       $this->session->set_flashdata('msg', '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>Menu tidak dapat ditambahkan, file gambar yang Anda masukkan terlalu besar.</div>');
-      redirect('admin/menu/outlet' . $outlet_id);
+      $this->outlet($outlet_id);
     }
 
     if (empty($_FILES['filefoto']['name'])) {
-      $upload = $this->M_crud->select("tbl_menu_$outlet_id", 'menu_id', $menu_id);
+      $upload = $this->M_crud->select("tbl_menu_${outlet_id}", 'menu_id', $menu_id);
       $gbr['file_name'] = $upload['menu_gambar'];
     }
 
@@ -81,23 +81,23 @@ class Menu extends MY_Controller
     $log_newval = strtr(json_encode($data), array(',' => ' | ', '{' => '', '}' => '', '"' => ' '));
 
     if (!$menu_id) {
-      $this->M_crud->insert("tbl_menu_$outlet_id", $data);
+      $this->M_crud->insert("tbl_menu_${outlet_id}", $data);
       $reff_id = $this->db->insert_id();
 
       $this->M_log->simpan_log($reff_id, 'MENU', null, $log_newval);
       $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Menu <b>' . $data['menu_nama'] . '</b> Berhasil disimpan ke database.</div>');
       $this->simpan_kategori($reff_id, $outlet_id);
-      redirect('admin/menu/outlet/' . $outlet_id);
+      $this->outlet($outlet_id);
     }
 
-    $data_old = $this->M_crud->select("tbl_menu_$outlet_id", 'menu_id', $menu_id);
+    $data_old = $this->M_crud->select("tbl_menu_${outlet_id}", 'menu_id', $menu_id);
     $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
 
     $this->M_log->simpan_log($menu_id, 'MENU', $log_oldval, $log_newval);
-    $this->M_crud->update("tbl_menu_$outlet_id", $data, 'menu_id', $menu_id);
+    $this->M_crud->update("tbl_menu_${outlet_id}", $data, 'menu_id', $menu_id);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Menu <b>' . $data['menu_nama'] . '</b> Berhasil disimpan ke database.</div>');
     $this->simpan_kategori($menu_id, $outlet_id);
-    redirect('admin/menu/outlet/' . $outlet_id);
+    $this->outlet($outlet_id);
   }
 
 
@@ -110,7 +110,7 @@ class Menu extends MY_Controller
       $i = 1;
       foreach ($data_old as $old) {
         $nama_kategori = $old['kategori_nama'];
-        $log_oldval .= ("kategori ${i} : $nama_kategori | ");
+        $log_oldval .= ("kategori ${i} : ${nama_kategori} | ");
         $i++;
       };
     }
@@ -140,13 +140,13 @@ class Menu extends MY_Controller
 
   public function hapus_menu($outlet_id, $menu_id)
   {
-    $data_old = $this->M_crud->select("tbl_menu_$outlet_id", 'menu_id', $menu_id);
+    $data_old = $this->M_crud->select("tbl_menu_${outlet_id}", 'menu_id', $menu_id);
     $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
 
     $this->M_log->simpan_log($menu_id, 'MENU', $log_oldval);
-    $this->M_crud->delete("tbl_menu_$outlet_id", 'menu_id', $menu_id);
+    $this->M_crud->delete("tbl_menu_${outlet_id}", 'menu_id', $menu_id);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Menu Berhasil dihapus dari database.</div>');
-    redirect('admin/menu/outlet/' . $outlet_id);
+    $this->outlet($outlet_id);
   }
 
 
@@ -161,7 +161,7 @@ class Menu extends MY_Controller
         $nama_stock = $old['stock_nama'];
         $qty_stock = $old['ing_qty'];
         $kode_satuan = $old['satuan_kode'];
-        $log_oldval .= ("ingredient : ${nama_stock} Qty : $qty_stock Satuan : $kode_satuan | ");
+        $log_oldval .= ("ingredient : ${nama_stock} Qty : ${qty_stock} Satuan : ${kode_satuan} | ");
       };
     }
 
@@ -188,7 +188,7 @@ class Menu extends MY_Controller
         $nama_stock = $new['stock_nama'];
         $qty_stock = $new['ing_qty'];
         $kode_satuan = $new['satuan_kode'];
-        $log_newval .= ("ingredient : ${nama_stock} Qty :  ${qty_stock} Satuan : $kode_satuan | ");
+        $log_newval .= ("ingredient : ${nama_stock} Qty :  ${qty_stock} Satuan : ${kode_satuan} | ");
       };
     }
     $this->M_log->simpan_log($menu_id, 'INGREDIENT MENU', $log_oldval, $log_newval);
@@ -211,10 +211,10 @@ class Menu extends MY_Controller
   {
     $out_id = $this->input->post('outlet_tujuan');
     $outlet_tujuan = $this->M_crud->select('tbl_outlet', 'out_id', $out_id);
-    $duplicate_menu = $this->M_crud->select("tbl_menu_$out_id", 'menu_reff_id', $menu_id);
+    $duplicate_menu = $this->M_crud->select("tbl_menu_${out_id}", 'menu_reff_id', $menu_id);
     if ($duplicate_menu) {
       $this->session->set_flashdata('msg', '<div class="alert alert-warning"><button type="button" class="close" data-dismiss="alert">&times;</button>Menu <b>' . $duplicate_menu['menu_nama'] . ' </b>sudah ada di outlet <b>' . $outlet_tujuan['out_nama'] . '</b></div>');
-      redirect('admin/menu/outlet/master');
+      $this->outlet('master');
     };
     $data = $this->M_crud->select('tbl_menu_master', 'menu_id', $menu_id);
     $nama_menu = $data['menu_nama'];
@@ -225,6 +225,6 @@ class Menu extends MY_Controller
     $this->M_crud->insert("tbl_menu_${out_id}", $data);
     $this->M_log->simpan_log($menu_id, 'TRANSFER MENU', $log, $log);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Menu ' . $data['menu_nama'] . ' Berhasil ditambah ke outlet tujuan.</div>');
-    redirect('admin/menu/outlet/master');
+    $this->outlet('master');
   }
 }

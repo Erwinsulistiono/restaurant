@@ -68,7 +68,8 @@
                         </div>
                         <div class="col-sm-6">
                           <div class="form-group">
-                            <input type="password" class="form-control" name="password2" id="pengguna_password_conf">
+                            <input type="password" class="form-control" name="password_confirmation"
+                              id="pengguna_password_conf">
                             <label for="pengguna_password_conf">Confirm Password</label>
                           </div>
                         </div>
@@ -79,7 +80,7 @@
                         </div>
                       </div>
 
-                  </div>                  
+                  </div>
                 </div>
               </div>
             </div>

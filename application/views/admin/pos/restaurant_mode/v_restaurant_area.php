@@ -46,7 +46,8 @@
                     <a href="#" class="btn btn-icon-toggle btn-raised" title="Edit row" data-toggle="modal"
                       data-target="#modal_edit_area<?= $table_content['area_id']; ?>"><i class="fa fa-pencil"></i></a>
                     <a href="<?= base_url(); ?>admin/restaurant/hapus_area/<?= $table_content['area_id']; ?>"
-                      onclick="return confirm('Apakah anda yakin?')" class="btn btn-icon-toggle btn-raised" title="Delete row">
+                      onclick="return confirm('Apakah anda yakin?')" class="btn btn-icon-toggle btn-raised"
+                      title="Delete row">
                       <i class="fa fa-trash-o text-danger"></i></a>
                   </td>
                 </tr>
@@ -84,15 +85,15 @@
         enctype="multipart/form-data">
         <div class="modal-body">
           <div class="form-group">
-            <label  class="col-sm-3 control-label">Nama Area</label>
+            <label class="col-sm-3 control-label">Nama Area</label>
             <div class="col-sm-8">
-              <input name="area_nama" class="form-control"  required>
+              <input name="area_nama" class="form-control" required>
             </div>
           </div>
           <div class="form-group">
-            <label  class="col-sm-3 control-label">Lantai</label>
+            <label class="col-sm-3 control-label">Lantai</label>
             <div class="col-sm-8">
-              <input type="number" name="area_level" class="form-control"  required>
+              <input type="number" name="area_level" class="form-control" required>
             </div>
           </div>
 
@@ -125,17 +126,15 @@
         <input type="hidden" name="area_id" value="<?= $table_content['area_id']; ?>">
         <div class="modal-body">
           <div class="form-group">
-            <label  class="col-sm-3 control-label">Nama Area</label>
+            <label class="col-sm-3 control-label">Nama Area</label>
             <div class="col-sm-8">
-              <input name="area_nama" value="<?= $table_content['area_nama']; ?>" class="form-control" 
-                required>
+              <input name="area_nama" value="<?= $table_content['area_nama']; ?>" class="form-control" required>
             </div>
           </div>
           <div class="form-group">
-            <label  class="col-sm-3 control-label">Lantai</label>
+            <label class="col-sm-3 control-label">Lantai</label>
             <div class="col-sm-8">
-              <input name="area_level" value="<?= $table_content['area_level']; ?>" class="form-control" 
-                required>
+              <input name="area_level" value="<?= $table_content['area_level']; ?>" class="form-control" required>
             </div>
           </div>
 
