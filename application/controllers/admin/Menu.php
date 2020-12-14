@@ -19,18 +19,18 @@ class Menu extends MY_Controller
     $this->load->library('upload');
   }
 
-  public function outlet($dataBase = null)
+  public function outlet($outlet = null)
   {
-    is_null($dataBase) ? $db = $this->input->post('selectDb') : $db = $dataBase;
+    is_null($outlet) ? $outlet_id = $this->input->post('outlet_id') : $outlet_id = $outlet;
     $data = [
-      'dataBase' => $db,
+      'outlet_id' => $outlet_id,
       'outlet' => $this->M_crud->read('tbl_outlet'),
       'kategori' => $this->M_crud->read('tbl_kategori'),
       'kategori_makanan' => $this->M_crud->left_join('tbl_menu_kat', 'tbl_kategori', 'tbl_menu_kat.kategori_id=tbl_kategori.kategori_id'),
-      'data' => $this->M_crud->read("tbl_menu_$db"),
-      'inventory' => json_encode($this->M_crud->read("tbl_stock_$db")),
+      'data' => $this->M_crud->read("tbl_menu_${outlet_id}"),
+      'inventory' => json_encode($this->M_crud->read("tbl_stock_${outlet_id}")),
       'satuan' => json_encode($this->M_crud->read('tbl_satuan')),
-      'ingredient' => json_encode($this->M_menu->get_all_resep($db)),
+      'ingredient' => json_encode($this->M_menu->get_all_resep($outlet_id)),
     ];
     $this->render('admin/katalog/v_menu_outlet', $data);
   }
@@ -42,7 +42,7 @@ class Menu extends MY_Controller
     $this->render('admin/katalog/v_menu', $data);
   }
 
-  function simpan_menu($dataBase)
+  function simpan_menu($outlet_id)
   {
     $menu_id = $this->input->post('menu_id');
     $nmfile = "file_" . time() . '.jpg'; //nama file saya beri nama langsung dan diikuti fungsi time
@@ -59,11 +59,11 @@ class Menu extends MY_Controller
 
     if (empty($_FILES['filefoto']['name']) && !$menu_id) {
       $this->session->set_flashdata('msg', '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>Menu tidak dapat ditambahkan, file gambar yang Anda masukkan terlalu besar.</div>');
-      redirect('admin/menu/outlet' . $dataBase);
+      redirect('admin/menu/outlet' . $outlet_id);
     }
 
     if (empty($_FILES['filefoto']['name'])) {
-      $upload = $this->M_crud->select("tbl_menu_$dataBase", 'menu_id', $menu_id);
+      $upload = $this->M_crud->select("tbl_menu_$outlet_id", 'menu_id', $menu_id);
       $gbr['file_name'] = $upload['menu_gambar'];
     }
 
@@ -81,35 +81,36 @@ class Menu extends MY_Controller
     $log_newval = strtr(json_encode($data), array(',' => ' | ', '{' => '', '}' => '', '"' => ' '));
 
     if (!$menu_id) {
-      $this->M_crud->insert("tbl_menu_$dataBase", $data);
+      $this->M_crud->insert("tbl_menu_$outlet_id", $data);
       $reff_id = $this->db->insert_id();
 
       $this->M_log->simpan_log($reff_id, 'MENU', null, $log_newval);
       $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Menu <b>' . $data['menu_nama'] . '</b> Berhasil disimpan ke database.</div>');
-      $this->simpan_kategori($reff_id, $dataBase);
-      redirect('admin/menu/outlet/' . $dataBase);
+      $this->simpan_kategori($reff_id, $outlet_id);
+      redirect('admin/menu/outlet/' . $outlet_id);
     }
 
-    $data_old = $this->M_crud->select("tbl_menu_$dataBase", 'menu_id', $menu_id);
+    $data_old = $this->M_crud->select("tbl_menu_$outlet_id", 'menu_id', $menu_id);
     $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
 
     $this->M_log->simpan_log($menu_id, 'MENU', $log_oldval, $log_newval);
-    $this->M_crud->update("tbl_menu_$dataBase", $data, 'menu_id', $menu_id);
+    $this->M_crud->update("tbl_menu_$outlet_id", $data, 'menu_id', $menu_id);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Menu <b>' . $data['menu_nama'] . '</b> Berhasil disimpan ke database.</div>');
-    $this->simpan_kategori($menu_id, $dataBase);
-    redirect('admin/menu/outlet/' . $dataBase);
+    $this->simpan_kategori($menu_id, $outlet_id);
+    redirect('admin/menu/outlet/' . $outlet_id);
   }
 
 
   /*----------------- MODUL KATEGORI TIAP MENU ---------------------*/
-  public function simpan_kategori($menu_id, $dataBase)
+  public function simpan_kategori($menu_id, $outlet_id)
   {
-    $data_old = $this->M_menu->get_kategori($dataBase, $menu_id);
+    $data_old = $this->M_menu->get_kategori($outlet_id, $menu_id);
     $log_oldval = '';
     if ($data_old) {
       $i = 1;
       foreach ($data_old as $old) {
-        $log_oldval .= ('kategori' . $i . ' : ' . $old['kategori_nama'] . ' | ');
+        $nama_kategori = $old['kategori_nama'];
+        $log_oldval .= ("kategori ${i} : $nama_kategori | ");
         $i++;
       };
     }
@@ -125,38 +126,42 @@ class Menu extends MY_Controller
       var_dump($data);
     }
 
-    $data_new = $this->M_menu->get_kategori($dataBase, $menu_id);
+    $data_new = $this->M_menu->get_kategori($outlet_id, $menu_id);
     if ($data_new) {
       $log_newval = '';
       $i = 1;
       foreach ($data_new as $new) {
-        $log_newval .= ('kategori' . $i . ' : ' . $new['kategori_nama'] . ' | ');
+        $nama_kategori = $new['kategori_nama'];
+        $log_newval .= ("kategori ${i} : ${nama_kategori} | ");
       };
     }
     $this->M_log->simpan_log($menu_id, 'KATEGORI PER MENU', $log_oldval, $log_newval);
   }
 
-  public function hapus_menu($dataBase, $menu_id)
+  public function hapus_menu($outlet_id, $menu_id)
   {
-    $data_old = $this->M_crud->select("tbl_menu_$dataBase", 'menu_id', $menu_id);
+    $data_old = $this->M_crud->select("tbl_menu_$outlet_id", 'menu_id', $menu_id);
     $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
 
     $this->M_log->simpan_log($menu_id, 'MENU', $log_oldval);
-    $this->M_crud->delete("tbl_menu_$dataBase", 'menu_id', $menu_id);
+    $this->M_crud->delete("tbl_menu_$outlet_id", 'menu_id', $menu_id);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Menu Berhasil dihapus dari database.</div>');
-    redirect('admin/menu/outlet/' . $dataBase);
+    redirect('admin/menu/outlet/' . $outlet_id);
   }
 
 
   /*----------------- MODUL RESEP MENU ---------------------*/
-  public function simpan_recipe($dataBase, $menu_id)
+  public function simpan_recipe($outlet_id, $menu_id)
   {
-    $data_old = $this->M_menu->get_resep($dataBase, $menu_id);
+    $data_old = $this->M_menu->get_resep($outlet_id, $menu_id);
     $log_oldval = '';
 
     if ($data_old) {
       foreach ($data_old as $old) {
-        $log_oldval .= ('ingredient : ' . $old['stock_nama'] . ' Qty : ' . $old['ing_qty'] . ' Satuan : ' . $old['satuan_kode'] . ' | ');
+        $nama_stock = $old['stock_nama'];
+        $qty_stock = $old['ing_qty'];
+        $kode_satuan = $old['satuan_kode'];
+        $log_oldval .= ("ingredient : ${nama_stock} Qty : $qty_stock Satuan : $kode_satuan | ");
       };
     }
 
@@ -176,11 +181,14 @@ class Menu extends MY_Controller
       };
     }
 
-    $data_new = $this->M_menu->get_resep($dataBase, $menu_id);
+    $data_new = $this->M_menu->get_resep($outlet_id, $menu_id);
     if ($data_new) {
       $log_newval = '';
       foreach ($data_new as $new) {
-        $log_newval .= ('ingredient : ' . $new['stock_nama'] . ' Qty : ' . $new['ing_qty'] . ' Satuan : ' . $new['satuan_kode'] . ' | ');
+        $nama_stock = $new['stock_nama'];
+        $qty_stock = $new['ing_qty'];
+        $kode_satuan = $new['satuan_kode'];
+        $log_newval .= ("ingredient : ${nama_stock} Qty :  ${qty_stock} Satuan : $kode_satuan | ");
       };
     }
     $this->M_log->simpan_log($menu_id, 'INGREDIENT MENU', $log_oldval, $log_newval);
@@ -189,13 +197,13 @@ class Menu extends MY_Controller
 
 
   /*----------------- MODUL FETCH SATUAN KONVERSI ---------------------*/
-  public function check_satuan_konversi()
+  /* public function check_satuan_konversi()
   {
-    $outlet = $this->input->post('dataBase');
+    $outlet = $this->input->post('outlet_id');
     $ing_satuan = $this->M_crud->select("tbl_stock_$outlet", 'stock_id', $this->input->post('ing'))['stock_satuan'];
     $data = $this->M_menu->check_satuan_konversi($ing_satuan);
     echo json_encode($data);
-  }
+  }  disabled on 14 December 2020/*
 
 
   /*----------------- MODUL TRANSFER MENU KE OUTLET CABANG---------------------*/
@@ -209,10 +217,12 @@ class Menu extends MY_Controller
       redirect('admin/menu/outlet/master');
     };
     $data = $this->M_crud->select('tbl_menu_master', 'menu_id', $menu_id);
-    $log = 'menu = ' . $data['menu_nama'] . ' | Outlet tujuan = ' . $outlet_tujuan['out_nama'];
+    $nama_menu = $data['menu_nama'];
+    $nama_outlet_tujuan = $outlet_tujuan['out_nama'];
+    $log = "menu = ${nama_menu} | Outlet tujuan = ${nama_outlet_tujuan} ";
     $data['menu_reff_id'] = $menu_id;
 
-    $this->M_crud->insert("tbl_menu_$out_id", $data);
+    $this->M_crud->insert("tbl_menu_${out_id}", $data);
     $this->M_log->simpan_log($menu_id, 'TRANSFER MENU', $log, $log);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Menu ' . $data['menu_nama'] . ' Berhasil ditambah ke outlet tujuan.</div>');
     redirect('admin/menu/outlet/master');

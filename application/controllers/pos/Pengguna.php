@@ -24,7 +24,7 @@ class Pengguna extends MY_Controller
 		$data = [
 			'level' => $this->M_crud->read('tbl_level_admin'),
 			'level_pos' => $this->M_crud->read('tbl_level_pos'),
-			'data' => $this->M_pengguna->getPenggunaPerOutlet($this->outlet),
+			'data' => $this->M_pengguna->get_pengguna_outlet($this->outlet),
 		];
 		$this->render('pos/user/v_pengguna', $data);
 	}

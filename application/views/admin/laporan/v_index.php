@@ -20,8 +20,7 @@
               <span class="text-lg text-bold text-primary">Pilih Laporan</span>
               <br />
               <?= $this->session->flashdata('msg'); ?>
-              <form class='form floating-label' action='<?= base_url('admin/laporan/laporan') ?>' accept-charset='utf-8'
-                method='post'>
+              <form class='form floating-label' action='<?= base_url('admin/laporan/laporan') ?>' accept-charset='utf-8' method='post'>
                 <div class="row">
                   <div class="form-group">
                     <div class=" col-md-6">

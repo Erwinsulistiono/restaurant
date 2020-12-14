@@ -6,9 +6,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- END META -->
-  <link rel="shorcut icon" href="<?= base_url() . 'assets/img/logo.png' ?>">
+  <link rel="shorcut icon" href="<?= base_url('assets/img/logo.png'); ?>">
   <!-- BEGIN STYLESHEETS -->
-  <link type="text/css" rel="stylesheet" href="<?= base_url() . 'assets/css/print_laporan/style.css' ?>" />
+  <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/print_laporan/style.css');  ?>" />
 </head>
 
 <body translate="no">
@@ -55,37 +55,38 @@
               <h2>Grand Total</h2>
             </td>
           </tr>
-          <?php $no= 0; foreach($data as $item) :
-          $no++ ?>
-          <tr class="service">
-            <td class="tableitem">
-              <p class="itemtext"><?= $no; ?>
-            </td>
-            <td class="tableitem">
-              <p class="itemtext"><?= $item['trx_cust']; ?>
-            </td>
-            <td class="tableitem">
-              <p class="itemtext"><?= $item['join_date']; ?>
-            </td>
-            <td class="tableitem">
-              <p class="itemtext"><?= $item['last_order']; ?></p>
-            </td>
-            <td class="tableitem">
-              <p class="itemtext"><?= number_format($item['trx_subtotal'], 2); ?>
-            </td>
-            <td class="tableitem">
-              <p class="itemtext"><?= number_format($item['trx_discount'], 2); ?>
-            </td>
-            <td class="tableitem">
-              <p class="itemtext"><?= number_format($item['trx_tax_ppn'], 2); ?>
-            </td>
-            <td class="tableitem">
-              <p class="itemtext"><?= number_format($item['trx_tax_service'], 2); ?>
-            </td>
-            <td class="tableitem">
-              <p class="itemtext"><?= number_format($item['trx_grand_total'], 2); ?>
-            </td>
-          </tr>
+          <?php $no = 0;
+          foreach ($data as $item) :
+            $no++ ?>
+            <tr class="service">
+              <td class="tableitem">
+                <p class="itemtext"><?= $no; ?>
+              </td>
+              <td class="tableitem">
+                <p class="itemtext"><?= $item['trx_cust']; ?>
+              </td>
+              <td class="tableitem">
+                <p class="itemtext"><?= $item['join_date']; ?>
+              </td>
+              <td class="tableitem">
+                <p class="itemtext"><?= $item['last_order']; ?></p>
+              </td>
+              <td class="tableitem">
+                <p class="itemtext"><?= number_format($item['trx_subtotal'], 2); ?>
+              </td>
+              <td class="tableitem">
+                <p class="itemtext"><?= number_format($item['trx_discount'], 2); ?>
+              </td>
+              <td class="tableitem">
+                <p class="itemtext"><?= number_format($item['trx_tax_ppn'], 2); ?>
+              </td>
+              <td class="tableitem">
+                <p class="itemtext"><?= number_format($item['trx_tax_service'], 2); ?>
+              </td>
+              <td class="tableitem">
+                <p class="itemtext"><?= number_format($item['trx_grand_total'], 2); ?>
+              </td>
+            </tr>
 
           <?php endforeach; ?>
 
@@ -100,5 +101,5 @@
 </body>
 
 <script>
-window.print();
+  window.print();
 </script>

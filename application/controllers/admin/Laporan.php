@@ -34,19 +34,19 @@ class Laporan extends MY_Controller
 
     switch ($input_data["group"]) {
       case "order":
-        $return_data = $this->groupByOrder($input_data);
+        $return_data = $this->group_by_order($input_data);
         $this->render('admin/laporan/v_order', $return_data);
         break;
       case "plg":
-        $return_data = $this->groupByPlg($input_data);
+        $return_data = $this->group_by_pelanggan($input_data);
         $this->render('admin/laporan/v_pelanggan', $return_data);
         break;
       case "trx":
-        $return_data = $this->groupByTrx($input_data);
+        $return_data = $this->group_by_transaksi($input_data);
         $this->render('admin/laporan/v_transaksi', $return_data);
         break;
       case "menu":
-        $return_data = $this->groupByMenu($input_data);
+        $return_data = $this->group_by_menu($input_data);
         $this->render('admin/laporan/v_menu', $return_data);
         break;
       default:
@@ -69,19 +69,19 @@ class Laporan extends MY_Controller
 
     switch ($data_input['group']) {
       case "order":
-        $return_data = $this->groupByOrder($data_input);
+        $return_data = $this->group_by_order($data_input);
         $this->load->view('admin/laporan/pdf/v_order', $return_data);
         break;
       case "plg":
-        $return_data = $this->groupByPlg($data_input);
+        $return_data = $this->group_by_pelanggan($data_input);
         $this->load->view('admin/laporan/pdf/v_pelanggan', $return_data);
         break;
       case "trx":
-        $return_data = $this->groupByTrx($data_input);
+        $return_data = $this->group_by_transaksi($data_input);
         $this->load->view('admin/laporan/pdf/v_transaksi', $return_data);
         break;
       case "menu":
-        $return_data = $this->groupByMenu($data_input);
+        $return_data = $this->group_by_menu($data_input);
         $this->load->view('admin/laporan/pdf/v_menu', $return_data);
         break;
       default:
@@ -104,19 +104,19 @@ class Laporan extends MY_Controller
 
     switch ($data_input['group']) {
       case "order":
-        $return_data = $this->groupByOrder($data_input);
+        $return_data = $this->group_by_order($data_input);
         $this->load->view('admin/laporan/excel/v_order', $return_data);
         break;
       case "plg":
-        $return_data = $this->groupByPlg($data_input);
+        $return_data = $this->group_by_pelanggan($data_input);
         $this->load->view('admin/laporan/excel/v_pelanggan', $return_data);
         break;
       case "trx":
-        $return_data = $this->groupByTrx($data_input);
+        $return_data = $this->group_by_transaksi($data_input);
         $this->load->view('admin/laporan/excel/v_transaksi', $return_data);
         break;
       case "menu":
-        $return_data = $this->groupByMenu($data_input);
+        $return_data = $this->group_by_menu($data_input);
         $this->load->view('admin/laporan/excel/v_menu', $return_data);
         break;
       default:
@@ -125,66 +125,66 @@ class Laporan extends MY_Controller
     }
   }
 
-  public function groupByOrder($data)
+  public function group_by_order($data)
   {
     if ($data['outlet'] != 'all') {
-      $data['data'] = $this->M_laporan->getLaporanOrder($data);
-      $data['rinci'] = $this->M_laporan->getLaporanTrx($data);
+      $data['data'] = $this->M_laporan->get_laporan_order($data);
+      $data['rinci'] = $this->M_laporan->get_laporan_transaksi($data);
       return $data;
     }
 
     foreach ($this->all_outlet as $o) {
       $data['outlet'] = $o['out_id'];
-      $data['data'] += $this->M_laporan->getLaporanOrder($data);
-      $data['rinci'] += $this->M_laporan->getLaporanTrx($data);
+      $data['data'] += $this->M_laporan->get_laporan_order($data);
+      $data['rinci'] += $this->M_laporan->get_laporan_transaksi($data);
       return $data;
     }
   }
 
-  public function groupByMenu($data)
+  public function group_by_menu($data)
   {
     if ($data['outlet'] != 'all') {
-      $data['data'] = $this->M_laporan->getLaporanMenu($data);
-      $data['rinci'] = $this->M_laporan->getLaporanTrx($data);
+      $data['data'] = $this->M_laporan->get_laporan_menu($data);
+      $data['rinci'] = $this->M_laporan->get_laporan_transaksi($data);
       return $data;
     }
 
     foreach ($this->all_outlet as $o) {
       $data['outlet'] = $o['out_id'];
-      $data['data'] += $this->M_laporan->getLaporanMenu($data);
-      $data['rinci'] += $this->M_laporan->getLaporanTrx($data);
+      $data['data'] += $this->M_laporan->get_laporan_menu($data);
+      $data['rinci'] += $this->M_laporan->get_laporan_transaksi($data);
       return $data;
     }
   }
 
-  public function groupByPlg($data)
+  public function group_by_pelanggan($data)
   {
     if ($data['outlet'] != 'all') {
-      $data['data'] = $this->M_laporan->getLaporanPlg($data);
-      $data['rinci'] = $this->M_laporan->getLaporanTrx($data);
+      $data['data'] = $this->M_laporan->get_laporan_pelanggan($data);
+      $data['rinci'] = $this->M_laporan->get_laporan_transaksi($data);
       return $data;
     }
 
     foreach ($this->all_outlet as $o) {
       $data['outlet'] = $o['out_id'];
-      $data['data'] += $this->M_laporan->getLaporanPlg($data);
-      $data['rinci'] += $this->M_laporan->getLaporanTrx($data);
+      $data['data'] += $this->M_laporan->get_laporan_pelanggan($data);
+      $data['rinci'] += $this->M_laporan->get_laporan_transaksi($data);
       return $data;
     }
   }
 
-  public function groupByTrx($data)
+  public function group_by_transaksi($data)
   {
     if ($data['outlet'] != 'all') {
-      $data['data'] = $this->M_laporan->getLaporan($data);
-      $data['rinci'] = $this->M_laporan->getLaporanTrx($data);
+      $data['data'] = $this->M_laporan->get_laporan($data);
+      $data['rinci'] = $this->M_laporan->get_laporan_transaksi($data);
       return $data;
     }
 
     foreach ($this->all_outlet as $o) {
       $data['outlet'] = $o['out_id'];
-      $data['data'] += $this->M_laporan->getLaporan($data);
-      $data['rinci'] += $this->M_laporan->getLaporanTrx($data);
+      $data['data'] += $this->M_laporan->get_laporan($data);
+      $data['rinci'] += $this->M_laporan->get_laporan_transaksi($data);
       return $data;
     }
   }

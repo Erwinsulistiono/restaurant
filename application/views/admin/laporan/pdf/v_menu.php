@@ -6,20 +6,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- END META -->
-  <link rel="shorcut icon" href="<?= base_url() . 'assets/img/logo.png' ?>">
+  <link rel="shorcut icon" href="<?= base_url('assets/img/logo.png'); ?>">
   <!-- BEGIN STYLESHEETS -->
-  <link type="text/css" rel="stylesheet" href="<?= base_url() . 'assets/css/print_laporan/style.css' ?>" />
+  <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/print_laporan/style.css'); ?>" />
 </head>
 
 <body translate="no">
   <div id="invoice-POS">
-    <!-- <center id="top">
-      <img class="logo" src="<?= base_url() . 'assets/logo/' . $pt['pt_logo']; ?>" />
-      <div class="info">
-        <h2><?= $pt['pt_nama']; ?></h2>
-        <h2></h2>
-      </div>
-    </center> -->
 
     <div id="mid">
       <div class="info">
@@ -50,25 +43,26 @@
               <h2>Total Revenue</h2>
             </td>
           </tr>
-          <?php $no= 0; foreach($data as $item):
-          $no++ ?>
-          <tr class="service">
-            <td class="tableitem">
-              <p class="itemtext"><?= $no; ?>
-            </td>
-            <td class="tableitem">
-              <p class="itemtext"><?= $item['order_menu']; ?>
-            </td>
-            <td class="tableitem">
-              <p class="itemtext"><?= number_format($item['order_harga'], 2); ?>
-            </td>
-            <td class="tableitem">
-              <p class="itemtext"><?= $item['order_total']; ?></p>
-            </td>
-            <td class="tableitem">
-              <p class="itemtext"><?= number_format($item['order_revenue'], 2); ?>
-            </td>
-          </tr>
+          <?php $no = 0;
+          foreach ($data as $item) :
+            $no++ ?>
+            <tr class="service">
+              <td class="tableitem">
+                <p class="itemtext"><?= $no; ?>
+              </td>
+              <td class="tableitem">
+                <p class="itemtext"><?= $item['order_menu']; ?>
+              </td>
+              <td class="tableitem">
+                <p class="itemtext"><?= number_format($item['order_harga'], 2); ?>
+              </td>
+              <td class="tableitem">
+                <p class="itemtext"><?= $item['order_total']; ?></p>
+              </td>
+              <td class="tableitem">
+                <p class="itemtext"><?= number_format($item['order_revenue'], 2); ?>
+              </td>
+            </tr>
 
           <?php endforeach; ?>
 
@@ -83,5 +77,5 @@
 </body>
 
 <script>
-window.print();
+  window.print();
 </script>

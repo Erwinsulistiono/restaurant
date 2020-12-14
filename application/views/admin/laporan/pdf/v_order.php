@@ -6,9 +6,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- END META -->
-  <link rel="shorcut icon" href="<?= base_url() . 'assets/img/logo.png' ?>">
+  <link rel="shorcut icon" href="<?= base_url('assets/img/logo.png'); ?>">
   <!-- BEGIN STYLESHEETS -->
-  <link type="text/css" rel="stylesheet" href="<?= base_url() . 'assets/css/print_laporan/style.css' ?>" />
+  <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/print_laporan/style.css') ?>" />
 </head>
 
 <body translate="no">
@@ -63,46 +63,47 @@
               <h2>Outlet</h2>
             </td>
           </tr>
-          <?php $no= 0; foreach($data as $item) :
-          $no++ ?>
-          <tr class="service">
-            <td class="tableitem">
-              <p class="itemtext"><?= $no; ?>
-            </td>
-            <td class="tableitem">
-              <p class="itemtext"><?= $item['trx_nomor']; ?>
-            </td>
-            <td class="tableitem">
-              <p class="itemtext"><?= $item['trx_table']; ?>
-            </td>
-            <td class="tableitem">
-              <p class="itemtext"><?= $item['order_menu']; ?></p>
-            </td>
-            <td class="tableitem">
-              <p class="itemtext"><?= $item['order_qty']; ?>
-            </td>
-            <td class="tableitem">
-              <p class="itemtext"><?= $item['order_harga']; ?>
-            </td>
-            <td class="tableitem">
-              <p class="itemtext"><?= $item['order_subtotal']; ?>
-            </td>
-            <td class="tableitem">
-              <p class="itemtext"><?= $item['order_notes']; ?>
-            </td>
-            <td class="tableitem">
-              <p class="itemtext"><?= $item['order_date']; ?>
-            </td>
-            <td class="tableitem">
-              <p class="itemtext"><?= $item['order_userid']; ?>
-            </td>
-            <td class="tableitem">
-              <p class="itemtext"><?= $item['trx_cust']; ?>
-            </td>
-            <td class="tableitem">
-              <p class="itemtext"><?= $item['out_nama']; ?>
-            </td>
-          </tr>
+          <?php $no = 0;
+          foreach ($data as $item) :
+            $no++ ?>
+            <tr class="service">
+              <td class="tableitem">
+                <p class="itemtext"><?= $no; ?>
+              </td>
+              <td class="tableitem">
+                <p class="itemtext"><?= $item['trx_nomor']; ?>
+              </td>
+              <td class="tableitem">
+                <p class="itemtext"><?= $item['trx_table']; ?>
+              </td>
+              <td class="tableitem">
+                <p class="itemtext"><?= $item['order_menu']; ?></p>
+              </td>
+              <td class="tableitem">
+                <p class="itemtext"><?= $item['order_qty']; ?>
+              </td>
+              <td class="tableitem">
+                <p class="itemtext"><?= $item['order_harga']; ?>
+              </td>
+              <td class="tableitem">
+                <p class="itemtext"><?= $item['order_subtotal']; ?>
+              </td>
+              <td class="tableitem">
+                <p class="itemtext"><?= $item['order_notes']; ?>
+              </td>
+              <td class="tableitem">
+                <p class="itemtext"><?= $item['order_date']; ?>
+              </td>
+              <td class="tableitem">
+                <p class="itemtext"><?= $item['order_userid']; ?>
+              </td>
+              <td class="tableitem">
+                <p class="itemtext"><?= $item['trx_cust']; ?>
+              </td>
+              <td class="tableitem">
+                <p class="itemtext"><?= $item['out_nama']; ?>
+              </td>
+            </tr>
 
           <?php endforeach; ?>
 
@@ -117,5 +118,5 @@
 </body>
 
 <script>
-window.print();
+  window.print();
 </script>

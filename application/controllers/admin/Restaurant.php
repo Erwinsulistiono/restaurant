@@ -57,7 +57,7 @@ class Restaurant extends MY_Controller
 
   public function meja($dataBase = null)
   {
-    is_null($dataBase) ? $db = $this->input->post('selectDb') : $db = $dataBase;
+    is_null($dataBase) ? $db = $this->input->post('outlet_id') : $db = $dataBase;
     $data = [
       'dataBase' => $db,
       'data' => $this->M_crud->left_join("tbl_meja_$db", 'tbl_area', "tbl_meja_$db.meja_lokasi=tbl_area.area_id"),

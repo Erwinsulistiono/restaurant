@@ -21,14 +21,14 @@ class Settings extends MY_Controller
 	{
 		$tgl_awal = $this->M_crud->select('tbl_pengguna', 'pengguna_id', $this->user)['pengguna_last_login'];
 		$tgl_akhir = date("Y-m-d H:i:s");
-		$tot_saldo = $this->M_laporan->getLaporanCashInOut($tgl_awal, $tgl_akhir, $this->outlet, $this->session->userdata('pengguna_username'));
+		$tot_saldo = $this->M_laporan->get_laporan_cash_in_out($tgl_awal, $tgl_akhir, $this->outlet, $this->session->userdata('pengguna_username'));
 		$tot = 0;
 		foreach ($tot_saldo as $t) {
 			$tot += $t['trx_grand_total'];
 		}
 		$data = [
 			'tot_saldo' => $tot,
-			'cek_saldo' => $this->M_pos->getDataCashInSaldo($tgl_awal, $this->user, $this->outlet),
+			'cek_saldo' => $this->M_pos->get_saldo_cash_in($tgl_awal, $this->user, $this->outlet),
 		];
 		$this->render('pos/settings/v_closing_kasir', $data);
 	}
@@ -40,7 +40,7 @@ class Settings extends MY_Controller
 		$data = [
 			'kas_saldo_akhir' => preg_replace('/[^0-9]/', '', $kas_saldo_akhir),
 		];
-		$this->M_crud->update('tbl_kas_harian_' . $this->outlet, $data, 'kas_id', $this->input->post('kas_id'));
+		$this->M_crud->update("tbl_kas_harian_$this->outlet", $data, 'kas_id', $this->input->post('kas_id'));
 		redirect('pos/dashboard');
 	}
 }

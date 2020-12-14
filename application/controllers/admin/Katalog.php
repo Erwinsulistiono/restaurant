@@ -29,7 +29,7 @@ class Katalog extends MY_Controller
     $kategori_id = $this->input->post('kategori_id');
 
     $this->form_validation->set_rules('kategori_nama', 'Kategori', 'is_unique[tbl_kategori.kategori_nama]');
-    if ($this->form_validation->run() == false) {
+    if ($this->form_validation->run() == FALSE) {
       $this->session->set_flashdata('msg', '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><b></b>Nama Kategori ini sudah ada !</div>');
       redirect('admin/katalog/kategori_menu');
     }

@@ -20,8 +20,7 @@
               <span class="text-lg text-bold text-primary">Pilih Saldo Kas Harian</span>
               <br />
               <?= $this->session->flashdata('msg'); ?>
-              <form class='form floating-label' action='<?= base_url('admin/pos/saldo_kas_harian') ?>' accept-charset='utf-8'
-                method='post'>
+              <form class='form floating-label' action='<?= base_url('admin/pos/saldo_kas_harian'); ?>' accept-charset='utf-8' method='post'>
                 <div class="row">
                   <div class="form-group">
                     <div class=" col-md-6">

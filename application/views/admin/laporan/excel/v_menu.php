@@ -2,10 +2,10 @@
 <h3 align="center">Data Menu</h3>
 
 <table>
-<?php 
-header("Content-type: application/vnd-ms-excel");
-header("Content-Disposition: attachment; filename=Data_Menu.xls");
-?>
+  <?php
+  header("Content-type: application/vnd-ms-excel");
+  header("Content-Disposition: attachment; filename=Data_Menu.xls");
+  ?>
   <thead>
     <tr>
       <th>No</th>
@@ -16,17 +16,17 @@ header("Content-Disposition: attachment; filename=Data_Menu.xls");
     </tr>
   </thead>
   <tbody>
-  <?php
-  $no = 0;
-  foreach ($data as $table_content) :
-  $no++ ?>
-    <tr>
-      <td><?= $no; ?></td>
-      <td><?= $table_content['order_menu']; ?></td>
-      <td><?= number_format($table_content['order_harga'], 2); ?></td>
-      <td><?= $table_content['order_total']; ?></td>
-      <td><?= number_format($table_content['order_revenue'], 2); ?></td>
-    </tr>
-  <?php endforeach; ?>
+    <?php
+    $no = 0;
+    foreach ($data as $table_content) :
+      $no++ ?>
+      <tr>
+        <td><?= $no; ?></td>
+        <td><?= $table_content['order_menu']; ?></td>
+        <td><?= number_format($table_content['order_harga'], 2); ?></td>
+        <td><?= $table_content['order_total']; ?></td>
+        <td><?= number_format($table_content['order_revenue'], 2); ?></td>
+      </tr>
+    <?php endforeach; ?>
   </tbody>
 </table>

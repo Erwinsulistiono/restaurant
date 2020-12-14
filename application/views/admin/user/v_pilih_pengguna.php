@@ -21,7 +21,7 @@
               <br />
               <form class='form floating-label' action='<?= base_url('admin/pengguna/pengguna'); ?>' accept-charset='utf-8' method='post'>
                 <div class="form-group">
-                  <h2><select id="selectDb" name="selectDb" class="form-control" required>
+                  <h2><select name="select_outlet" class="form-control" required>
                       <option value="">&nbsp;</option>
                       <?php foreach ($outlet as $row) : ?>
                         <option value="<?= $row['out_id']; ?>"><?= $row['out_nama']; ?></option>

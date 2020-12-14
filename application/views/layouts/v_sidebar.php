@@ -96,6 +96,7 @@
             <ul>
               <li><a href="<?= base_url('admin/restaurant/area'); ?>"><span class="title">Settings Area</span></a></li>
               <li><a href="<?= base_url('admin/restaurant/pilih_meja'); ?>"><span class="title">Settings Meja</span></a></li>
+              <li><a href="<?= base_url('admin/pos/pilih_kitchen'); ?>"><span class="title">Kitchen</span></a></li>
             </ul>
         </ul>
         <ul>
@@ -136,7 +137,7 @@
           <span class="title">User</span>
         </a>
         <ul>
-          <li><a href="<?= base_url() . 'admin/pengguna' ?>"><span class="title">User List</span></a></li>
+          <li><a href="<?= base_url() . 'admin/pengguna/pilih_pengguna' ?>"><span class="title">User List</span></a></li>
         </ul>
       </li>
       <?php endif; ?>

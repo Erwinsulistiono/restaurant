@@ -2,7 +2,7 @@
 class M_laporan extends CI_Model
 {
 
-	public function getLaporan($data)
+	public function get_laporan($data)
 	{
 		$tgl_awal = $data['tgl_awal'];
 		$tgl_akhir = $data['tgl_akhir'];
@@ -10,17 +10,16 @@ class M_laporan extends CI_Model
 		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
 		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
 		$out_nama = $this->db->query("SELECT `out_nama` FROM `tbl_outlet` WHERE `out_id` = $outlet ")->row('out_nama');
-		$nama_kasir = $data['name'];
 
 		$query = $this->db->query("SELECT *,
 								'$out_nama'  AS `out_nama` 
 								FROM tbl_lap_trx_$outlet 
-								WHERE DATE(trx_date) >= '$tgl_awal' AND DATE(trx_date) <= '$tgl_akhir'
+								WHERE DATE(trx_date) >= '$tgl_awal' AND DATE(trx_date) <= '$tgl_akhir' 
 								ORDER BY trx_date DESC");
 		return $query->result_array();
 	}
 
-	public function getLaporanTrx($data)
+	public function get_laporan_transaksi($data)
 	{
 		$tgl_awal = $data['tgl_awal'];
 		$tgl_akhir = $data['tgl_akhir'];
@@ -39,7 +38,7 @@ class M_laporan extends CI_Model
 		return $query->result_array();
 	}
 
-	public function getLaporanOrder($data)
+	public function get_laporan_order($data)
 	{
 		$tgl_awal = $data['tgl_awal'];
 		$tgl_akhir = $data['tgl_akhir'];
@@ -56,7 +55,7 @@ class M_laporan extends CI_Model
 		return $query->result_array();
 	}
 
-	public function getLaporanPlg($data)
+	public function get_laporan_pelanggan($data)
 	{
 		$tgl_awal = $data['tgl_awal'];
 		$tgl_akhir = $data['tgl_akhir'];
@@ -82,7 +81,7 @@ class M_laporan extends CI_Model
 		return $query->result_array();
 	}
 
-	public function getLaporanMenu($data)
+	public function get_laporan_menu($data)
 	{
 		$tgl_awal = $data['tgl_awal'];
 		$tgl_akhir = $data['tgl_akhir'];
@@ -102,7 +101,7 @@ class M_laporan extends CI_Model
 		return $query->result_array();
 	}
 
-	public function getLaporanCashInOut($tgl_awal = null, $tgl_akhir = null, $outlet, $user)
+	public function get_laporan_cash_in_out($tgl_awal = null, $tgl_akhir = null, $outlet, $user)
 	{
 		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
 		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');

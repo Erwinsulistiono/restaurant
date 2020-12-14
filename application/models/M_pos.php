@@ -21,14 +21,21 @@ class M_pos extends CI_Model
 
 	public function getAllOrderPos($id, $outlet)
 	{
-		$query = $this->db->query('SELECT * FROM tbl_order_' . $outlet . ' WHERE order_trx_reff = ' . $id);
+		$this->db->select('*');
+		$this->db->from("tbl_order_$outlet as tbl1");
+		$this->db->where("order_trx_reff = $id");
+		$this->db->join("tbl_menu_$outlet as tbl2", "tbl1.order_menu=tbl2.menu_id", "left");
+		$query = $this->db->get();
 		return $query->result_array();
 	}
 
 	public function getAllOrderFromMobilePos($id, $outlet)
 	{
-		$query = $this->db->query('SELECT * FROM cust_order_' . $outlet . ' WHERE order_userid = ' . $id);
-		return $query->result_array();
+		$this->db->select('*');
+		$this->db->from("cust_order_$outlet AS tbl1");
+		$this->db->join("tbl_menu_$outlet AS tbl2", "tbl1.order_menu=tbl2.menu_id", "left");
+		$this->db->where("order_userid = $id");
+		$query = $this->db->get();
 	}
 
 	public function get_qty_diff($id, $qty, $outlet)
@@ -40,13 +47,13 @@ class M_pos extends CI_Model
 		return $query->result_array();
 	}
 
-	public function getDataCashInSaldo($tgl, $user, $outlet)
+	public function get_saldo_cash_in($tgl, $user, $outlet)
 	{
 		$query = $this->db->get_where('tbl_kas_harian_' . $outlet, ['kas_tgl > ' => $tgl, 'kas_nm_kasir' => $user, 'kas_saldo_akhir' => 0]);
 		return $query->row_array();
 	}
 
-	public function getLatestDateSaldo($outlet)
+	public function get_latest_saldo_per_date($outlet)
 	{
 		$query = $this->db->query("SELECT DATE(kas_tgl) AS kas_tgl FROM tbl_kas_harian_$outlet WHERE kas_id IN (
 									SELECT MAX(kas_id) FROM tbl_kas_harian_$outlet
@@ -54,7 +61,7 @@ class M_pos extends CI_Model
 		return $query->row()->kas_tgl;
 	}
 
-	public function resetNomorTransaksiHarian($outlet)
+	public function reset_nomor_transaksi_harian($outlet)
 	{
 		$this->db->query("TRUNCATE tbl_trx_pos_$outlet");
 		$this->db->query("TRUNCATE tbl_order_$outlet");

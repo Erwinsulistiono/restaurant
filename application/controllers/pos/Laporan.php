@@ -29,8 +29,8 @@ class Laporan extends MY_Controller
 			'outlet' => $this->outlet,
 		];
 		$data = [
-			'data' => $this->M_laporan->getLaporan($dataFilter),
-			'pesanan' => $this->M_crud->left_join('tbl_lap_trx_' . $this->outlet, 'tbl_lap_order_' . $this->outlet, 'tbl_lap_trx_' . $this->outlet . '.trx_id=tbl_lap_order_' . $this->outlet . '.order_trx_reff'),
+			'data' => $this->M_laporan->get_laporan($dataFilter),
+			'pesanan' => $this->M_crud->left_join("tbl_lap_trx_$this->outlet", 'tbl_lap_order_' . $this->outlet, "tbl_lap_trx_$this->outlet.trx_id=tbl_lap_order_$this->outlet.order_trx_reff"),
 		];
 		$this->render('pos/laporan/v_laporan', $data);
 	}

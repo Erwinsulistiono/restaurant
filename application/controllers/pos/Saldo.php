@@ -21,7 +21,7 @@ class Saldo extends MY_Controller
   public function index()
   {
     $tgl = $this->M_crud->select('tbl_pengguna', 'pengguna_id', $this->user)['pengguna_last_login'];
-    $cek_saldo = $this->M_pos->getDataCashInSaldo($tgl, $this->user, $this->outlet);
+    $cek_saldo = $this->M_pos->get_saldo_cash_in($tgl, $this->user, $this->outlet);
     if ($cek_saldo) {
       redirect(base_url('pos/pos'));
     }
@@ -31,18 +31,17 @@ class Saldo extends MY_Controller
   public function simpan_saldo_outlet()
   {
     $kas_saldo_awal = $this->input->post('kas_saldo_awal');
-    $date_last_insert_saldo = $this->M_pos->getLatestDateSaldo($this->outlet);
+    $date_last_insert_saldo = $this->M_pos->get_latest_saldo_per_date($this->outlet);
     $data = [
       'kas_tgl' => date("Y-m-d H:i:s"),
       'kas_nm_kasir' => $this->user,
       'kas_saldo_awal' => preg_replace('/[^0-9]/', '', $kas_saldo_awal),
       'kas_saldo_akhir' => 0
     ];
-    $this->M_crud->insert('tbl_kas_harian_' . $this->outlet, $data);
-    
-    if (($date_last_insert_saldo + 1) != $data['kas_tgl'])
-    {
-      $this->M_pos->resetNomorTransaksiHarian($this->outlet);
+    $this->M_crud->insert("tbl_kas_harian_$this->outlet", $data);
+
+    if (($date_last_insert_saldo + 1) != $data['kas_tgl']) {
+      $this->M_pos->reset_nomor_transaksi_harian($this->outlet);
     }
     redirect(base_url('pos/pos'));
   }

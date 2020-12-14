@@ -1,15 +1,6 @@
 <?php
 class M_log extends CI_Model
 {
-
-	public function getAllData()
-	{
-		$this->db->order_by('log_tgl', 'DESC');
-		$query = $this->db->get('tbl_log')->result_array();
-		return $query->result_array();
-	}
-
-
 	public function datainsert($data2)
 	{
 		$this->db->insert('tbl_log', $data2);

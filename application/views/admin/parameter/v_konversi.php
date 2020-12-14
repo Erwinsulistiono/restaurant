@@ -18,8 +18,7 @@
 
       <!-- BEGIN TABLE HOVER -->
       <section class="card style-default-bright" style="margin-top:0px;">
-        <p><a href="#" class="btn btn-primary btn-raised" data-toggle="modal" data-target="#modal_add_konversi"><span
-              class="fa fa-plus"></span> Tambah Satuan</a></p>
+        <p><a href="#" class="btn btn-primary btn-raised" data-toggle="modal" data-target="#modal_add_konversi"><span class="fa fa-plus"></span> Tambah Satuan</a></p>
         <div class="section-body">
           <div class="row">
             <table class="table table-hover" id="datatable1">
@@ -36,20 +35,18 @@
                 <?php
                 $no = 0;
                 foreach ($data as $table_content) :
+                  $satuan_id = $table_content['satuan_id'];
                   $no++ ?>
-                <tr>
-                  <td><?= $no; ?></td>
-                  <td><?= $table_content['satuan_kode']; ?></td>
-                  <td><?= $table_content['satuan_reff']; ?></td>
-                  <td><?= $table_content['satuan_val']; ?></td>
-                  <td class="text-right">
-                    <a href="#" class="btn btn-icon-toggle btn-raised" title="Edit row" data-toggle="modal"
-                      data-target="#modal_edit_konversi<?= $table_content['satuan_id']; ?>"><i
-                        class="fa fa-pencil"></i></a>
-                    <a href="<?= base_url('admin/konversi/hapus_konversi/') . $table_content['satuan_id'] ?>"
-                      class="btn btn-icon-toggle btn-raised" title="Delete row" onclick="return confirm('Apakah anda yakin?')"><i class="fa fa-trash-o text-danger"></i></a>
-                  </td>
-                </tr>
+                  <tr>
+                    <td><?= $no; ?></td>
+                    <td><?= $table_content['satuan_kode']; ?></td>
+                    <td><?= $table_content['satuan_reff']; ?></td>
+                    <td><?= $table_content['satuan_val']; ?></td>
+                    <td class="text-right">
+                      <a href="#" class="btn btn-icon-toggle btn-raised" title="Edit row" data-toggle="modal" data-target="#modal_edit_konversi<?= $table_content['satuan_id']; ?>"><i class="fa fa-pencil"></i></a>
+                      <a href="<?= base_url("admin/konversi/hapus_konversi/${satuan_id}"); ?>" class="btn btn-icon-toggle btn-raised" title="Delete row" onclick="return confirm('Apakah anda yakin?')"><i class="fa fa-trash-o text-danger"></i></a>
+                    </td>
+                  </tr>
                 <?php endforeach; ?>
               </tbody>
             </table>
@@ -67,8 +64,7 @@
 <!-- END BASE -->
 
 <!-- ============ MODAL ADD OUTLET =============== -->
-<div class="modal fade" id="modal_add_konversi" tabindex="-1" role="dialog" aria-labelledby="largeModal"
-  aria-hidden="true">
+<div class="modal fade" id="modal_add_konversi" tabindex="-1" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -76,8 +72,7 @@
           <span class="fa fa-times"></span></button>
         <h3 class="modal-title" id="myModalLabel">Tambah Outlet</h3>
       </div>
-      <form class="form-horizontal" role="form" method="post" action="<?= base_url('admin/konversi/simpan_konversi'); ?>"
-        enctype="multipart/form-data">
+      <form class="form-horizontal" role="form" method="post" action="<?= base_url('admin/konversi/simpan_konversi'); ?>" enctype="multipart/form-data">
         <div class="modal-body">
           <div class="form-group">
             <label class="col-sm-3 control-label">Satuan Kode</label>
@@ -95,7 +90,7 @@
                 foreach ($data as $row) :
                   if ($satuan !== $row['satuan_reff']) :
                 ?>
-                  <option value="<?= $row['satuan_reff']; ?>"><?= $row['satuan_reff']; ?></option>
+                    <option value="<?= $row['satuan_reff']; ?>"><?= $row['satuan_reff']; ?></option>
                 <?php
                     $satuan = $row['satuan_reff'];
                   endif;
@@ -122,57 +117,54 @@
 
 <!-- ============ MODAL EDIT OUTLET =============== -->
 <?php foreach ($data as $table_content) : ?>
-<div class="modal fade" id="modal_edit_konversi<?= $table_content['satuan_id']; ?>" tabindex="-1" role="dialog"
-  aria-labelledby="largeModal" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close text-danger btn-raised" data-dismiss="modal" aria-hidden="true">
-          <span class="fa fa-times"></span></button>
-        <h3 class="modal-title" id="myModalLabel">Edit Outlet</h3>
-      </div>
-      <form class="form-horizontal" role="form" method="post" action="<?= base_url('admin/konversi/simpan_konversi'); ?>"
-        enctype="multipart/form-data">
-        <div class="modal-body">
-          <div class="form-group">
-            <label class="col-sm-3 control-label">Satuan Kode</label>
-            <div class="col-sm-8">
-              <input type="hidden" name="satuan_id" class="form-control" value="<?= $table_content['satuan_id'] ?>" required>
-              <input name="satuan_kode" class="form-control" value="<?= $table_content['satuan_kode'] ?>" required>
+  <div class="modal fade" id="modal_edit_konversi<?= $table_content['satuan_id']; ?>" tabindex="-1" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close text-danger btn-raised" data-dismiss="modal" aria-hidden="true">
+            <span class="fa fa-times"></span></button>
+          <h3 class="modal-title" id="myModalLabel">Edit Outlet</h3>
+        </div>
+        <form class="form-horizontal" role="form" method="post" action="<?= base_url('admin/konversi/simpan_konversi'); ?>" enctype="multipart/form-data">
+          <div class="modal-body">
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Satuan Kode</label>
+              <div class="col-sm-8">
+                <input type="hidden" name="satuan_id" class="form-control" value="<?= $table_content['satuan_id'] ?>" required>
+                <input name="satuan_kode" class="form-control" value="<?= $table_content['satuan_kode'] ?>" required>
+              </div>
             </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-3 control-label">Satuan Referensi</label>
-            <div class="col-sm-8">
-              <select name="satuan_reff" class="form-control">
-                <option value="<?= $table_content['satuan_reff'] ?>"><?= $table_content['satuan_reff'] ?></option>
-                <?php
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Satuan Referensi</label>
+              <div class="col-sm-8">
+                <select name="satuan_reff" class="form-control">
+                  <option value="<?= $table_content['satuan_reff'] ?>"><?= $table_content['satuan_reff'] ?></option>
+                  <?php
                   $satuan = "";
                   foreach ($data as $row) :
                     if ($satuan !== $row['satuan_reff']) :
                   ?>
-                <option value="<?= $row['satuan_reff']; ?>"><?= $row['satuan_reff']; ?></option>
-                <?php
+                      <option value="<?= $row['satuan_reff']; ?>"><?= $row['satuan_reff']; ?></option>
+                  <?php
                       $satuan = $row['satuan_reff'];
                     endif;
                   endforeach; ?>
-              </select>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Konversi Value / Satuan Reff</label>
+              <div class="col-sm-8">
+                <input type="number" name="satuan_val" class="form-control" value="<?= floatval($table_content['satuan_val']); ?>" required>
+              </div>
             </div>
           </div>
-          <div class="form-group">
-            <label class="col-sm-3 control-label">Konversi Value / Satuan Reff</label>
-            <div class="col-sm-8">
-              <input type="number" name="satuan_val" class="form-control"
-                value="<?= floatval($table_content['satuan_val']); ?>" required>
-            </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary btn-raised btn-flat" data-dismiss="modal" aria-hidden="true">Tutup</button>
+            <button class="btn btn-primary btn-primary" type="submit">Simpan</button>
           </div>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-primary btn-raised btn-flat" data-dismiss="modal" aria-hidden="true">Tutup</button>
-          <button class="btn btn-primary btn-primary" type="submit">Simpan</button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
-</div>
 <?php endforeach; ?>
