@@ -20,7 +20,9 @@
         <h2><?= $outlet['out_nama']; ?></h2>
       </div>
     </center>
-
+    <!-- <pre>
+      <?= var_dump($order) ?>
+    </pre> -->
     <div id="mid">
       <div class="info">
         <p>

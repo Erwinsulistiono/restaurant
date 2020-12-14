@@ -40,31 +40,32 @@
               <h2>Saldo Akhir</h2>
             </td>
           </tr>
-          <?php $no= 0; foreach($data as $item) :
-          $no++ ?>
-          <tr class="service">
-            <td class="tableitem">
-              <p class="itemtext"><?= $no; ?>
-            </td>
-            <td class="tableitem">
-              <p class="itemtext"><?= $item['kas_tgl']; ?>
-            </td>
-            <td class="tableitem">
-              <p class="itemtext"><?= $item['out_kode']; ?>
-            </td>
-            <td class="tableitem">
-              <p class="itemtext"><?= $item['out_nama']; ?></p>
-            </td>
-            <td class="tableitem">
-              <p class="itemtext"><?= $item['pengguna_nama']; ?>
-            </td>
-            <td class="tableitem">
-              <p class="itemtext"><?= number_format($item['kas_saldo_awal']); ?>
-            </td>
-            <td class="tableitem">
-              <p class="itemtext"><?= number_format($item['kas_saldo_akhir']); ?>
-            </td>
-          </tr>
+          <?php $no = 0;
+          foreach ($data as $item) :
+            $no++ ?>
+            <tr class="service">
+              <td class="tableitem">
+                <p class="itemtext"><?= $no; ?>
+              </td>
+              <td class="tableitem">
+                <p class="itemtext"><?= $item['kas_tgl']; ?>
+              </td>
+              <td class="tableitem">
+                <p class="itemtext"><?= $item['out_kode']; ?>
+              </td>
+              <td class="tableitem">
+                <p class="itemtext"><?= $item['out_nama']; ?></p>
+              </td>
+              <td class="tableitem">
+                <p class="itemtext"><?= $item['pengguna_nama']; ?>
+              </td>
+              <td class="tableitem">
+                <p class="itemtext"><?= number_format($item['kas_saldo_awal']); ?>
+              </td>
+              <td class="tableitem">
+                <p class="itemtext"><?= number_format($item['kas_saldo_akhir']); ?>
+              </td>
+            </tr>
 
           <?php endforeach; ?>
 
@@ -79,5 +80,5 @@
 </body>
 
 <script>
-window.print();
+  window.print();
 </script>

@@ -2,14 +2,14 @@
 class M_menu extends CI_Model
 {
 
-    function check_satuan_konversi($ing_satuan)
+    /* function check_satuan_konversi($ing_satuan)
     {
         $this->db->select('satuan_id, satuan_kode');
         $this->db->from('tbl_satuan');
         $this->db->where('satuan_reff', $ing_satuan);
         $query = $this->db->get();
         return $query->result_array();
-    }
+    } disabled on 14 December 2020*/
 
     function get_resep($outlet, $id)
     {
@@ -22,7 +22,7 @@ class M_menu extends CI_Model
         return $query->result_array();
     }
 
-     function get_all_resep($outlet)
+    function get_all_resep($outlet)
     {
         $this->db->select('*');
         $this->db->from('tbl_ingredient');

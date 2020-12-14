@@ -752,6 +752,7 @@ foreach ($payment as $k) :
     if ((isOrderUpdated) || (isMobile)) {
       submitOrderToKitchen();
     } else {
+      // submitOrderToKitchen();
       paidAndPrintReceipt();
     }
   })

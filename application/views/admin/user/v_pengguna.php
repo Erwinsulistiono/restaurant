@@ -79,7 +79,7 @@
           <span class="fa fa-times"></span></button>
         <h3 class="modal-title" id="myModalLabel">Tambah Pengguna</h3>
       </div>
-      <form class="form-horizontal" role="form" method="post" action="<?= base_url() . 'admin/pengguna/simpan_pengguna/' . $dataBase ?>" enctype="multipart/form-data">
+      <form class="form-horizontal" role="form" method="post" action="<?= base_url() . 'admin/pengguna/simpan_pengguna/' . $outlet_id ?>" enctype="multipart/form-data">
         <div class="modal-body">
           <div class="form-group">
             <label class="col-sm-3 control-label">Nama</label>
@@ -138,7 +138,7 @@
           <div class="form-group">
             <label for="password13" class="col-sm-3 control-label">Ulangi Password</label>
             <div class="col-sm-8">
-              <input type="password" name="pengguna_password2" class="form-control" id="password13" required>
+              <input type="password" name="pengguna_password_confirmation" class="form-control" id="password13" required>
             </div>
           </div>
           <div class="form-group">
@@ -181,7 +181,7 @@ foreach ($data as $table_content) :
             <span class="fa fa-times"></span></button>
           <h3 class="modal-title" id="myModalLabel">Edit Pengguna</h3>
         </div>
-        <form class="form-horizontal" role="form" method="post" action="<?= base_url() . 'admin/pengguna/simpan_pengguna/' . $dataBase ?>" enctype="multipart/form-data">
+        <form class="form-horizontal" role="form" method="post" action="<?= base_url() . 'admin/pengguna/simpan_pengguna/' . $outlet_id ?>" enctype="multipart/form-data">
           <div class="modal-body">
             <div class="form-group">
               <label class="col-sm-3 control-label">Nama</label>
@@ -259,7 +259,7 @@ foreach ($data as $table_content) :
             <div class="form-group">
               <label for="password13" class="col-sm-3 control-label">Ulangi Password</label>
               <div class="col-sm-8">
-                <input type="password" name="pengguna_password2" class="form-control" id="password13">
+                <input type="password" name="pengguna_password_confirmation" class="form-control" id="password13">
               </div>
             </div>
             <div class="form-group">

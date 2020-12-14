@@ -11,7 +11,7 @@
       <section class="card style-default-bright" style="margin-top:0px;">
         <p><a href="<?= base_url('admin/menu'); ?>" class="btn btn-primary btn-raised"><span class="fa fa-arrow-left"></span>
             Kembali</a>
-          <?php (($dataBase == 'master') && print('<a href="#" class="btn btn-primary btn-raised" data-toggle="modal" data-target="#addNewModal"><span
+          <?php (($outlet_id == 'master') && print('<a href="#" class="btn btn-primary btn-raised" data-toggle="modal" data-target="#addNewModal"><span
               class="fa fa-plus"></span> Tambah Menu</a>')) ?>
         </p>
 
@@ -30,9 +30,12 @@
                 </tr>
               </thead>
               <tbody>
-                <?php foreach ($data as $table_content) :  ?>
+                <?php foreach ($data as $table_content) :
+                  $menu_gambar = $table_content['menu_gambar'];
+                  $menu_id = $table_content['menu_id'];
+                ?>
                   <tr>
-                    <td><img style="width:80px;height:80px;" class="img-thumbnail width-1" src="<?= base_url() . 'assets/gambar/' . $table_content['menu_gambar']; ?>" alt="" /></td>
+                    <td><img style="width:80px;height:80px;" class="img-thumbnail width-1" src="<?= base_url("assets/gambar/${menu_gambar}"); ?>" alt="" /></td>
                     <td><?= $table_content['menu_nama']; ?></td>
                     <td><?= limit_words($table_content['menu_deskripsi'], 10) . '...'; ?></td>
                     <?php if (empty($table_content['menu_harga_lama'])) : ?>
@@ -46,22 +49,22 @@
                     <?php endif; ?>
                     <td>
                       <?php foreach ($kategori_makanan as $row) :
-                        if (($table_content['menu_id']) == ($row['menu_id'])) :
+                        if ($menu_id == $row['menu_id']) :
                           echo $row['kategori_nama'] . ', ';
                         endif;
                       endforeach;
                       ?>
                     </td>
                     <td class="text-right">
-                      <?php (($dataBase == 'master') && print('<a href="#" class="btn btn-icon-toggle btn-raised" title="Edit row" data-toggle="modal"
-                      data-target="#UpdateModal' . $table_content['menu_id'] . '"><i class="fa fa-pencil"></i></a>
-                    <a href="#" data-row="' . $table_content['menu_id'] . '" class="addIng btn btn-icon-toggle btn-raised"
-                      title="Edit recipe" data-toggle="modal" data-target="#RecipeModal' . $table_content['menu_id'] . '"><i
-                        class="fa fa-file text-primary-dark"></i></a>
-                    <a href="#" data-row="' . $table_content['menu_id'] . '" class="addIng btn btn-icon-toggle btn-raised"
-                      title="Tambah Menu Ke Outlet" data-toggle="modal" data-target="#MenuTransferModal' . $table_content['menu_id'] . '"><i
+                      <?php (($outlet_id == 'master') && print('<a href="#" class="btn btn-icon-toggle btn-raised" title="Edit row" data-toggle="modal"
+                          data-target="#UpdateModal$menu_id"><i class="fa fa-pencil"></i></a>
+                        <a href="#" data-row="' . $menu_id . '" class="addIng btn btn-icon-toggle btn-raised"
+                          title="Edit recipe" data-toggle="modal" data-target="#RecipeModal' . $menu_id . '"><i
+                            class="fa fa-file text-primary-dark"></i></a>
+                        <a href="#" data-row="' . $menu_id . '" class="addIng btn btn-icon-toggle btn-raised"
+                          title="Tambah Menu Ke Outlet" data-toggle="modal" data-target="#MenuTransferModal' . $menu_id . '"><i
                         class="fa fa-exchange text-primary-dark"></i></a>')); ?>
-                      <a href="<?= base_url('admin/menu/hapus_menu/') . $dataBase . '/' . $table_content['menu_id']; ?>" onclick="return confirm('Apakah anda yakin?')" class="btn btn-icon-toggle text-danger btn-raised" title="Delete row"><i class="fa fa-trash-o"></i></a>
+                      <a href="<?= base_url("admin/menu/hapus_menu/${outlet_id}/${menu_id}"); ?>" onclick="return confirm('Apakah anda yakin?')" class="btn btn-icon-toggle text-danger btn-raised" title="Delete row"><i class="fa fa-trash-o"></i></a>
                     </td>
                   </tr>
                 <?php endforeach; ?>
@@ -78,7 +81,7 @@
 
 
 <!-- ================== Modal Add New Menu =======================-->
-<form class="form" role="form" action="<?= base_url('admin/menu/simpan_menu/') . $dataBase; ?>" method="post" enctype="multipart/form-data">
+<form class="form" role="form" action="<?= base_url("admin/menu/simpan_menu/${outlet_id}"); ?>" method="post" enctype="multipart/form-data">
   <div class="modal fade" id="addNewModal" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -156,7 +159,7 @@
 foreach ($data as $table_content) :
 ?>
   <!-- MODAL EDIT MENU -->
-  <form action="<?= base_url('admin/menu/simpan_menu/') . $dataBase; ?>" method="post" enctype="multipart/form-data">
+  <form action="<?= base_url("admin/menu/simpan_menu/${outlet_id}"); ?>" method="post" enctype="multipart/form-data">
     <div class="modal fade" id="UpdateModal<?= $table_content['menu_id']; ?>" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -282,9 +285,10 @@ foreach ($data as $table_content) :
 
 <?php
 foreach ($data as $table_content) :
+  $menu_id = $table_content['menu_id'];
 ?>
   <!-- Modal Add/Update Resep-->
-  <form class="form-horizontal formIngredient" action="<?= base_url('admin/menu/simpan_recipe/') . $dataBase . '/' . $table_content['menu_id']; ?>" method="post">
+  <form class="form-horizontal formIngredient" action="<?= base_url("admin/menu/simpan_recipe/${outlet_id}/${menu_id}"); ?>" method="post">
     <div class="modal fade" id="RecipeModal<?= $table_content['menu_id']; ?>" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -318,7 +322,7 @@ foreach ($data as $table_content) :
   });
 
   let no;
-  let dataBase = '<?php echo $dataBase ?>';
+  let outletId = '<?php echo $outlet_id ?>';
   let inventory = [];
   let checkRecipeDuplicate;
   let ingredient = JSON.parse('<?php echo $ingredient ?>');
@@ -511,7 +515,7 @@ foreach ($data as $table_content) :
     !isDuplicate(checkRecipeDuplicate) && alert("Duplicate Ingredient");
     isDuplicate(checkRecipeDuplicate) &&
       $.ajax({
-        url: '<?= base_url('admin/menu/simpan_recipe/') ?>' + dataBase + '/' + menu_id,
+        url: '<?= base_url('admin/menu/simpan_recipe/') ?>' + outletId + '/' + menu_id,
         data: data,
         type: 'POST',
         dataType: 'json',

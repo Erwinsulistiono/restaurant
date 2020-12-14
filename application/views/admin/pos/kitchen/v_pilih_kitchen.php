@@ -19,13 +19,12 @@
               <br />
               <span class="text-lg text-bold text-primary">Pilih Outlet</span>
               <br />
-              <form class='form floating-label' action='<?= base_url('admin/pos/kitchen'); ?>' accept-charset='utf-8'
-                method='post'>
+              <form class='form floating-label' action='<?= base_url('admin/pos/kitchen'); ?>' accept-charset='utf-8' method='post'>
                 <div class="form-group">
-                  <h2><select id="selectDb" name="selectDb" class="form-control" required>
+                  <h2><select name="outlet_id" class="form-control" required>
                       <option value="">&nbsp;</option>
-                      <?php foreach ($outlet as $row) : ?>
-                      <option value="<?= $row['out_id']; ?>"><?= $row['out_nama']; ?></option>
+                      <?php foreach ($outlets as $row) : ?>
+                        <option value="<?= $row['out_id']; ?>"><?= $row['out_nama']; ?></option>
                       <?php endforeach; ?>
                     </select></h2>
                 </div>

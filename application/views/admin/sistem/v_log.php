@@ -36,7 +36,7 @@
                 <?php $no = 0;
                 foreach ($data as $table_content) :
                   $no++;
-                  ?>
+                ?>
                   <tr>
                     <td><?= $no; ?></td>
                     <td><?= $table_content['log_type']; ?></td>

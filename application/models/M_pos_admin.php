@@ -1,7 +1,7 @@
 <?php
 class M_pos_admin extends CI_Model
 {
-	public function getSaldoHarianPerOutlet($outlet, $tgl_awal , $tgl_akhir)
+	public function get_saldo_harian_all($outlet, $tgl_awal, $tgl_akhir)
 	{
 		$query = $this->db->query("SELECT * , 
 								'$outlet[out_id]' AS out_id , 

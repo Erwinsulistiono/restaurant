@@ -22,9 +22,9 @@
 				<p><a href="<?= base_url('admin/pos/pilih_saldo/'); ?>" class="btn btn-primary"><span class="fa fa-arrow-left"></span>
 						Kembali</a>
 					<a href="#" class="btn btn-primary btn-raised" data-toggle="modal" data-target="#modal_add_saldo"><span class="fa fa-plus"></span> Tambah Saldo</a>
-					<a href="<?= base_url('admin/pos/pdf/') . $pengguna_kasir . '/' . $tgl_awal . '/' . $tgl_akhir . '/' . $outlets; ?>" target="_blank" class="btn btn-default-light text-danger btn-raised"><span class="fa fa-file-pdf-o text-danger"></span>
+					<a href="<?= base_url("admin/pos/pdf/$pengguna_kasir/$tgl_awal/$tgl_akhir/$outlets"); ?>" target="_blank" class="btn btn-default-light text-danger btn-raised"><span class="fa fa-file-pdf-o text-danger"></span>
 						PDF</a>
-					<a href="<?= base_url('admin/pos/excel/') . $pengguna_kasir . '/' . $tgl_awal . '/' . $tgl_akhir . '/' . $outlets; ?>" class="btn btn-default-light text-success btn-raised"><span class="fa fa-file-excel-o text-success"></span>
+					<a href="<?= base_url("admin/pos/excel/$pengguna_kasir/$tgl_awal/$tgl_akhir/$outlets"); ?>" class="btn btn-default-light text-success btn-raised"><span class="fa fa-file-excel-o text-success"></span>
 						EXCEL</a></p>
 				<div class="section-body">
 					<div class="row">
@@ -91,9 +91,8 @@
 				<h3 class="modal-title" id="myModalLabel">Tambah Saldo</h3>
 			</div>
 
-			<form class="form-horizontal" role="form" method="post" action="<?= base_url('admin/pos/simpan_saldo/') . $pengguna_kasir . '/' . $tgl_awal . '/' . $tgl_akhir . '/' . $outlets; ?>" enctype="multipart/form-data">
+			<form class="form-horizontal" role="form" method="post" action="<?= base_url("admin/pos/simpan_saldo/$pengguna_kasir/$tgl_awal/$tgl_akhir/$outlets"); ?>" enctype="multipart/form-data">
 				<div class="modal-body">
-
 					<div class="form-group">
 						<label for="textarea13" class="col-sm-3 control-label">Outlet</label>
 						<div class="col-sm-8">
