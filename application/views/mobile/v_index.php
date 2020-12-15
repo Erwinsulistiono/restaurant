@@ -42,7 +42,7 @@
                                 <div style="border:solid; border-width:1px; border-color:#b6b6b6;margin-top:10px; transform: translatex(2vh)"></div>
                             </div>
                         </div>
-                        <a onclick="redirectCheckOrder()" href="<?= base_url('mobile/order/view_order/' . $outlet) ?>" id="view_order" class="btn btn-flat btn-block btn-primary btn-raised" type="submit" style="border:solid; border-width:1px; border-color:#08867e">View Order</a>
+                        <a onclick="redirectCheckOrder()" href="<?= base_url("mobile/order/view_order/${outlet}") ?>" id="view_order" class="btn btn-flat btn-block btn-primary btn-raised" type="submit" style="border:solid; border-width:1px; border-color:#08867e">View Order</a>
                     </div>
                 </div>
             </div>
@@ -57,7 +57,7 @@
     dataPelanggan = (JSON.parse(sessionStorage.getItem('dataPelanggan')));
     let redirectPage = () => {
         if (!dataPelanggan) {
-            return document.location = '<?= base_url('mobile/order/register/' . $outlet) ?>';
+            return document.location = '<?= base_url("mobile/order/register/${outlet}") ?>';
         }
         redirectPageIfUserSessionValid();
     }
@@ -73,16 +73,16 @@
         })
         const isValid = await response.json();
         if (isValid) {
-            document.location = '<?= base_url('mobile/pos/display_pos/' . $outlet) ?>';
+            document.location = '<?= base_url("mobile/pos/display_pos/${outlet}") ?>';
         } else {
             sessionStorage.removeItem('dataPelanggan');
-            document.location = '<?= base_url('mobile/order/register/' . $outlet) ?>';
+            document.location = '<?= base_url("mobile/order/register/${outlet}") ?>';
         }
     }
 
     let redirectCheckOrder = () => {
         if (!dataPelanggan) {
-            return document.location = '<?= base_url('mobile/order/view_order/' . $outlet) ?>';
+            return document.location = '<?= base_url("mobile/order/view_order/${outlet}") ?>';
         }
         redirectCheckOrderIfUserSessionValid();
     }
@@ -98,10 +98,10 @@
         })
         const isValid = await response.json();
         if (isValid) {
-            document.location = '<?= base_url('mobile/order/view_order/' . $outlet . '/') ?>' + dataPelanggan.hashed + '/' + dataPelanggan.plg_id;
+            document.location = '<?= base_url("mobile/order/view_order/${outlet}/") ?>' + dataPelanggan.hashed + '/' + dataPelanggan.plg_id;
         } else {
             sessionStorage.removeItem('dataPelanggan');
-            document.location = '<?= base_url('mobile/order/view_order/' . $outlet) ?>';
+            document.location = '<?= base_url("mobile/order/view_order/${outlet}") ?>';
         }
     }
 

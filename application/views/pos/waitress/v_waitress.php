@@ -117,11 +117,11 @@
 
           card +=
             `<form role="form" method="post" class="form-${no} header-${t.trx_id}">
-                <div class="col-md-3 col-sm-4 col-xs-6">
+              <div class="col-md-3 col-sm-4 col-xs-6">
                 <div class="card">
-                <div class="card-head style-gray">
-                <h3  class="text-center text-light">${t.trx_table}</h3>
-                </div>
+                  <div class="card-head style-gray">
+                    <h3 class="text-center text-light">${t.trx_table}</h3>
+                  </div>
                 <div class="card-body">`;
 
           order.forEach(o => {
@@ -137,17 +137,18 @@
             let buttonDisabled = (deliveringStatus === 'Y') ? 'disabled' : '';
 
             if (isIdHeadAndDetailSame && cookingStatus === 'Y') {
-              card += `<div class="clearfix">
-                            <div class="pull-left">${menu}</div>
-                              <div class="pull-right no-padding">
-                                <a href="#" data-toggle="modal" data-target="#return_order_${o.order_id}"
-                                  id="orderFlg${order.order_date}" class="btn btn-icon text-danger no-padding btn-return-order-${t.trx_id}" ${buttonDisabled}>
-                                  <span class="fa fa-times"></span></a>&nbsp;&nbsp;
-                                <a href="#" onclick="updateFlg(${o.order_id})"
-                                  id="orderFlg${order.order_date}" class="btn btn-icon text-success no-padding btn-coret-${t.trx_id}" ${buttonDisabled}>
-                                  <span class="fa fa-pencil"></span></a>
-                              </div>
-                            </div>`;
+              card +=
+                `<div class="clearfix">
+                  <div class="pull-left">${menu}</div>
+                    <div class="pull-right no-padding">
+                      <a href="#" data-toggle="modal" data-target="#return_order_${o.order_id}"
+                        id="orderFlg${order.order_date}" class="btn btn-icon text-danger no-padding btn-return-order-${t.trx_id}" ${buttonDisabled}>
+                        <span class="fa fa-times"></span></a>&nbsp;&nbsp;
+                      <a href="#" onclick="updateFlg(${o.order_id})"
+                        id="orderFlg${order.order_date}" class="btn btn-icon text-success no-padding btn-coret-${t.trx_id}" ${buttonDisabled}>
+                        <span class="fa fa-pencil"></span></a>
+                    </div>
+                  </div>`;
 
               card += ((o.order_notes)) ? `<div class="clearfix pull-left"> - ${o.order_notes}</div>` : '';
               iteration++;
@@ -181,7 +182,7 @@
             </form>`;
 
           (iteration > 0) && $('#target').append(card);
-          if (iterationReturnOrderToCashier > 0 && isTrxCanceled) {
+          if (iterationReturnOrderToCashier > 0 || isTrxCanceled) {
             let head = document.querySelectorAll(`.form-${no}`)
             head.forEach(h => {
               let header = h.querySelector('.card-head');
@@ -272,24 +273,6 @@
           }
         })
       }
-
-      let clearOrder = trx_id => {
-        let form = $(`#form-${trx_id}`)
-        $.ajax({
-          type: 'POST',
-          url: '<?php echo base_url() . "pos/pos/clear_order/" ?>',
-          data: {
-            trx_id: trx_id,
-          },
-          dataType: 'json',
-          success: function(data) {
-            (data.type == 'error') && alert(data.message);
-            (data.type == 'success') &&
-            (form.remove(),
-              alert(data.message));
-          }
-        })
-      };
 
       $('#getWaitress').click(function() {
         getdate();

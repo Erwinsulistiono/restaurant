@@ -209,8 +209,10 @@
                     <div class="row">
                       <div class="col-md-12">
                         <div class="col-sm-12 text-center">
-                          <?php if ($k['payment_qrcode']) : ?>
-                            <img src="<?= base_url() . 'assets/img/' . $k['payment_qrcode']; ?>" id="qrcode<?= $k_id ?>" class="img-responsive">
+                          <?php if ($k['payment_qrcode']) :
+                            $qr_code = $k['payment_qrcode'];
+                          ?>
+                            <img src="<?= base_url("assets/img/${qr_code}"); ?>" id="qrcode<?= $k_id ?>" class="img-responsive">
                           <?php endif ?>
                         </div>
                       </div>

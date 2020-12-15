@@ -18,20 +18,147 @@ class Laporan extends MY_Controller
 
 	public function index()
 	{
-		$this->render('pos/laporan/index');
+		$data['trx_tipe'] = $this->M_crud->read('tbl_tipe_transaksi');
+		$this->render('pos/laporan/v_index', $data);
 	}
 
-	public function filter()
+	public function laporan()
 	{
-		$dataFilter = [
+
+		$input_data = [
 			'tgl_awal' => $this->input->post('tgl_awal'),
 			'tgl_akhir' => $this->input->post('tgl_akhir'),
+			'tipe_trx' => $this->input->post('tipe_trx'),
 			'outlet' => $this->outlet,
+			'group' => $this->input->post('group'),
 		];
-		$data = [
-			'data' => $this->M_laporan->get_laporan($dataFilter),
-			'pesanan' => $this->M_crud->left_join("tbl_lap_trx_$this->outlet", 'tbl_lap_order_' . $this->outlet, "tbl_lap_trx_$this->outlet.trx_id=tbl_lap_order_$this->outlet.order_trx_reff"),
+
+		switch ($input_data["group"]) {
+			case "order":
+				$return_data = $this->group_by_order($input_data);
+				$return_data['payment'] = $this->M_crud->read("tbl_payment");
+				$this->render('pos/laporan/v_order', $return_data);
+				break;
+			case "plg":
+				$return_data = $this->group_by_pelanggan($input_data);
+				$return_data['payment'] = $this->M_crud->read("tbl_payment");
+				$this->render('pos/laporan/v_pelanggan', $return_data);
+				break;
+			case "trx":
+				$return_data = $this->group_by_transaksi($input_data);
+				$return_data['payment'] = $this->M_crud->read("tbl_payment");
+				$this->render('pos/laporan/v_transaksi', $return_data);
+				break;
+			case "menu":
+				$return_data = $this->group_by_menu($input_data);
+				$return_data['payment'] = $this->M_crud->read("tbl_payment");
+				$this->render('pos/laporan/v_menu', $return_data);
+				break;
+			default:
+				$this->session->set_flashdata('msg', '<div class="alert alert-warning"><button type="button" class="close" data-dismiss="alert">&times;</button>pilih group.</div>');
+				$this->index();
+		}
+	}
+
+	public function pdf($tgl_awal, $tgl_akhir, $tipe_trx, $group)
+	{
+		$data_input = [
+			'tgl_awal' => $tgl_awal,
+			'tgl_akhir' => $tgl_akhir,
+			'tipe_trx' => $tipe_trx,
+			'outlet' => $this->outlet,
+			'group' => $group,
+			'pt' => $this->M_crud->select('tbl_pt', 'pt_id', 1),
 		];
-		$this->render('pos/laporan/v_laporan', $data);
+
+		switch ($data_input['group']) {
+			case "order":
+				$return_data = $this->group_by_order($data_input);
+				$return_data['payment'] = $this->M_crud->read("tbl_payment");
+				$this->load->view('pos/laporan/pdf/v_order', $return_data);
+				break;
+			case "plg":
+				$return_data = $this->group_by_pelanggan($data_input);
+				$return_data['payment'] = $this->M_crud->read("tbl_payment");
+				$this->load->view('pos/laporan/pdf/v_pelanggan', $return_data);
+				break;
+			case "trx":
+				$return_data = $this->group_by_transaksi($data_input);
+				$return_data['payment'] = $this->M_crud->read("tbl_payment");
+				$this->load->view('pos/laporan/pdf/v_transaksi', $return_data);
+				break;
+			case "menu":
+				$return_data = $this->group_by_menu($data_input);
+				$return_data['payment'] = $this->M_crud->read("tbl_payment");
+				$this->load->view('pos/laporan/pdf/v_menu', $return_data);
+				break;
+			default:
+				$this->session->set_flashdata('msg', '<div class="alert alert-warning"><button type="button" class="close" data-dismiss="alert">&times;</button>Unknown Error.</div>');
+				$this->index();
+		}
+	}
+
+	public function excel($tgl_awal, $tgl_akhir, $tipe_trx, $group)
+	{
+		$data_input = [
+			'tgl_awal' => $tgl_awal,
+			'tgl_akhir' => $tgl_akhir,
+			'tipe_trx' => $tipe_trx,
+			'outlet' => $this->outlet,
+			'group' => $group,
+			'pt' => $this->M_crud->select('tbl_pt', 'pt_id', 1),
+		];
+
+		switch ($data_input['group']) {
+			case "order":
+				$return_data = $this->group_by_order($data_input);
+				$return_data['payment'] = $this->M_crud->read("tbl_payment");
+				$this->load->view('pos/laporan/excel/v_order', $return_data);
+				break;
+			case "plg":
+				$return_data = $this->group_by_pelanggan($data_input);
+				$return_data['payment'] = $this->M_crud->read("tbl_payment");
+				$this->load->view('pos/laporan/excel/v_pelanggan', $return_data);
+				break;
+			case "trx":
+				$return_data = $this->group_by_transaksi($data_input);
+				$return_data['payment'] = $this->M_crud->read("tbl_payment");
+				$this->load->view('pos/laporan/excel/v_transaksi', $return_data);
+				break;
+			case "menu":
+				$return_data = $this->group_by_menu($data_input);
+				$return_data['payment'] = $this->M_crud->read("tbl_payment");
+				$this->load->view('pos/laporan/excel/v_menu', $return_data);
+				break;
+			default:
+				$this->session->set_flashdata('msg', '<div class="alert alert-warning"><button type="button" class="close" data-dismiss="alert">&times;</button>Unknown Error.</div>');
+				$this->index();
+		}
+	}
+
+	public function group_by_order($data)
+	{
+		$data['data'] = $this->M_laporan->get_laporan_order_outlet($data);
+		return $data;
+	}
+
+	public function group_by_menu($data)
+	{
+		$data['data'] = $this->M_laporan->get_laporan_menu_outlet($data);
+		return $data;
+	}
+
+	public function group_by_pelanggan($data)
+	{
+		$data['data'] = $this->M_laporan->get_laporan_pelanggan_outlet($data);
+		$data['rinci'] = $this->M_laporan->get_laporan_transaksi_outlet($data);
+		return $data;
+	}
+
+	public function group_by_transaksi($data)
+	{
+		$data['data'] = $this->M_laporan->get_laporan_outlet($data);
+		$data['rinci'] = $this->M_laporan->get_laporan_transaksi_outlet($data);
+		return $data;
 	}
 }

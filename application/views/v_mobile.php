@@ -30,10 +30,11 @@
               <?php $closed = " - (closed)" ?>
               <?php $disabled = 'style="pointer-events: none; opacity: 0.6"' ?>
               <?php if (date("H:i:s") > $o['out_opening_hours'] && date("H:i:s") < $o['out_closing_hours']) : ?>
+                <?php $out_id = $o['out_id']; ?>
                 <?php $closed = "" ?>
                 <?php $disabled = "" ?>
               <?php endif ?>
-              <a class="text-lg text-medium" href="<?= base_url('order/outlet/' . $o['out_id']) ?>" <?= $disabled ?>>
+              <a class="text-lg text-medium" href="<?= base_url("order/outlet/$out_id"); ?>" <?= $disabled ?>>
                 <div class="col-xs-12 col-lg-6 hbox-xs" style="border-bottom:solid; border-width:1px; border-color:#b6b6b6">
                   <div class="hbox-column v-top">
                     <div class="clearfix">

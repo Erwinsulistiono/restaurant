@@ -36,6 +36,7 @@ class M_pos extends CI_Model
 		$this->db->join("tbl_menu_$outlet AS tbl2", "tbl1.order_menu=tbl2.menu_id", "left");
 		$this->db->where("order_userid = $id");
 		$query = $this->db->get();
+		return $query->result_array();
 	}
 
 	public function get_qty_diff($id, $qty, $outlet)

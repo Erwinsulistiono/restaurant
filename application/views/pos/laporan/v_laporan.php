@@ -9,15 +9,17 @@
           <h2><span class="	fa fa-map-marker"></span> Data Transaksi</h2>
       </div>
       <?= $this->session->flashdata('msg'); ?>
+      <!-- <pre>
+        <?php var_dump($data) ?>
+      </pre> -->
       <section class="card style-default-bright" style="margin-top:0px;">
         <div class="section-body">
           <div class="row">
-
             <table class="table table-hover" id="datatable1">
               <thead>
                 <tr>
                   <th>No</th>
-                  <th>Table</th>
+                  <th>Jenis Transaksi</th>
                   <th>Cust</th>
                   <th>Jam Pesan</th>
                   <th>Register</th>
@@ -35,11 +37,11 @@
                 <?php
                 $no = 0;
                 foreach ($data as $table_content) :
-                  $is_order_canceled = 0;
+                  $is_order_canceled = TRUE;
                   $no++ ?>
                   <tr>
                     <td><?= $no; ?></td>
-                    <td><?= $table_content['trx_table']; ?></td>
+                    <td><?= $table_content['tipe_transaksi_nama'] . ' - ' . $table_content['trx_table']; ?></td>
                     <td><?= $table_content['trx_cust']; ?></td>
                     <td><?= $table_content['trx_date']; ?></td>
                     <td><?= $table_content['trx_userid']; ?></td>
@@ -52,11 +54,11 @@
                     <?php foreach ($payment as $pay) : ?>
                       <?php if (strtolower(str_replace(' ', '', $table_content['trx_payment'])) == strtolower(str_replace(' ', '', $pay['payment_nama']))) : ?>
                         <td><?= $pay['payment_nama']; ?></td>
-                        <?php $is_order_canceled = 1; ?>
+                        <?php $is_order_canceled = FALSE; ?>
                       <?php endif; ?>
                     <?php endforeach; ?>
-                    <?php if (!$is_order_canceled) : ?>
-                      <td><?= $table_content['trx_payment'] ?></td>
+                    <?php if ($is_order_canceled) : ?>
+                      <td style="color:#f44336"><?= $table_content['trx_payment'] ?></td>
                     <?php endif; ?>
                     <td class="text-right">
                       <a href="#" class="btn btn-icon-toggle btn-raised" title="lihat pesanan" data-toggle="modal" data-target="#modal_view_pesanan<?= $table_content['trx_id']; ?>"><i class="fa fa-eye"></i></a>

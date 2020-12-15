@@ -50,12 +50,14 @@
           <div class="msg" style="position:fixed; top:10vh; left:0; right:0; z-index:10001"></div>
           <div class="tabs-content" data-tabs-content="example-tabs" style="overflow-y:scroll">
             <div role="tabpanel" class="tab-pane active" id="panel-all">
-              <?php foreach ($data as $index => $table_content) : ?>
+              <?php foreach ($data as $index => $table_content) :
+                $menu_gambar = $table_content['menu_gambar'];
+              ?>
                 <div class="col-md-2 col-xs-6 col-sm-3">
                   <div class="no-padding card thumbnail" style="box-shadow: 1px 1px 4px 1px #e5e0e0">
                     <a data-toggle="modal" class="modal_add_cart btn-raised" data-itemid="<?= $table_content['menu_id'] ?>" data-target="#option_menu<?= $table_content['menu_id'] ?>" data-itemname="<?= $table_content['menu_nama'] ?>">
                       <td>
-                        <img loading="lazy" style="width:auto;height:13rem;border-radius:4px;" class="width-1 img-responsive rounded" src="<?= base_url() . 'assets/gambar/' . $table_content['menu_gambar']; ?>" alt="" />
+                        <img loading="lazy" style="width:auto;height:13rem;border-radius:4px;" class="width-1 img-responsive rounded" src="<?= base_url("assets/gambar/${menu_gambar}"); ?>" alt="" />
                       </td>
                       <div class="caption text-left no-padding">
                         <h5 class="text-light">&nbsp;<?= ucwords($table_content['menu_nama']); ?></h5>
@@ -70,13 +72,15 @@
         </div>
         <?php foreach ($kategori as $index => $tab) : ?>
           <div role="tabpanel" class="tab-pane" id="panel-<?= $index; ?>">
-            <?php foreach ($kategori_makanan as $index => $table_content) : ?>
+            <?php foreach ($kategori_makanan as $index => $table_content) :
+              $menu_gambar = $table_content['menu_gambar'];
+            ?>
               <?php if (($table_content['kategori_id'] == $tab['kategori_id']) && $table_content['menu_nama'] != '') : ?>
                 <div class="col-md-3 col-xs-6 col-sm-3">
                   <div class="no-padding card thumbnail" style="box-shadow: 1px 1px 4px 1px #e5e0e0">
                     <a data-toggle="modal" class="modal_add_cart btn-raised" data-itemid="<?= $table_content['menu_id'] ?>" data-target="#option_menu<?= $table_content['menu_id'] ?>" data-itemname="<?= $table_content['menu_nama'] ?>">
                       <td>
-                        <img loading="lazy" style="width:auto;height:13rem;border-radius:4px;" class="width-1 img-responsive rounded" src="<?= base_url() . 'assets/gambar/' . $table_content['menu_gambar']; ?>" alt="" />
+                        <img loading="lazy" style="width:auto;height:13rem;border-radius:4px;" class="width-1 img-responsive rounded" src="<?= base_url("assets/gambar/${menu_gambar}"); ?>" alt="" />
                       </td>
                       <div class="caption text-left no-padding">
                         <h5 class="text-light">&nbsp;<?= ucwords($table_content['menu_nama']); ?></h5>
@@ -137,7 +141,9 @@
 <!-- END OFFCANVAS DEMO LEFT -->
 
 
-<?php foreach ($data as $index => $table_content) : ?>
+<?php foreach ($data as $index => $table_content) :
+  $menu_gambar = $table_content['menu_gambar'];
+?>
   <div class="modal fade" id="option_menu<?= $table_content['menu_id'] ?>" tabindex="-1" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -148,7 +154,7 @@
           </div>
           <form class="form-horizontal" id="form_search" action="#" method="post">
             <div class="modal-body">
-              <img loading="lazy" style="width:35rem;height:18rem;" class="width-1 img-responsive" src="<?= base_url() . 'assets/gambar/' . $table_content['menu_gambar']; ?>" alt="" />
+              <img loading="lazy" style="width:35rem;height:18rem;" class="width-1 img-responsive" src="<?= base_url("assets/gambar/$menu_gambar"); ?>" alt="" />
               <div class="form-group card-body">
                 <h3 class="text-light pull-left"><strong><?= $table_content['menu_nama']; ?></strong></h3>
                 <h3 class="text-light pull-right">

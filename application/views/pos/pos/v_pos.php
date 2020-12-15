@@ -44,7 +44,11 @@
                 <div class="pull-right">
                   <h4><?= strtoupper($trx_prop['trx_tipe']) . ' - ' .  (isset($trx_prop['trx_tipe_nama']) ? strtoupper($trx_prop['trx_tipe_nama']) . '' : ''); ?></h4>
                 </div>
-                <form role="form" id="order_form" method="post" action="<?= base_url() . 'pos/pos/proses_kitchen/' .  $trx_prop['plg_id'] . '/' . $trx_prop['trx_tipe_nama']; ?>">
+                <?php if (isset($trx_prop['plg_id']) && isset($trx_prop['trx_tipe_nama'])) {
+                  $plg_id = $trx_prop['plg_id'];
+                  $nama_tipe_trx = $trx_prop['trx_tipe_nama'];
+                } ?>
+                <form role="form" id="order_form" method="post" action="<?= base_url("pos/pos/proses_kitchen/$plg_id/$nama_tipe_trx"); ?>">
 
                   <table class="table no-margin no-padding table-responsive">
 
@@ -213,12 +217,14 @@
               <div class="tabs-content" data-tabs-content="example-tabs" style="overflow-y:scroll; height:70vh">
                 <div role="tabpanel" class="tab-pane active" id="panel-all">
                   </br>
-                  <?php foreach ($data as $index => $table_content) : ?>
+                  <?php foreach ($data as $index => $table_content) :
+                    $menu_gambar = $table_content['menu_gambar'];
+                  ?>
                     <div class="col-md-4 col-lg-3 col-sm-6">
                       <div class="no-padding card thumbnail btn" style="box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.33)">
                         <a data-toggle="modal" data-target="#option_menu<?= $table_content['menu_id'] ?>">
                           <td>
-                            <img loading="lazy" style="width:auto;height:12rem;border-radius:4px" class="width-1 img-responsive rounded" src="<?= base_url() . 'assets/gambar/' . $table_content['menu_gambar']; ?>" alt="" />
+                            <img loading="lazy" style="width:auto;height:12rem;border-radius:4px" class="width-1 img-responsive rounded" src="<?= base_url("assets/gambar/${menu_gambar}"); ?>" alt="" />
                           </td>
                           <div class="caption text-left no-padding">
                             <h5 class="text-light">&nbsp;<?= $table_content['menu_nama']; ?></h5>
@@ -235,14 +241,16 @@
             <?php foreach ($kategori as $index => $tab) : ?>
               <div role="tabpanel" class="tab-pane" id="panel-<?= $index; ?>">
                 </br>
-                <?php foreach ($kategori_makanan as $index => $table_content) : ?>
+                <?php foreach ($kategori_makanan as $index => $table_content) :
+                  $menu_gambar = $table_content['menu_gambar'];
+                ?>
                   <?php if (($table_content['kategori_id'] == $tab['kategori_id']) && $table_content['menu_nama'] != '') : ?>
                     <div class="col-md-4 col-lg-3 col-sm-6">
 
                       <div class="no-padding card thumbnail btn" style="box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.33)">
                         <a data-toggle="modal" data-target="#option_menu<?= $table_content['menu_id'] ?>">
                           <td>
-                            <img loading="lazy" style="width:auto;height:12rem;border-radius:4px" class="width-1 img-responsive rounded" src="<?= base_url() . 'assets/gambar/' . $table_content['menu_gambar']; ?>" alt="" />
+                            <img loading="lazy" style="width:auto;height:12rem;border-radius:4px" class="width-1 img-responsive rounded" src="<?= base_url("assets/gambar/${menu_gambar}"); ?>" alt="" />
                           </td>
                           <div class="caption text-left no-padding">
                             <h5 class="text-light">&nbsp;<?= $table_content['menu_nama']; ?></h5>
@@ -677,8 +685,10 @@ foreach ($payment as $k) :
               <div class="row">
                 <div class="col-xs-12">
                   <div class="col-xs-12 text-center">
-                    <?php if ($k['payment_qrcode']) : ?>
-                      <img loading="lazy" src="<?= base_url() . 'assets/img/' . $k['payment_qrcode']; ?>" class="img-responsive">
+                    <?php if ($k['payment_qrcode']) :
+                      $qr_code = $k['payment_qrcode'];
+                    ?>
+                      <img loading="lazy" src="<?= base_url("assets/img/${qr_code}"); ?>" class="img-responsive">
                     <?php endif ?>
                   </div>
                 </div>
@@ -1009,7 +1019,7 @@ foreach ($payment as $k) :
       isMobile: isMobile,
     }
     $.ajax({
-      url: '<?php echo base_url() . "pos/pos/proses_kitchen/" . $trx_prop['plg_id'] . '/' . $trx_prop['trx_tipe_nama'];  ?>',
+      url: '<?= base_url() . "pos/pos/proses_kitchen/$trx_prop[plg_id]/$trx_prop[trx_tipe_nama]"; ?>',
       method: 'POST',
       data: data,
       dataType: "json",

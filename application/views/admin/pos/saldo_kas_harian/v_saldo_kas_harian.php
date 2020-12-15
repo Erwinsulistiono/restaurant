@@ -140,7 +140,7 @@
 						<span class="fa fa-times"></span></button>
 					<h3 class="modal-title" id="myModalLabel">Input Saldo Akhir</h3>
 				</div>
-				<form class="form-horizontal" role="form" method="post" action="<?= base_url('admin/pos/simpan_saldo/') . $pengguna_kasir . '/' . $tgl_awal . '/' . $tgl_akhir . '/' . $outlets; ?>" enctype="multipart/form-data">
+				<form class="form-horizontal" role="form" method="post" action="<?= base_url("admin/pos/simpan_saldo/${pengguna_kasir}/${tgl_awal}/${tgl_akhir}/${outlets}"); ?>" enctype="multipart/form-data">
 					<div class="modal-body">
 
 						<div class="form-group">

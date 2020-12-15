@@ -8,8 +8,9 @@
     <div class="headerbar-right">
       <ul class="header-nav header-nav-profile">
         <li class="dropdown">
+          <?php $photo = $this->session->userdata('pengguna_photo');  ?>
           <a href="javascript:void(0);" class="dropdown-toggle ink-reaction" data-toggle="dropdown">
-            <img src="<?= base_url() . 'assets/images/' . $this->session->userdata('pengguna_photo'); ?>" alt="" />
+            <img src="<?= base_url("assets/images/$photo"); ?>" alt="" />
             <span class="profile-info">
               <?= $this->session->userdata('user_nama'); ?>
             </span>

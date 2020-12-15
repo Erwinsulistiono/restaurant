@@ -11,10 +11,12 @@
   <link type="text/css" rel="stylesheet" href="<?= base_url() . 'assets/css/print/style.css' ?>" />
 </head>
 
+<?php $logo = $pt['pt_logo'] ?>
+
 <body translate="no">
   <div id="invoice-POS">
     <center id="top">
-      <img class="logo" src="<?= base_url() . 'assets/logo/' . $pt['pt_logo']; ?>" />
+      <img class="logo" src="<?= base_url("assets/logo/${logo}"); ?>" />
       <div class="info">
         <h2><?= $pt['pt_nama']; ?></h2>
         <h2><?= $outlet['out_nama']; ?></h2>

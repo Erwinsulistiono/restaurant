@@ -43,7 +43,6 @@
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
 
@@ -55,6 +54,9 @@
     <script src="<?= base_url() . 'assets/js/jquery-3.4.1.min.js' ?>"></script>
     <script type="text/javascript">
       let urlGetPesanan = '<?php echo base_url('pos/Pesanan/'); ?>'
+      let trx;
+      let order;
+      let recipe;
       let getTrxKitchen = () => {
         $.ajax({
           type: 'GET',
@@ -65,9 +67,9 @@
             $('#targetKitchen').html('');
             $('#targetWaitress').html('');
             $('#targetDone').html('');
-            let trx = data.trx;
-            let order = data.order;
-            let recipe = data.recipe;
+            trx = data.trx;
+            order = data.order;
+            recipe = data.recipe;
             var no = 1;
 
             let filteredTrx = trx.filter((v, i, a) => a.findIndex(t => (t.trx_id === v.trx_id)) === i)
@@ -138,21 +140,41 @@
                   }
                 })
 
-                cardFoot += `<br/>
-                <br/>
-                <div class="text-center">
-                <div>${date.getDate()} / ${(date.getMonth()+1)} / ${date.getFullYear()}</div>
-                <h4 class="dispTime-${filteredTrx.trx_id}-${date.getTime()}"></h4>`;
-                cardFoot += `<br/>
-                <div class="row">
-                <div class="col-xs-12">
-                <a href="#" onclick="cancelTrx(${t.trx_id},${no})"
-                class="btn btn-danger btn-raised btn-block" >cancel order</a>
+                if (iterationDone == 0) {
+                  cardFoot += `<br/>
+                    <br/>
+                    <div class="text-center">
+                    <div>${date.getDate()} / ${(date.getMonth()+1)} / ${date.getFullYear()}</div>
+                    <h4 class="dispTime-${filteredTrx.trx_id}-${date.getTime()}"></h4>
+                    <br/>`;
+
+                  cardFoot += `
+                    <div class="row">
+                    <div class="col-xs-12">
+                    <a href="#" onclick="cancelTrx(${t.trx_id},${no})"
+                    class="btn btn-danger btn-raised btn-block" >cancel order</a>
+                    </div>
+                    </div>`;
+                } else {
+                  cardFoot += `<br/>
+                    <br/>
+                    <div class="text-center">
+                    <div>${date.getDate()} / ${(date.getMonth()+1)} / ${date.getFullYear()}</div>
+                    <h4>${date.toLocaleTimeString('id-ID')}</h4>
+                    <br/>`;
+
+                  cardFoot += `
+                    <div class="row">
+                    <div class="col-xs-12">
+                    <a href="#" onclick="clearOrder(${t.trx_id})"
+                    class="btn btn-success btn-raised btn-block" >finish order</a>
+                    </div>
+                    </div>`;
+                }
+
+                cardFoot += `
                 </div>
                 </div>
-                </div>
-                </div>
-                
                 </div>
                 </div>
                 </form>`;
@@ -227,6 +249,31 @@
           }
         })
       }
+
+      let clearOrder = trx_id => {
+        let form = document.querySelector(`.header-${trx_id}`);
+        let isOrderNotFinish = false;
+        order.forEach(o => {
+          if (o.order_waitress_flg == 'N') isOrderNotFinish = true;
+        })
+
+        if (isOrderNotFinish) return alert("Beberapa Order Belum Selesai..");
+
+        $.ajax({
+          type: 'POST',
+          url: '<?php echo base_url("pos/pos/clear_order/"); ?>',
+          data: {
+            trx_id: trx_id,
+          },
+          dataType: 'json',
+          success: function(data) {
+            (data.type == 'error') && alert(data.message);
+            (data.type == 'success') &&
+            (form.remove(),
+              alert(data.message));
+          }
+        })
+      };
 
       $('#getKitchen').click(function() {
         getdate();

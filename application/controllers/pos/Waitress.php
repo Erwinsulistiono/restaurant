@@ -13,6 +13,7 @@ class Waitress extends MY_Controller
 		$this->load->model('M_crud');
 		$this->load->model('M_kitchen');
 		$this->load->model('M_pos');
+		$this->load->model('M_waitress');
 		$this->outlet = $this->session->userdata('pengguna_outlet');
 	}
 
@@ -55,7 +56,7 @@ class Waitress extends MY_Controller
 	{
 		$orderId = $this->input->post('orderId');
 		$trxId = $this->input->post('trxId');
-		$this->M_crud->update("tbl_order_$this->outlet", ['order_cancel_flg' => 'Y'], 'order_id', $orderId);
+		$this->M_waitress->clear_order_after_cancelation($this->outlet, $trxId);
 
 		redirect('pos/pesanan/clear_transaksi/' . $trxId);
 	}

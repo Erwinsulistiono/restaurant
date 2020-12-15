@@ -35,9 +35,11 @@
               <tbody>
                 <?php
                 foreach ($data as $table_content) :
+                  $pengguna_photo = $table_content['pengguna_photo'];
+                  $pengguna_id = $table_content['pengguna_id'];
                 ?>
                   <tr>
-                    <td><img style="width:40px;height:40px;" class="img-circle width-1" src="<?= base_url() . 'assets/images/' . $table_content['pengguna_photo']; ?>" alt="" /></td>
+                    <td><img style="width:40px;height:40px;" class="img-circle width-1" src="<?= base_url("assets/images/${pengguna_photo}"); ?>" alt="" /></td>
                     <td><?= $table_content['pengguna_nama']; ?></td>
                     <?= ($table_content['pengguna_jenkel'] == '2') ? '<td>Perempuan</td>' : '<td>Laki - laki</td>'; ?>
                     <td><?= $table_content['level_desc']; ?></td>
@@ -50,8 +52,8 @@
                     <th><?= $table_content['pengguna_nohp']; ?></th>
                     <td class="text-right">
                       <a href="#" class="btn btn-icon-toggle btn-raised" title="Edit row" data-toggle="modal" data-target="#modal_edit_pengguna<?= $table_content['pengguna_id']; ?>"><i class="fa fa-pencil"></i></a>
-                      <a href="<?= base_url() . 'admin/pengguna/reset_password/' . $table_content['pengguna_id']; ?>" class="btn btn-icon-toggle btn-raised" title="Reset Password"><i class="fa fa-refresh"></i></a>
-                      <a href="<?= base_url('admin/pengguna/hapus_pengguna/') . $table_content['pengguna_id']; ?>" onclick="return confirm('Apakah anda yakin menghapus data <?= $table_content['pengguna_nama']; ?>?')" class="btn btn-icon-toggle text-danger btn-raised" title="Delete row"><i class="fa fa-trash-o"></i></a>
+                      <a href="<?= base_url("admin/pengguna/reset_password/${pengguna_id}"); ?>" class="btn btn-icon-toggle btn-raised" title="Reset Password"><i class="fa fa-refresh"></i></a>
+                      <a href="<?= base_url("admin/pengguna/hapus_pengguna/${pengguna_id}"); ?>" onclick="return confirm('Apakah anda yakin menghapus data <?= $table_content['pengguna_nama']; ?>?')" class="btn btn-icon-toggle text-danger btn-raised" title="Delete row"><i class="fa fa-trash-o"></i></a>
                     </td>
                   </tr>
                 <?php endforeach; ?>
@@ -79,7 +81,7 @@
           <span class="fa fa-times"></span></button>
         <h3 class="modal-title" id="myModalLabel">Tambah Pengguna</h3>
       </div>
-      <form class="form-horizontal" role="form" method="post" action="<?= base_url() . 'admin/pengguna/simpan_pengguna/' . $outlet_id ?>" enctype="multipart/form-data">
+      <form class="form-horizontal" role="form" method="post" action="<?= base_url("admin/pengguna/simpan_pengguna/${outlet_id}"); ?>" enctype="multipart/form-data">
         <div class="modal-body">
           <div class="form-group">
             <label class="col-sm-3 control-label">Nama</label>
@@ -181,7 +183,7 @@ foreach ($data as $table_content) :
             <span class="fa fa-times"></span></button>
           <h3 class="modal-title" id="myModalLabel">Edit Pengguna</h3>
         </div>
-        <form class="form-horizontal" role="form" method="post" action="<?= base_url() . 'admin/pengguna/simpan_pengguna/' . $outlet_id ?>" enctype="multipart/form-data">
+        <form class="form-horizontal" role="form" method="post" action="<?= base_url("admin/pengguna/simpan_pengguna/${outlet_id}"); ?>" enctype="multipart/form-data">
           <div class="modal-body">
             <div class="form-group">
               <label class="col-sm-3 control-label">Nama</label>

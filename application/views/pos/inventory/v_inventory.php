@@ -26,6 +26,9 @@
                 <?php
                 $i = 0;
                 foreach ($data as $table_content) :
+                  $stock_id = $table_content['stock_id'];
+                  $stock_satuan = $table_content['stock_satuan'];
+                  $stock_qty = $table_content['stock_qty'];
                   $i++;
                 ?>
                   <tr>
@@ -33,8 +36,8 @@
                     <td> <?= $table_content['stock_kode']; ?> </td>
                     <td> <?= $table_content['stock_nama']; ?> </td>
                     <td> <?= $table_content['stock_kat']; ?> </td>
-                    <td id="qty-<?= $table_content['stock_id'] ?>"> <?= floatval($table_content['stock_qty']) . ' (' . $table_content['stock_satuan'] . ')'; ?> </td>
-                    <td class="text-right"> <a href="<?= base_url('pos/inventory/reset_stock/' . $table_content['stock_id']) ?>" class="btn btn-icon btn-primary btn-flat" onclick="resetStock(this)" data-satuan="<?= $table_content['stock_satuan'] ?>" data-id="<?= $table_content['stock_id'] ?>" disabled><i class="fa fa-repeat" aria-hidden="true"></i></a> </td>
+                    <td id="qty-<?= $table_content['stock_id'] ?>"> <?= floatval($stock_qty) . " (${stock_satuan})"; ?> </td>
+                    <td class="text-right"> <a href="<?= base_url("pos/inventory/reset_stock/${stock_id}") ?>" class="btn btn-icon btn-primary btn-flat" onclick="resetStock(this)" data-satuan="<?= $stock_satuan ?>" data-id="<?= $stock_id ?>" disabled><i class="fa fa-repeat" aria-hidden="true"></i></a> </td>
                   </tr>
                 <?php endforeach; ?>
               </tbody>
