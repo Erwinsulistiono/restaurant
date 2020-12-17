@@ -26,6 +26,11 @@
                   <th style="width:35%;">Deskripsi</th>
                   <th style="text-align:center;">Harga</th>
                   <th style="width:15%;">Kategori</th>
+                  <?php if ($outlet_id !== 'master') : ?>
+                    <th>Kitchen</th>
+                  <?php else : ?>
+                    <th style="display: none;"></th>
+                  <?php endif; ?>
                   <th class="text-right">Actions</th>
                 </tr>
               </thead>
@@ -55,15 +60,31 @@
                       endforeach;
                       ?>
                     </td>
+                    <?php if ($outlet_id !== 'master') : ?>
+                      <td>
+                        <?php foreach ($kitchen as $row) :
+                          if (($table_content['menu_kitchen']) == ($row['kitchen_id'])) :
+                            echo $row['kitchen_nama'];
+                          endif;
+                        endforeach;
+                        ?>
+
+                      </td>
+                    <?php else : ?>
+                      <td style="display: none;"></td>
+                    <?php endif; ?>
                     <td class="text-right">
                       <?php (($outlet_id == 'master') && print('<a href="#" class="btn btn-icon-toggle btn-raised" title="Edit row" data-toggle="modal"
-                          data-target="#UpdateModal$menu_id"><i class="fa fa-pencil"></i></a>
-                        <a href="#" data-row="' . $menu_id . '" class="addIng btn btn-icon-toggle btn-raised"
-                          title="Edit recipe" data-toggle="modal" data-target="#RecipeModal' . $menu_id . '"><i
-                            class="fa fa-file text-primary-dark"></i></a>
-                        <a href="#" data-row="' . $menu_id . '" class="addIng btn btn-icon-toggle btn-raised"
-                          title="Tambah Menu Ke Outlet" data-toggle="modal" data-target="#MenuTransferModal' . $menu_id . '"><i
+                      data-target="#UpdateModal' . $menu_id . '"><i class="fa fa-pencil"></i></a>
+                    <a href="#" data-row="' . $menu_id . '" class="addIng btn btn-icon-toggle btn-raised"
+                      title="Edit recipe" data-toggle="modal" data-target="#RecipeModal' . $menu_id . '"><i
+                        class="fa fa-file text-primary-dark"></i></a>
+                    <a href="#" data-row="' . $menu_id . '" class="addIng btn btn-icon-toggle btn-raised"
+                      title="Tambah Menu Ke Outlet" data-toggle="modal" data-target="#MenuTransferModal' . $menu_id . '"><i
                         class="fa fa-exchange text-primary-dark"></i></a>')); ?>
+                      <?php if ($outlet_id !== 'master') : ?>
+                        <a href="#" class="btn btn-icon-toggle text-primary-dark btn-raised" title="Edit Kitchen" data-toggle="modal" data-target="#editKitchen<?= $menu_id; ?>"><i class="fa fa-cutlery"></i></a>
+                      <?php endif; ?>
                       <a href="<?= base_url("admin/menu/hapus_menu/${outlet_id}/${menu_id}"); ?>" onclick="return confirm('Apakah anda yakin?')" class="btn btn-icon-toggle text-danger btn-raised" title="Delete row"><i class="fa fa-trash-o"></i></a>
                     </td>
                   </tr>
@@ -313,6 +334,52 @@ foreach ($data as $table_content) :
     </div>
   </form>
 <?php endforeach; ?>
+
+<!-- ================== Edit Kitchen ============================  -->
+
+<?php
+foreach ($data as $table_content) :
+?>
+  <div class="modal fade" id="editKitchen<?= $table_content['menu_id']; ?>" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close text-danger btn-raised" data-dismiss="modal" aria-hidden="true">
+            <span class="fa fa-times"></span></button>
+          <h3 class="modal-title" id="myModalLabel">Edit Kitchen</h3>
+        </div>
+
+        <form class="form-horizontal" action="<?= base_url('admin/menu/simpan_kitchen/') . $dataBase; ?>" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="menu_id" class="form-control" value="<?= $table_content['menu_id']; ?>">
+          <div class="form-group">
+            <label for="select13" class="col-sm-3 control-label">Kitchen</label>
+            <div class="col-sm-8">
+              <select id="select13" name="menu_kitchen" class="form-control" required>
+                <option value="">&nbsp;</option>
+                <?php
+                foreach ($kitchen as $row) :
+                  $id_menu = $table_content['menu_kitchen'];
+                  $id_kitchen = $row['kitchen_id'];
+                  ($id_menu == $id_kitchen) ? $select = "selected" : $select = "";
+                ?>
+                  <option value="<?= $row['kitchen_id']; ?>" <?= $select; ?>><?= $row['kitchen_nama']; ?></option>
+                <?php
+                endforeach;
+                ?>
+              </select>
+            </div>
+          </div>
+
+
+          <div class="modal-footer">
+            <button class="btn btn-primary btn-raised" type="submit">Simpan</button>
+          </div>
+      </div>
+    </div>
+  </div>
+  </form>
+<?php endforeach; ?>
+
 
 <!--Load JavaScript File-->
 <script type="text/javascript" src="<?= base_url('assets/js/jquery-3.4.1.min.js'); ?>"></script>
