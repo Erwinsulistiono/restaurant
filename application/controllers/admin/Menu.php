@@ -27,6 +27,7 @@ class Menu extends MY_Controller
       'outlet' => $this->M_crud->read('tbl_outlet'),
       'kategori' => $this->M_crud->read('tbl_kategori'),
       'kategori_makanan' => $this->M_crud->left_join('tbl_menu_kat', 'tbl_kategori', 'tbl_menu_kat.kategori_id=tbl_kategori.kategori_id'),
+      'kitchen' => ($outlet_id == 'master') ? '' : $this->M_crud->read('tbl_kitchen_' . $outlet_id),
       'data' => $this->M_crud->read("tbl_menu_${outlet_id}"),
       'inventory' => json_encode($this->M_crud->read("tbl_stock_${outlet_id}")),
       'satuan' => json_encode($this->M_crud->read('tbl_satuan')),
@@ -100,6 +101,24 @@ class Menu extends MY_Controller
     $this->outlet($outlet_id);
   }
 
+  /*-------------------SIMPAN KITCHEN ----------------------------*/
+  public function simpan_kitchen($dataBase)
+  {
+    $kitchen_id = $this->input->post('menu_id');
+    $data = [
+      'menu_kitchen' => $this->input->post('menu_kitchen'),
+    ];
+    $log_newval = strtr(json_encode($data), array(',' => ' | ', '{' => '', '}' => '', '"' => ' '));
+
+    $data_old = $this->M_crud->select('tbl_menu_' . $dataBase, 'menu_id', $kitchen_id);
+    $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
+    $this->M_log->simpan_log($kitchen_id, 'MENU', $log_oldval, $log_newval);
+
+    $this->M_crud->update('tbl_menu_' . $dataBase, $data, 'menu_id', $kitchen_id);
+    $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Menu <b>' . $data['menu_nama'] . '</b> Berhasil disimpan ke database.</div>');
+    redirect('admin/menu/outlet/' . $dataBase);
+  }
+
 
   /*----------------- MODUL KATEGORI TIAP MENU ---------------------*/
   public function simpan_kategori($menu_id, $outlet_id)
@@ -123,7 +142,6 @@ class Menu extends MY_Controller
         'menu_id' => $menu_id,
       ];
       $this->M_crud->insert('tbl_menu_kat', $data);
-      var_dump($data);
     }
 
     $data_new = $this->M_menu->get_kategori($outlet_id, $menu_id);

@@ -51,6 +51,7 @@
                 <?php
                 $no = 0;
                 foreach ($data as $table_content) :
+                  $is_order_canceled = TRUE;
                   $no++ ?>
                   <tr>
                     <td><?= $no; ?></td>
