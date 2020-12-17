@@ -15,7 +15,7 @@
         <h2><span class="fa fa-file"></span> Laporan</h2>
       </div>
       <p>
-        <a href="<?= base_url('pos/laporan/'); ?>" class="btn btn-primary btn-raised"><span class="fa fa-arrow-left"></span>
+        <a href="<?= base_url('pos/laporan'); ?>" onclick="" class="popup-btn btn btn-primary btn-raised"><span class="fa fa-arrow-left"></span>
           Kembali</a>
         <a href="<?= base_url("pos/laporan/pdf/${tgl_awal}/${tgl_akhir}/${tipe_trx}/${group}"); ?>" target="_blank" class="btn btn-default-light text-danger btn-raised"><span class="fa fa-file-pdf-o text-danger"></span>
           PDF</a>
@@ -167,3 +167,9 @@
   </div>
   </div>
 <?php endforeach; ?>
+
+<script type="text/javascript">
+  function close_window() {
+    close();
+  }
+</script>

@@ -22,15 +22,18 @@ class Laporan extends MY_Controller
 		$this->render('pos/laporan/v_index', $data);
 	}
 
-	public function laporan()
+	public function laporan($kasir_id = null, $outlet_id = null)
 	{
-
+		if (isset($kasir_id) && $kasir_id != md5($this->session->userdata("pengguna_id")) && $outlet_id != md5($this->outlet)) {
+			$this->session->set_flashdata('msg', '<div class="alert alert-warning"><button type="button" class="close" data-dismiss="alert">&times;</button>Uknown Error</div>');
+			$this->index();
+		}
 		$input_data = [
-			'tgl_awal' => $this->input->post('tgl_awal'),
-			'tgl_akhir' => $this->input->post('tgl_akhir'),
-			'tipe_trx' => $this->input->post('tipe_trx'),
+			'tgl_awal' => ($kasir_id) ? date("Y-m-d") : $this->input->post('tgl_awal'),
+			'tgl_akhir' => ($kasir_id) ? date("Y-m-d") : $this->input->post('tgl_akhir'),
+			'tipe_trx' => ($kasir_id) ? "all" : $this->input->post('tipe_trx'),
 			'outlet' => $this->outlet,
-			'group' => $this->input->post('group'),
+			'group' => ($kasir_id) ? "trx" : $this->input->post('group'),
 		];
 
 		switch ($input_data["group"]) {

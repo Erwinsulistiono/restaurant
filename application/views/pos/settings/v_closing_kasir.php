@@ -7,6 +7,7 @@
       <div class="card contain-xs style-transparent">
         <div class="card-body">
           <div class="row">
+
             <div class="col-xs-12">
               <br />
               <span class="text-lg text-bold text-primary">Input Saldo Akhir</span>
@@ -39,9 +40,12 @@
 
 <script type="text/javascript" src="<?= base_url('assets/js/jquery-3.4.1.min.js'); ?>"></script>
 <script type='text/javascript'>
+  let kasirId = '<?= md5($this->session->userdata("idadmin")) ?>';
+  let outletId = '<?= md5($this->session->userdata("pengguna_outlet")) ?>';
+
   $('#lapSaldo').click(function(e) {
     e.preventDefault();
-    var win = window.open("<?= base_url('pos/laporan/laporan'); ?>", '_blank');
+    var win = window.open("<?= base_url('pos/laporan/laporan/'); ?>" + `${kasirId}/${outletId}`, '_blank');
     (win) ? win.focus(): alert('Please allow popups for this website');
   });
 

@@ -102,7 +102,7 @@ class Menu extends MY_Controller
   }
 
   /*-------------------SIMPAN KITCHEN ----------------------------*/
-  public function simpan_kitchen($dataBase)
+  public function simpan_kitchen($outlet_id)
   {
     $kitchen_id = $this->input->post('menu_id');
     $data = [
@@ -110,13 +110,13 @@ class Menu extends MY_Controller
     ];
     $log_newval = strtr(json_encode($data), array(',' => ' | ', '{' => '', '}' => '', '"' => ' '));
 
-    $data_old = $this->M_crud->select('tbl_menu_' . $dataBase, 'menu_id', $kitchen_id);
+    $data_old = $this->M_crud->select("tbl_menu_${outlet_id}", 'menu_id', $kitchen_id);
     $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
     $this->M_log->simpan_log($kitchen_id, 'MENU', $log_oldval, $log_newval);
 
-    $this->M_crud->update('tbl_menu_' . $dataBase, $data, 'menu_id', $kitchen_id);
+    $this->M_crud->update("tbl_menu_${outlet_id}", $data, 'menu_id', $kitchen_id);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Menu <b>' . $data['menu_nama'] . '</b> Berhasil disimpan ke database.</div>');
-    redirect('admin/menu/outlet/' . $dataBase);
+    $this->outlet($outlet_id);
   }
 
 
