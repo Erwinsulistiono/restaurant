@@ -3,22 +3,24 @@ class M_pengguna extends CI_Model
 {
     public function get_pengguna_pos($outlet_id)
     {
-        $this->db->select('*');
-        $this->db->from('tbl_pengguna');
-        $this->db->join('tbl_level_pos', 'tbl_pengguna.pengguna_level = tbl_level_pos.level_id', 'left');
-        $this->db->where("tbl_pengguna.pengguna_outlet = $outlet_id");
-        $query = $this->db->get();
+        $query = $this->db->select()
+            ->from('tbl_pengguna AS tbl1')
+            ->join('tbl_level_pos AS tbl2', 'tbl1.pengguna_level=tbl2.level_id', 'LEFT')
+            ->where('pengguna_outlet', $outlet_id)
+            ->get();
+
         return $query->result_array();
     }
 
     public function get_pengguna($outlet_id)
     {
-        $this->db->select('*');
-        $this->db->from('tbl_pengguna');
-        $this->db->join('tbl_level_admin', 'tbl_pengguna.pengguna_level = tbl_level_admin.level_id', 'left');
-        $this->db->join('tbl_level_pos', 'tbl_pengguna.pengguna_level = tbl_level_pos.level_id', 'left');
-        $this->db->where("tbl_pengguna.pengguna_outlet = $outlet_id");
-        $query = $this->db->get();
+        $query =  $this->db->select()
+            ->from('tbl_pengguna AS tbl1')
+            ->join('tbl_level_admin AS tbl2', 'tbl1.pengguna_level = tbl2.level_id', 'LEFT')
+            ->join('tbl_level_pos AS tbl3', 'tbl1.pengguna_level = tbl3.level_id', 'LEFT')
+            ->where('pengguna_outlet', $outlet_id)
+            ->get();
+
         return $query->result_array();
     }
 }

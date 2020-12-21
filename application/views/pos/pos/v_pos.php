@@ -47,7 +47,8 @@
                 <?php if (isset($trx_prop['plg_id']) && isset($trx_prop['trx_tipe_nama'])) {
                   $plg_id = $trx_prop['plg_id'];
                   $nama_tipe_trx = $trx_prop['trx_tipe_nama'];
-                } ?>
+                }
+                ?>
                 <form role="form" id="order_form" method="post" action="<?= base_url("pos/pos/proses_kitchen/$plg_id/$nama_tipe_trx"); ?>">
 
                   <table class="table no-margin no-padding table-responsive">
@@ -76,7 +77,7 @@
                             <td><?= $c['qty']; ?></td>
                             <td><?= $c['subtotal']; ?></td>
                             <td class="text-right">
-                              <a href="#" class="hapus_cart btn text-danger btn-icon-toggle btn-raised" id="<?= $c['rowid']; ?>" title="hapus pesanan" <?= $disabledDeletion ?>>
+                              <a href="#" class="hapus_cart btn text-danger btn-icon-toggle btn-raised" id="<?= $c['rowid']; ?>" title="hapus pesanan" <?= @$disabledDeletion ?>>
                                 <i class="fa fa-trash"></i></a>
                             </td>
                           </tr>
@@ -700,7 +701,7 @@ foreach ($payment as $k) :
               <div class="col-xs-8"></div>
               <div class="col-xs-2">
                 <div class="input-group-btn btn-raised">
-                  <button type="button" class="btn btn-primary btn-flat btn-raised" tabindex="-1" data-toggle="dropdown" tabindex="-1" <?= $disabledBayar ?>>Split Bill</button>
+                  <button type="button" class="btn btn-primary btn-flat btn-raised" tabindex="-1" data-toggle="dropdown" tabindex="-1" <?= @$disabledBayar ?>>Split Bill</button>
                   <ul class="dropdown-menu pull-right" role="menu">
                     <?php
                     foreach ($payment as $split) :
@@ -731,7 +732,7 @@ foreach ($payment as $k) :
   let assignFormatingValueToElement = (element, value) => element.val(Number(value).toLocaleString('id-ID'));
   let dividedByOneHundred = (value) => (value / 100);
   let activeTrx = JSON.parse('<?= json_encode($trx) ?>');
-  let isMobile = '<?= $trx['is_mobile'] ?>';
+  let isMobile = '<?= @$trx['is_mobile'] ?>';
   let isOrderUpdated = false;
 
 

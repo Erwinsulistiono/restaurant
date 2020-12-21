@@ -34,7 +34,7 @@
                 <tr>
                   <th>No</th>
                   <th>Cust</th>
-                  <th>Join Date</th>
+                  <th>Order Date</th>
                   <th>Last Order</th>
                   <th>Sub Total</th>
                   <th>Discount</th>
@@ -52,7 +52,7 @@
                   <tr>
                     <td><?= $no; ?></td>
                     <td><?= $table_content['trx_cust']; ?></td>
-                    <td><?= $table_content['join_date']; ?></td>
+                    <td><?= $table_content['order_date']; ?></td>
                     <td><?= $table_content['last_order']; ?></td>
                     <td><?= number_format($table_content['trx_subtotal'], 2); ?></td>
                     <td><?= number_format($table_content['trx_discount'], 2); ?></td>

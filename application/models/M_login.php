@@ -2,15 +2,24 @@
 class M_login extends CI_Model
 {
 
-    public function cekadmin($u, $p)
+    public function cekadmin($username, $password)
     {
-        $query = $this->db->get_where('tbl_pengguna', ['pengguna_username' => $u, 'pengguna_password' => $p]);
+        $query = $this->db->select()
+            ->from('tbl_pengguna')
+            ->where('pengguna_username', $username)
+            ->where('pengguna_password', $password)
+            ->get();
+
         return $query->row_array();
     }
 
     public function getMethodOfOrder($getMethod)
     {
-        return $this->db->query('SELECT * FROM tbl_tipe_transaksi WHERE 
-                                FIND_IN_SET('. $getMethod . ' ,tipe_pembayaran');
+        $query = $this->db->select()
+            ->from('tbl_tipe_transaksi')
+            ->where("FIND_IN_SET($getMethod ,tipe_pembayaran")
+            ->get();
+
+        return $query;
     }
 }

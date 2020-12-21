@@ -349,7 +349,7 @@ foreach ($data as $table_content) :
           <h3 class="modal-title" id="myModalLabel">Edit Kitchen</h3>
         </div>
 
-        <form class="form-horizontal" action="<?= base_url('admin/menu/simpan_kitchen/') . $dataBase; ?>" method="post" enctype="multipart/form-data">
+        <form class="form-horizontal" action="<?= base_url("admin/menu/simpan_kitchen/$outlet_id"); ?>" method="post" enctype="multipart/form-data">
           <input type="hidden" name="menu_id" class="form-control" value="<?= $table_content['menu_id']; ?>">
           <div class="form-group">
             <label for="select13" class="col-sm-3 control-label">Kitchen</label>

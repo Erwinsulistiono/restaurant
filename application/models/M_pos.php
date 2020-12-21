@@ -5,124 +5,155 @@ class M_pos extends CI_Model
 	public function search_voucher($title)
 	{
 		$date = date('Y-m-d');
-		$this->db->where('voucher_periode_akhir > ', $date);
-		$this->db->where('voucher_periode_awal < ', $date);
-		$this->db->where('voucher_limit != ', '0');
-		$this->db->like('voucher_kode', $title, 'none');
-		$this->db->limit(1);
-		$query =  $this->db->get('tbl_voucher');
+
+		$query = $this->db->where('voucher_periode_akhir > ', $date)
+			->where('voucher_periode_awal < ', $date)
+			->where('voucher_limit != ', '0')
+			->like('voucher_kode', $title, 'none')
+			->limit(1)
+			->get('tbl_voucher');
+
 		return $query->result_array();
 	}
 
 	public function potongQtyVoucher($id)
 	{
-		$this->db->query("UPDATE `tbl_voucher` SET `voucher_limit` = `voucher_limit` - 1 WHERE voucher_id = " . $id);
+		$this->db->set('voucher_limit', 'voucher_limit-1', FALSE)
+			->where('voucher_id', $id)
+			->update('tbl_voucher');
 	}
 
-	public function getAllOrderPos($id, $outlet)
+	public function getAllOrderPos($id, $outlet_id)
 	{
-		$this->db->select('*');
-		$this->db->from("tbl_order_$outlet as tbl1");
-		$this->db->where("order_trx_reff = $id");
-		$this->db->join("tbl_menu_$outlet as tbl2", "tbl1.order_menu=tbl2.menu_id", "left");
-		$query = $this->db->get();
+		$query = $this->db->select()
+			->from("tbl_order_$outlet_id AS tbl1")
+			->where('order_trx_reff', $id)
+			->join("tbl_menu_$outlet_id AS tbl2", "tbl1.order_menu=tbl2.menu_id", "LEFT")
+			->get();
+
 		return $query->result_array();
 	}
 
-	public function getAllOrderFromMobilePos($id, $outlet)
+	public function getAllOrderFromMobilePos($id, $outlet_id)
 	{
-		$this->db->select('*');
-		$this->db->from("cust_order_$outlet AS tbl1");
-		$this->db->join("tbl_menu_$outlet AS tbl2", "tbl1.order_menu=tbl2.menu_id", "left");
-		$this->db->where("order_userid = $id");
-		$query = $this->db->get();
+		$query = $this->db->select()
+			->from("cust_order_$outlet_id AS tbl1")
+			->join("tbl_menu_$outlet_id AS tbl2", "tbl1.order_menu=tbl2.menu_id", "LEFT")
+			->where('order_userid', $id)
+			->get();
+
 		return $query->result_array();
 	}
 
-	public function get_qty_diff($id, $qty, $outlet)
+	public function get_qty_diff($id, $qty, $outlet_id)
 	{
-		$query = $this->db->query('SELECT a.stock_id, a.stock_nama, a.stock_qty - (b.ing_qty * c.satuan_val * ' . $qty . ') as stock_qty FROM tbl_stock_' . $outlet . ' a
-		INNER JOIN tbl_ingredient b ON a.stock_id=b.ing_inv_id
-		INNER JOIN tbl_satuan c ON b.ing_satuan_id=c.satuan_id 
-		WHERE b.ing_menu_id = ' . $id);
+		$query = $this->db->select("stock_id, stock_nama, (stock_qty - ing_qty * satuan_val * $qty) AS stock_qty")
+			->from("tbl_stock_$outlet_id AS tbl1")
+			->join('tbl_ingredient AS tbl2', 'tbl1.stock_id=tbl2.ing_inv_id', 'INNER')
+			->join('tbl_satuan AS tbl3', 'tbl2.ing_satuan_id=tbl3.satuan_id', 'INNER')
+			->where('ing_menu_id', $id)
+			->get();
+
 		return $query->result_array();
 	}
 
-	public function get_saldo_cash_in($tgl, $user, $outlet)
+	public function get_saldo_cash_in($tgl, $user, $outlet_id)
 	{
-		$query = $this->db->get_where('tbl_kas_harian_' . $outlet, ['kas_tgl > ' => $tgl, 'kas_nm_kasir' => $user, 'kas_saldo_akhir' => 0]);
+		$query = $this->db->select("tbl_kas_harian_$outlet_id")
+			->where('kas_tgl', $tgl)
+			->where('kas_nm_kasir', $user)
+			->where('kas_saldo_akhir', 0);
+
 		return $query->row_array();
 	}
 
-	public function get_latest_saldo_per_date($outlet)
+	public function get_latest_saldo_per_date($outlet_id)
 	{
-		$query = $this->db->query("SELECT DATE(kas_tgl) AS kas_tgl FROM tbl_kas_harian_$outlet WHERE kas_id IN (
-									SELECT MAX(kas_id) FROM tbl_kas_harian_$outlet
-									);");
-		return $query->row()->kas_tgl;
+		// Sub Query
+		$subQuery = $this->db->select('MAX(kas_id)')
+			->from("tbl_kas_harian_$outlet_id")
+			->get_compiled_select();
+
+		// Main Query
+		$query = $this->db->select('DATE(kas_tgl) AS kas_tgl')
+			->from("tbl_kas_harian_$outlet_id")
+			->where("kas_id IN ($subQuery)", NULL, FALSE)
+			->get()
+			->row()->kas_tgl;
+		return $query;
 	}
 
-	public function reset_nomor_transaksi_harian($outlet)
+	public function reset_nomor_transaksi_harian($outlet_id)
 	{
-		$this->db->query("TRUNCATE tbl_trx_pos_$outlet");
-		$this->db->query("TRUNCATE tbl_order_$outlet");
+		$this->db->query("TRUNCATE tbl_trx_pos_$outlet_id");
+		$this->db->query("TRUNCATE tbl_order_$outlet_id");
 	}
 
-	public function getById($tgl, $user, $outlet)
+	public function getById($tgl, $user, $outlet_id)
 	{
-		$query = $this->db->query("SELECT * FROM tbl_kas_harian WHERE kas_tgl = '$tgl' AND kas_nm_kasir = '$user' AND kas_kd_outlet = '$outlet'");
+		$query = $this->db->select('kas_id')
+			->from('tbl_kas_harian')
+			->where('kas_tgl', $tgl)
+			->where('kas_nm_kasir', $user)
+			->where('kas_kd_outlet', $outlet_id)
+			->get();
+
 		return $query->row()->kas_id;
 	}
 
-	public function getAllOrderPrint($id, $outlet)
+	public function getAllOrderPrint($id, $outlet_id)
 	{
-		$query = $this->db->query('SELECT * FROM tbl_lap_order_' . $outlet . ' WHERE order_trx_reff = ' . $id);
+		$query = $this->db->select()
+			->from("tbl_lap_order_$outlet_id")
+			->where('order_trx_reff', $id);
+
 		return $query->result_array();
 	}
 
-	public function getLastAutoIncrementId($outlet)
+	public function getLastAutoIncrementId($outlet_id)
 	{
 		$db = $this->db->database;
-		$query = $this->db->query("SELECT `AUTO_INCREMENT`
-									FROM  INFORMATION_SCHEMA.TABLES
-									WHERE TABLE_SCHEMA = '$db'
-									AND   TABLE_NAME   = 'tbl_trx_pos_$outlet';");
+		$query = $this->db->select('AUTO_INCREMENT')
+			->from('INFORMATION_SCHEMA.TABLES')
+			->where('TABLE_SCHEMA', $db)
+			->where('TABLE_NAME', "tbl_trx_pos_$outlet_id");
+
 		return $query->row()->AUTO_INCREMENT;
 	}
 
-	public function getMobileTrx($outlet)
+	public function getMobileTrx($outlet_id)
 	{
-		$query = $this->db->query("SELECT a.*, b.`plg_nama` AS order_username , 
-												b.`plg_alamat` AS order_alamat, 
-												b.`plg_platno` AS order_platno, 
-												b.`plg_notelp` AS order_telp, c.* , d.* , e.*
-									FROM cust_order_$outlet AS a LEFT JOIN tbl_pelanggan AS b ON a.`order_userid`=b.`plg_id`
-															LEFT JOIN tbl_meja_$outlet AS c ON c.`meja_id`=a.`order_table`
-															LEFT JOIN tbl_area AS d ON c.`meja_lokasi`=d.`area_id`
-															LEFT JOIN tbl_voucher AS e ON a.`order_voucher_id`=e.`voucher_id`
-									GROUP BY order_userid;");
+		$query = $this->db->select('*, plg_nama AS order_username, plg_alamat AS order_alamat, plg_platno AS order_platno, plg_notelp AS order_telp')
+			->from("cust_order_$outlet_id AS tbl1")
+			->join('tbl_pelanggan AS tbl2', 'tbl1.order_userid = tbl2.plg_id', 'LEFT')
+			->join("tbl_meja_$outlet_id AS tbl3", 'tbl1.order_table = tbl3.meja_id', 'LEFT')
+			->join('tbl_area AS tbl4', 'tbl4.area_id = tbl3.meja_lokasi', 'LEFT')
+			->join('tbl_voucher AS tbl5', 'tbl5.voucher_id = tbl1.order_voucher_id', 'LEFT')
+			->group_by('order_userid');
+
 		return $query->result_array();
 	}
 
-	public function getIngredientAll($outlet)
+	public function getIngredientAll($outlet_id)
 	{
-		$query = $this->db->query("SELECT ing_id, ing_menu_id, ing_inv_id, ing_qty, satuan_val, stock_qty, b.*
-									FROM tbl_ingredient AS a
-									LEFT JOIN tbl_menu_$outlet AS b ON a.ing_menu_id=b.menu_id
-									LEFT JOIN tbl_stock_$outlet AS c ON a.`ing_inv_id` = c.`stock_id`
-									LEFT JOIN tbl_satuan AS d ON a.`ing_satuan_id`=d.`satuan_id`");
+		$query = $this->db->select()
+			->from('tbl_ingredient AS tbl1')
+			->join("tbl_menu_$outlet_id AS tbl2", "tbl2.menu_id = tbl1.ing_menu_id", 'LEFT')
+			->join("tbl_stock_$outlet_id AS tbl3", "tbl3.stock_id = tbl1.ing_inv_id", 'LEFT')
+			->join('tbl_satuan AS tbl4', 'tbl4.satuan_id = tbl1.ing_satuan_id');
+
 		return $query->result_array();
 	}
 
-	public function joinMobileOrderPelangganMeja($outlet)
+	public function joinMobileOrderPelangganMeja($outlet_id)
 	{
-		$this->db->select('*');
-		$this->db->from('cust_order_' . $outlet);
-		$this->db->join('tbl_pelanggan', 'tbl_pelanggan.plg_id = cust_order_' . $outlet . '.order_userid', 'left');
-		$this->db->join('tbl_meja_' . $outlet, 'tbl_meja_' . $outlet . '.meja_id = tbl_pelanggan.plg_meja', 'left');
-		$this->db->join('tbl_area', 'tbl_area.area_id = tbl_meja_' . $outlet . '.meja_lokasi', 'left');
-		$this->db->group_by("order_userid");
-		$query = $this->db->get();
+		$query = $this->db->select()
+			->from("cust_order_$outlet_id AS tbl1")
+			->join('tbl_pelanggan AS tbl2', 'tbl2.plg_id = tbl1.order_userid', 'LEFT')
+			->join("tbl_meja_$outlet_id AS tbl3", 'tbl3.meja_id = tbl2.plg_meja', 'LEFT')
+			->join('tbl_area AS tbl4', 'tbl4.area_id = tbl3.meja_lokasi', 'LEFT')
+			->group_by("order_userid")
+			->get();
 		return $query->result_array();
 	}
 }

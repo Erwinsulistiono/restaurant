@@ -9,13 +9,15 @@ class M_laporan extends CI_Model
 		$outlet = $data['outlet'];
 		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
 		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
-		$out_nama = $this->db->query("SELECT `out_nama` FROM `tbl_outlet` WHERE `out_id` = $outlet ")->row('out_nama');
+		$out_nama = $this->get_nama_outlet($outlet);
 
-		$query = $this->db->query("SELECT *,
-								'$out_nama'  AS `out_nama` 
-								FROM tbl_lap_trx_$outlet 
-								WHERE DATE(trx_date) >= '$tgl_awal' AND DATE(trx_date) <= '$tgl_akhir' 
-								ORDER BY trx_date DESC");
+		$query = $this->db->select("*, '$out_nama' AS out_nama")
+			->from("tbl_lap_trx_$outlet")
+			->where("DATE(trx_date) >=", $tgl_awal)
+			->where("DATE(trx_date) <=", $tgl_akhir)
+			->order_by("trx_date", 'DESC')
+			->get();
+
 		return $query->result_array();
 	}
 
@@ -27,15 +29,17 @@ class M_laporan extends CI_Model
 		$user = $data['trx_userid'];
 		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
 		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
-		$out_nama = $this->db->query("SELECT `out_nama` FROM `tbl_outlet` WHERE `out_id` = $outlet ")->row('out_nama');
+		$out_nama = $this->get_nama_outlet($outlet);
 
-		$query = $this->db->query("SELECT *,
-								'$out_nama'  AS `out_nama` 
-								FROM tbl_lap_trx_$outlet
-								LEFT JOIN `tbl_tipe_transaksi` 
-								ON `tbl_lap_trx_$outlet`.`trx_tipe`=`tbl_tipe_transaksi`.`tipe_transaksi_id` 
-								WHERE DATE(trx_date) >= '$tgl_awal' AND DATE(trx_date) <= '$tgl_akhir' AND trx_userid = '$user'
-								ORDER BY trx_date DESC");
+		$query = $this->db->select("*, '$out_nama' AS out_nama")
+			->from("tbl_lap_trx_$outlet AS tbl1")
+			->join('tbl_tipe_transaksi AS tbl2', "tbl1.trx_tipe=tbl2.tipe_transaksi_id", "LEFT")
+			->where("DATE(trx_date) >=", $tgl_awal)
+			->where("DATE(trx_date) <=", $tgl_akhir)
+			->where("trx_userid", $user)
+			->order_by("trx_date", 'DESC')
+			->get();
+
 		return $query->result_array();
 	}
 
@@ -46,15 +50,16 @@ class M_laporan extends CI_Model
 		$outlet = $data['outlet'];
 		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
 		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
-		$out_nama = $this->db->query("SELECT `out_nama` FROM `tbl_outlet` WHERE `out_id` = $outlet ")->row('out_nama');
+		$out_nama = $this->get_nama_outlet($outlet);
 
-		$query = $this->db->query("SELECT *,
-								'$out_nama'  AS `out_nama` 
-								FROM `tbl_lap_trx_$outlet` 
-								LEFT JOIN `tbl_lap_order_$outlet` 
-								ON `tbl_lap_trx_$outlet`.`trx_id`=`tbl_lap_order_$outlet`.`order_trx_reff`
-								WHERE DATE(trx_date) >= " . $tgl_awal . " AND DATE(trx_date) <= " . $tgl_akhir . " 
-								ORDER BY `tbl_lap_trx_$outlet`.`trx_date` DESC");
+		$query = $this->db->select("*, '$out_nama' AS out_nama, ")
+			->from("tbl_lap_trx_$outlet AS tbl1")
+			->join("tbl_lap_order_$outlet AS tbl2", "tbl1.trx_id=tbl2.order_trx_reff", "LEFT")
+			->where("DATE(trx_date) >=", $tgl_awal)
+			->where("DATE(trx_date) <=", $tgl_akhir)
+			->order_by("trx_date", 'DESC')
+			->get();
+
 		return $query->result_array();
 	}
 
@@ -66,12 +71,16 @@ class M_laporan extends CI_Model
 
 		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
 		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
-		$out_nama = $this->db->query("SELECT `out_nama` FROM `tbl_outlet` WHERE `out_id` = $outlet ")->row('out_nama');
+		$out_nama = $this->get_nama_outlet($outlet);
 
-		$query = $this->db->query("SELECT *, order_menu, '$out_nama' AS `out_nama` FROM `tbl_lap_order_$outlet` 
-			LEFT JOIN `tbl_lap_trx_$outlet` ON `tbl_lap_order_$outlet`.`order_trx_reff` = `tbl_lap_trx_$outlet`.`trx_id`
-			WHERE DATE(order_date) >= '$tgl_awal' AND DATE(order_date) <= '$tgl_akhir'
-			ORDER BY order_date DESC");
+		$query = $this->db->select("*, '$out_nama' AS out_nama")
+			->from("tbl_lap_order_$outlet AS tbl1")
+			->join("tbl_lap_trx_$outlet AS tbl2", "tbl1.order_trx_reff=tbl2.trx_id", "LEFT")
+			->where("DATE(trx_date) >=", $tgl_awal)
+			->where("DATE(trx_date) <=", $tgl_akhir)
+			->order_by('order_date', 'DESC')
+			->get();
+
 		return $query->result_array();
 	}
 
@@ -83,21 +92,24 @@ class M_laporan extends CI_Model
 
 		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
 		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
-		$out_nama = $this->db->query("SELECT `out_nama` FROM `tbl_outlet` WHERE `out_id` = $outlet ")->row('out_nama');
+		$out_nama = $this->get_nama_outlet($outlet);
 
-		$query = $this->db->query("SELECT `trx_cust` , SUM(`tbl_lap_trx_$outlet`.`trx_grand_total`) AS `trx_grand_total` ,
-															SUM(`tbl_lap_trx_$outlet`.`trx_subtotal`) AS `trx_subtotal`, 
-															SUM(`tbl_lap_trx_$outlet`.`trx_discount`) AS `trx_discount`, 
-															SUM(`tbl_lap_trx_$outlet`.`trx_tax_ppn`) AS `trx_tax_ppn`, 
-															SUM(`tbl_lap_trx_$outlet`.`trx_tax_service`) AS `trx_tax_service`, 
-															MAX(trx_date) AS `last_order` , MIN(trx_date) AS `join_date`,
-															'$out_nama'  AS `out_nama`
-															FROM `tbl_lap_trx_$outlet` 
-															LEFT JOIN `tbl_lap_order_$outlet` 
-															ON `tbl_lap_trx_$outlet`.`trx_id`=`tbl_lap_order_$outlet`.`order_trx_reff`
-															WHERE DATE(trx_date) >= '$tgl_awal' AND DATE(trx_date) <= '$tgl_akhir' 
-															GROUP BY `tbl_lap_trx_$outlet`.`trx_cust`
-															ORDER BY trx_date DESC");
+		$query = $this->db->select("trx_cust , SUM(trx_grand_total) AS trx_grand_total")
+			->select("SUM(trx_subtotal) AS trx_subtotal")
+			->select("SUM(trx_discount) AS trx_discount")
+			->select("SUM(trx_tax_ppn) AS trx_tax_ppn")
+			->select("SUM(trx_tax_service) AS trx_tax_service")
+			->select("MAX(trx_date) AS last_order")
+			->select("MIN(trx_date) AS order_date")
+			->select("'$out_nama' AS out_nama")
+			->from("tbl_lap_trx_$outlet AS tbl1")
+			->join("tbl_lap_order_$outlet AS tbl2", "tbl1.trx_id=tbl2.order_trx_reff", "LEFT")
+			->where("DATE(trx_date) >=", $tgl_awal)
+			->where("DATE(trx_date) <=", $tgl_akhir)
+			->group_by("trx_cust")
+			->order_by('trx_date', 'DESC')
+			->get();
+
 		return $query->result_array();
 	}
 
@@ -109,15 +121,19 @@ class M_laporan extends CI_Model
 
 		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
 		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
-		$out_nama = $this->db->query("SELECT `out_nama` FROM `tbl_outlet` WHERE `out_id` = $outlet ")->row('out_nama');
+		$out_nama = $this->get_nama_outlet($outlet);
 
-		$query = $this->db->query("SELECT * , SUM(`tbl_lap_order_$outlet`.`order_qty`) AS `order_total`,
-															'$out_nama'  AS `out_nama`, SUM(`tbl_lap_order_$outlet`.`order_subtotal`) AS `order_revenue`
-															FROM `tbl_lap_order_$outlet` LEFT JOIN `tbl_lap_trx_$outlet` 
-															ON `tbl_lap_order_$outlet`.`order_trx_reff`=`tbl_lap_trx_$outlet`.`trx_id` 
-															WHERE DATE(trx_date) >= '$tgl_awal' AND DATE(trx_date) <= '$tgl_akhir' 
-															GROUP BY `tbl_lap_order_$outlet`.`order_menu` 
-															ORDER BY trx_date DESC");
+		$query = $this->db->select("order_menu, order_harga, trx_cust, '$out_nama' AS out_nama")
+			->select("SUM(order_qty) AS order_total")
+			->select("SUM(order_subtotal) AS order_revenue")
+			->from("tbl_lap_order_$outlet AS tbl1")
+			->join("tbl_lap_trx_$outlet AS tbl2", "tbl1.order_trx_reff=tbl2.trx_id", "LEFT")
+			->where("DATE(trx_date) >=", $tgl_awal)
+			->where("DATE(trx_date) <=", $tgl_akhir)
+			->group_by('order_menu')
+			->order_by('trx_date', 'DESC')
+			->get();
+
 		return $query->result_array();
 	}
 
@@ -125,18 +141,21 @@ class M_laporan extends CI_Model
 	{
 		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
 		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
-		$out_nama = $this->db->query("SELECT `out_nama` FROM `tbl_outlet` WHERE `out_id` = $outlet ")->row('out_nama');
+		$out_nama = $this->get_nama_outlet($outlet);
 
-		$query = $this->db->query("SELECT *,
-								'$out_nama'  AS `out_nama` 
-								FROM tbl_lap_trx_$outlet 
-								WHERE trx_date >= '$tgl_awal' AND trx_date <= '$tgl_akhir' AND trx_userid = '$user'
-								ORDER BY trx_date DESC");
+		$query = $this->db->select("*, '$out_nama' AS out_nama")
+			->from("tbl_lap_trx_$outlet")
+			->where("DATE(trx_date) >=", $tgl_awal)
+			->where("DATE(trx_date) <=", $tgl_akhir)
+			->where("trx_userid", $user)
+			->order_by('trx_date', 'DESC')
+			->get();
+
 		return $query->result_array();
 	}
 
 
-	//Laporan POS
+	/*------------------ Laporan POS ------------------*/
 	public function get_laporan_outlet($data)
 	{
 		$tgl_awal = $data['tgl_awal'];
@@ -145,7 +164,7 @@ class M_laporan extends CI_Model
 		$tipe_transaksi = (int)$data['tipe_trx'];
 		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
 		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
-		$out_nama = $this->db->query("SELECT `out_nama` FROM `tbl_outlet` WHERE `out_id` = $outlet ")->row('out_nama');
+		$out_nama = $this->get_nama_outlet($outlet);
 
 		$this->db->select("*, '$out_nama' AS out_nama");
 		$this->db->from("tbl_lap_trx_$outlet");
@@ -168,11 +187,11 @@ class M_laporan extends CI_Model
 
 		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
 		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
-		$out_nama = $this->db->query("SELECT `out_nama` FROM `tbl_outlet` WHERE `out_id` = $outlet ")->row('out_nama');
+		$out_nama = $this->get_nama_outlet($outlet);
 
 		$this->db->select("*, '$out_nama' AS out_nama");
-		$this->db->from("tbl_lap_order_$outlet");
-		$this->db->join("tbl_lap_trx_$outlet", "tbl_lap_order_$outlet.order_trx_reff=tbl_lap_trx_$outlet.trx_id", "left");
+		$this->db->from("tbl_lap_order_$outlet AS tbl1");
+		$this->db->join("tbl_lap_trx_$outlet AS tbl2", "tbl1.order_trx_reff=tbl2.trx_id", "LEFT");
 		$this->db->where("DATE(trx_date) >=", $tgl_awal);
 		$this->db->where("DATE(trx_date) <=", $tgl_akhir);
 		if ($tipe_transaksi != 'all') {
@@ -192,17 +211,19 @@ class M_laporan extends CI_Model
 
 		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
 		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
-		$out_nama = $this->db->query("SELECT `out_nama` FROM `tbl_outlet` WHERE `out_id` = $outlet ")->row('out_nama');
+		$out_nama = $this->get_nama_outlet($outlet);
 
-		$this->db->select("order_menu, order_harga, trx_cust, SUM(tbl_lap_order_$outlet.order_qty) AS order_total, '$out_nama' AS out_nama, SUM(tbl_lap_order_$outlet.order_subtotal) AS order_revenue");
-		$this->db->from("tbl_lap_order_$outlet");
-		$this->db->join("tbl_lap_trx_$outlet", "tbl_lap_order_$outlet.order_trx_reff=tbl_lap_trx_$outlet.trx_id", "LEFT");
+		$this->db->select("order_menu, order_harga, trx_cust, '$out_nama' AS out_nama");
+		$this->db->select("SUM(order_qty) AS order_total");
+		$this->db->select("SUM(order_subtotal) AS order_revenue");
+		$this->db->from("tbl_lap_order_$outlet AS tbl1");
+		$this->db->join("tbl_lap_trx_$outlet AS tbl2", "tbl1.order_trx_reff=tbl2.trx_id", "LEFT");
 		$this->db->where("DATE(trx_date) >=", $tgl_awal);
 		$this->db->where("DATE(trx_date) <=", $tgl_akhir);
 		if ($tipe_transaksi != 'all') {
 			$this->db->where("trx_tipe", $tipe_transaksi);
 		}
-		$this->db->group_by("tbl_lap_order_$outlet.order_menu");
+		$this->db->group_by("order_menu");
 		$this->db->order_by('trx_date', 'DESC');
 		$query = $this->db->get();
 		return $query->result_array();
@@ -217,24 +238,24 @@ class M_laporan extends CI_Model
 
 		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
 		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
-		$out_nama = $this->db->query("SELECT `out_nama` FROM `tbl_outlet` WHERE `out_id` = $outlet ")->row('out_nama');
+		$out_nama = $this->get_nama_outlet($outlet);
 
-		$this->db->select("trx_cust , SUM(tbl_lap_trx_$outlet.trx_grand_total) AS trx_grand_total");
-		$this->db->select("SUM(tbl_lap_trx_$outlet.trx_subtotal) AS trx_subtotal");
-		$this->db->select("SUM(tbl_lap_trx_$outlet.trx_discount) AS trx_discount");
-		$this->db->select("SUM(tbl_lap_trx_$outlet.trx_tax_ppn) AS trx_tax_ppn");
-		$this->db->select("SUM(tbl_lap_trx_$outlet.trx_tax_service) AS trx_tax_service");
+		$this->db->select("trx_cust , SUM(trx_grand_total) AS trx_grand_total");
+		$this->db->select("SUM(trx_subtotal) AS trx_subtotal");
+		$this->db->select("SUM(trx_discount) AS trx_discount");
+		$this->db->select("SUM(trx_tax_ppn) AS trx_tax_ppn");
+		$this->db->select("SUM(trx_tax_service) AS trx_tax_service");
 		$this->db->select("MAX(trx_date) AS last_order");
 		$this->db->select("MIN(trx_date) AS order_date");
 		$this->db->select("'$out_nama' AS out_nama");
-		$this->db->from("tbl_lap_trx_$outlet");
-		$this->db->join("tbl_lap_order_$outlet", "tbl_lap_trx_$outlet.trx_id=tbl_lap_order_$outlet.order_trx_reff", "LEFT");
+		$this->db->from("tbl_lap_trx_$outlet AS tbl1");
+		$this->db->join("tbl_lap_order_$outlet AS tbl2", "tbl1.trx_id=tbl2.order_trx_reff", "LEFT");
 		$this->db->where("DATE(trx_date) >=", $tgl_awal);
 		$this->db->where("DATE(trx_date) <=", $tgl_akhir);
 		if ($tipe_transaksi != 'all') {
 			$this->db->where("trx_tipe", $tipe_transaksi);
 		}
-		$this->db->group_by("tbl_lap_trx_$outlet.trx_cust");
+		$this->db->group_by("trx_cust");
 		$this->db->order_by('trx_date', 'DESC');
 		$query = $this->db->get();
 		return $query->result_array();
@@ -248,7 +269,7 @@ class M_laporan extends CI_Model
 		$outlet = $data['outlet'];
 		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
 		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
-		$out_nama = $this->db->query("SELECT `out_nama` FROM `tbl_outlet` WHERE `out_id` = $outlet ")->row('out_nama');
+		$out_nama = $this->get_nama_outlet($outlet);
 
 		$this->db->select("*, '$out_nama' AS out_nama, ");
 		$this->db->from("tbl_lap_trx_$outlet");
@@ -258,8 +279,16 @@ class M_laporan extends CI_Model
 		if ($tipe_transaksi != 'all') {
 			$this->db->where("trx_tipe", $tipe_transaksi);
 		}
-		$this->db->order_by("tbl_lap_trx_$outlet.trx_date", 'DESC');
+		$this->db->order_by("trx_date", 'DESC');
 		$query = $this->db->get();
 		return $query->result_array();
+	}
+
+	public function get_nama_outlet($outlet_id)
+	{
+		$this->db->select('out_nama');
+		$this->db->where('out_id', $outlet_id);
+		$query = $this->db->get('tbl_outlet');
+		return $query->row('out_nama');
 	}
 }

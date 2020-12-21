@@ -21,22 +21,23 @@ class M_crud extends CI_Model
 
     function update($table, $data, $field_condition, $field_id)
     {
-        $this->db->where($field_condition, $field_id);
-        $this->db->update($table, $data);
+        $this->db->where($field_condition, $field_id)
+            ->update($table, $data);
     }
 
     function delete($table, $field_condition, $field_id)
     {
-        $this->db->where($field_condition, $field_id);
-        $this->db->delete($table);
+        $this->db->where($field_condition, $field_id)
+            ->delete($table);
     }
 
     function left_join($table, $table2, $field_join)
     {
-        $this->db->select('*');
-        $this->db->from($table);
-        $this->db->join($table2, $field_join, 'left');
-        $query = $this->db->get();
+        $query = $this->db->select()
+            ->from($table)
+            ->join($table2, $field_join, 'LEFT')
+            ->get();
+
         return $query->result_array();
     }
 
