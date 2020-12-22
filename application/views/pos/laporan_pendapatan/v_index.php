@@ -44,7 +44,6 @@
                         <option value="daily">Harian</option>
                         <option value="weekly">Mingguan</option>
                         <option value="monthly">Bulanan</option>
-                        <option value="yearly">Tahunan</option>
                       </select>
                     </div>
                   </div>

@@ -2,277 +2,119 @@
 class M_laporan_pendapatan extends CI_Model
 {
 
-	public function get_laporan($data)
+	public function get_laporan_mingguan($data)
 	{
 		$tgl_awal = $data['tgl_awal'];
 		$tgl_akhir = $data['tgl_akhir'];
 		$outlet = $data['outlet'];
-		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
-		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
-		$out_nama = $this->get_nama_outlet($outlet);
-
-		$this->db->select("*, '$out_nama' AS out_nama");
-		$this->db->from("tbl_lap_trx_$outlet");
-		$this->db->where("DATE(trx_date) >=", $tgl_awal);
-		$this->db->where("DATE(trx_date) <=", $tgl_akhir);
-		$this->db->order_by('trx_date', 'DESC');
-		$query = $this->db->get();
-		return $query->result_array();
-	}
-
-	public function get_laporan_kasir($data)
-	{
-		$tgl_awal = $data['tgl_awal'];
-		$tgl_akhir = $data['tgl_akhir'];
-		$outlet = $data['outlet'];
-		$user = $data['trx_userid'];
-		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
-		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
-		$out_nama = $this->get_nama_outlet($outlet);
-
-		$this->db->select("*, '$out_nama' AS out_nama");
-		$this->db->from("tbl_lap_trx_$outlet AS tbl1");
-		$this->db->join('tbl_tipe_transaksi AS tbl2', "tbl1.trx_tipe=tbl2.tipe_transaksi_id", "LEFT");
-		$this->db->where("DATE(trx_date) >=", $tgl_awal);
-		$this->db->where("DATE(trx_date) <=", $tgl_akhir);
-		$this->db->where("trx_userid", $user);
-		$this->db->order_by('trx_date', 'DESC');
-		$query = $this->db->get();
-		return $query->result_array();
-	}
-
-	public function get_laporan_transaksi($data)
-	{
-		$tgl_awal = $data['tgl_awal'];
-		$tgl_akhir = $data['tgl_akhir'];
-		$outlet = $data['outlet'];
-		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
-		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
-		$out_nama = $this->get_nama_outlet($outlet);
-
-		$this->db->select("*, '$out_nama' AS out_nama, ");
-		$this->db->from("tbl_lap_trx_$outlet AS tbl1");
-		$this->db->join("tbl_lap_order_$outlet AS tbl2", "tbl1.trx_id=tbl2.order_trx_reff", "LEFT");
-		$this->db->where("DATE(trx_date) >=", $tgl_awal);
-		$this->db->where("DATE(trx_date) <=", $tgl_akhir);
-		$this->db->order_by("trx_date", 'DESC');
-		$query = $this->db->get();
-		return $query->result_array();
-	}
-
-	public function get_laporan_order($data)
-	{
-		$tgl_awal = $data['tgl_awal'];
-		$tgl_akhir = $data['tgl_akhir'];
-		$outlet = $data['outlet'];
+		$tipe_pembayaran = $this->db->get_where('tbl_payment', ['payment_id' => $data['tipe_pembayaran']]);
 
 		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
 		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
 		$out_nama = $this->get_nama_outlet($outlet);
 
-		$this->db->select("*, '$out_nama' AS out_nama");
-		$this->db->from("tbl_lap_order_$outlet AS tbl1");
-		$this->db->join("tbl_lap_trx_$outlet AS tbl2", "tbl1.order_trx_reff=tbl2.trx_id", "LEFT");
-		$this->db->where("DATE(trx_date) >=", $tgl_awal);
-		$this->db->where("DATE(trx_date) <=", $tgl_akhir);
-		$this->db->order_by('order_date', 'DESC');
-		$query = $this->db->get();
-		return $query->result_array();
-	}
-
-	public function get_laporan_pelanggan($data)
-	{
-		$tgl_awal = $data['tgl_awal'];
-		$tgl_akhir = $data['tgl_akhir'];
-		$outlet = $data['outlet'];
-
-		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
-		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
-		$out_nama = $this->get_nama_outlet($outlet);
-
-		$this->db->select("trx_cust , SUM(trx_grand_total) AS trx_grand_total");
-		$this->db->select("SUM(trx_subtotal) AS trx_subtotal");
-		$this->db->select("SUM(trx_discount) AS trx_discount");
-		$this->db->select("SUM(trx_tax_ppn) AS trx_tax_ppn");
-		$this->db->select("SUM(trx_tax_service) AS trx_tax_service");
-		$this->db->select("MAX(trx_date) AS last_order");
-		$this->db->select("MIN(trx_date) AS order_date");
-		$this->db->select("'$out_nama' AS out_nama");
-		$this->db->from("tbl_lap_trx_$outlet AS tbl1");
-		$this->db->join("tbl_lap_order_$outlet AS tbl2", "tbl1.trx_id=tbl2.order_trx_reff", "LEFT");
-		$this->db->where("DATE(trx_date) >=", $tgl_awal);
-		$this->db->where("DATE(trx_date) <=", $tgl_akhir);
-		$this->db->group_by("trx_cust");
-		$this->db->order_by('trx_date', 'DESC');
-		$query = $this->db->get();
-		return $query->result_array();
-	}
-
-	public function get_laporan_menu($data)
-	{
-		$tgl_awal = $data['tgl_awal'];
-		$tgl_akhir = $data['tgl_akhir'];
-		$outlet = $data['outlet'];
-
-		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
-		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
-		$out_nama = $this->get_nama_outlet($outlet);
-
-		$this->db->select("order_menu, order_harga, trx_cust, '$out_nama' AS out_nama");
-		$this->db->select_sum("order_qty AS order_total");
-		$this->db->select_sum("order_subtotal AS order_revenue");
-		$this->db->from("tbl_lap_order_$outlet AS tbl1");
-		$this->db->join("tbl_lap_trx_$outlet AS tbl2", "tbl1.order_trx_reff=tbl2.trx_id", "LEFT");
-		$this->db->where("DATE(trx_date) >=", $tgl_awal);
-		$this->db->where("DATE(trx_date) <=", $tgl_akhir);
-		$this->db->group_by("order_menu");
-		$this->db->order_by('trx_date', 'DESC');
-		$query = $this->db->get();
-		return $query->result_array();
-	}
-
-	public function get_laporan_cash_in_out($tgl_awal = null, $tgl_akhir = null, $outlet, $user)
-	{
-		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
-		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
-		$out_nama = $this->get_nama_outlet($outlet);
-
-		$this->db->select("*, '$out_nama' AS out_nama");
-		$this->db->from("tbl_lap_trx_$outlet");
-		$this->db->where("DATE(trx_date) >=", $tgl_awal);
-		$this->db->where("DATE(trx_date) <=", $tgl_akhir);
-		$this->db->where("trx_userid", $user);
-		$this->db->order_by('trx_date', 'DESC');
-		$query = $this->db->get();
-		return $query->result_array();
-	}
-
-
-	/*------------------ Laporan POS ------------------*/
-	public function get_laporan_outlet($data)
-	{
-		$tgl_awal = $data['tgl_awal'];
-		$tgl_akhir = $data['tgl_akhir'];
-		$outlet = $data['outlet'];
-		$tipe_transaksi = (int)$data['tipe_trx'];
-		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
-		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
-		$out_nama = $this->get_nama_outlet($outlet);
-
-		$this->db->select("*, '$out_nama' AS out_nama");
-		$this->db->from("tbl_lap_trx_$outlet");
-		$this->db->where("DATE(trx_date) >=", $tgl_awal);
-		$this->db->where("DATE(trx_date) <=", $tgl_akhir);
-		if ($tipe_transaksi != 'all') {
-			$this->db->where("trx_tipe", $tipe_transaksi);
+		if ($data['tipe_pembayaran'] != 'all') {
+			$this->db->where("trx_payment", $tipe_pembayaran->row('payment_nama'));
 		}
-		$this->db->order_by('trx_date', 'DESC');
+
+		$this->db->select('SUM(trx_subtotal) AS trx_subtotal, SUM(trx_discount) AS trx_discount')
+			->select('SUM(trx_tax_ppn) AS trx_tax_ppn, SUM(trx_tax_service) AS trx_tax_service')
+			->select('SUM(trx_grand_total) AS trx_grand_total')
+			->select("trx_date, '$out_nama' AS out_nama, WEEK(trx_date) AS number_of_week")
+			->select("CONCAT(MAKEDATE(YEAR(trx_date), DAYOFYEAR(trx_date) - (WEEKDAY(trx_date) + 1)) , ' - ', MAKEDATE(YEAR(trx_date), DAYOFYEAR(trx_date) - (WEEKDAY(trx_date) - 5))) AS periode")
+			->from("tbl_lap_trx_$outlet")
+			->where("DATE(trx_date) >=", $tgl_awal)
+			->where("DATE(trx_date) <=", $tgl_akhir)
+			->order_by('trx_date', 'DESC')
+			->group_by('WEEK(trx_date)');
+
 		$query = $this->db->get();
 		return $query->result_array();
 	}
 
-	public function get_laporan_order_outlet($data)
+	public function get_laporan_harian($data)
 	{
 		$tgl_awal = $data['tgl_awal'];
 		$tgl_akhir = $data['tgl_akhir'];
 		$outlet = $data['outlet'];
-		$tipe_transaksi = $data['tipe_trx'];
+		$tipe_pembayaran = $this->db->get_where('tbl_payment', ['payment_id' => $data['tipe_pembayaran']]);
 
 		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
 		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
 		$out_nama = $this->get_nama_outlet($outlet);
 
-		$this->db->select("*, '$out_nama' AS out_nama");
-		$this->db->from("tbl_lap_order_$outlet AS tbl1");
-		$this->db->join("tbl_lap_trx_$outlet AS tbl2", "tbl1.order_trx_reff=tbl2.trx_id", "LEFT");
-		$this->db->where("DATE(trx_date) >=", $tgl_awal);
-		$this->db->where("DATE(trx_date) <=", $tgl_akhir);
-		if ($tipe_transaksi != 'all') {
-			$this->db->where("trx_tipe", $tipe_transaksi);
+		if ($data['tipe_pembayaran'] != 'all') {
+			$this->db->where("trx_payment", $tipe_pembayaran->row('payment_nama'));
 		}
-		$this->db->order_by('order_date', 'DESC');
+
+		$this->db->select('SUM(trx_subtotal) AS trx_subtotal, SUM(trx_discount) AS trx_discount')
+			->select('SUM(trx_tax_ppn) AS trx_tax_ppn, SUM(trx_tax_service) AS trx_tax_service')
+			->select('SUM(trx_grand_total) AS trx_grand_total')
+			->select("trx_date, '$out_nama' AS out_nama, DATE(trx_date) AS periode")
+			->from("tbl_lap_trx_$outlet")
+			->where("DATE(trx_date) >=", $tgl_awal)
+			->where("DATE(trx_date) <=", $tgl_akhir)
+			->order_by('trx_date', 'DESC')
+			->group_by('DATE(trx_date)');
+
 		$query = $this->db->get();
 		return $query->result_array();
 	}
 
-	public function get_laporan_menu_outlet($data)
+	public function get_laporan_bulanan($data)
 	{
 		$tgl_awal = $data['tgl_awal'];
 		$tgl_akhir = $data['tgl_akhir'];
-		$tipe_transaksi = $data['tipe_trx'];
 		$outlet = $data['outlet'];
+		$tipe_pembayaran = $this->db->get_where('tbl_payment', ['payment_id' => $data['tipe_pembayaran']]);
 
 		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
 		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
 		$out_nama = $this->get_nama_outlet($outlet);
 
-		$this->db->select("order_menu, order_harga, trx_cust, '$out_nama' AS out_nama");
-		$this->db->select("SUM(order_qty) AS order_total");
-		$this->db->select("SUM(order_subtotal) AS order_revenue");
-		$this->db->from("tbl_lap_order_$outlet AS tbl1");
-		$this->db->join("tbl_lap_trx_$outlet AS tbl2", "tbl1.order_trx_reff=tbl2.trx_id", "LEFT");
-		$this->db->where("DATE(trx_date) >=", $tgl_awal);
-		$this->db->where("DATE(trx_date) <=", $tgl_akhir);
-		if ($tipe_transaksi != 'all') {
-			$this->db->where("trx_tipe", $tipe_transaksi);
+		if ($data['tipe_pembayaran'] != 'all') {
+			$this->db->where("trx_payment", $tipe_pembayaran->row('payment_nama'));
 		}
-		$this->db->group_by("order_menu");
-		$this->db->order_by('trx_date', 'DESC');
+
+		$this->db->select('SUM(trx_subtotal) AS trx_subtotal, SUM(trx_discount) AS trx_discount')
+			->select('SUM(trx_tax_ppn) AS trx_tax_ppn, SUM(trx_tax_service) AS trx_tax_service')
+			->select('SUM(trx_grand_total) AS trx_grand_total')
+			->select("trx_date, '$out_nama' AS out_nama")
+			->select("(CONCAT(MONTHNAME(trx_date), ' - ', YEAR(trx_date))) AS periode")
+			->from("tbl_lap_trx_$outlet")
+			->where("DATE(trx_date) >=", $tgl_awal)
+			->where("DATE(trx_date) <=", $tgl_akhir)
+			->order_by('trx_date', 'DESC')
+			->group_by('MONTH(trx_date)');
+
 		$query = $this->db->get();
 		return $query->result_array();
 	}
 
-	public function get_laporan_pelanggan_outlet($data)
+	public function get_laporan_all($data)
 	{
 		$tgl_awal = $data['tgl_awal'];
 		$tgl_akhir = $data['tgl_akhir'];
-		$tipe_transaksi = $data['tipe_trx'];
 		$outlet = $data['outlet'];
+		$tipe_pembayaran = $this->db->get_where('tbl_payment', ['payment_id' => $data['tipe_pembayaran']]);
 
 		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
 		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
 		$out_nama = $this->get_nama_outlet($outlet);
 
-		$this->db->select("trx_cust , SUM(trx_grand_total) AS trx_grand_total");
-		$this->db->select("SUM(trx_subtotal) AS trx_subtotal");
-		$this->db->select("SUM(trx_discount) AS trx_discount");
-		$this->db->select("SUM(trx_tax_ppn) AS trx_tax_ppn");
-		$this->db->select("SUM(trx_tax_service) AS trx_tax_service");
-		$this->db->select("MAX(trx_date) AS last_order");
-		$this->db->select("MIN(trx_date) AS order_date");
-		$this->db->select("'$out_nama' AS out_nama");
-		$this->db->from("tbl_lap_trx_$outlet AS tbl1");
-		$this->db->join("tbl_lap_order_$outlet AS tbl2", "tbl1.trx_id=tbl2.order_trx_reff", "LEFT");
-		$this->db->where("DATE(trx_date) >=", $tgl_awal);
-		$this->db->where("DATE(trx_date) <=", $tgl_akhir);
-		if ($tipe_transaksi != 'all') {
-			$this->db->where("trx_tipe", $tipe_transaksi);
+		if ($data['tipe_pembayaran'] != 'all') {
+			$this->db->where("trx_payment", $tipe_pembayaran->row('payment_nama'));
 		}
-		$this->db->group_by("trx_cust");
-		$this->db->order_by('trx_date', 'DESC');
-		$query = $this->db->get();
-		return $query->result_array();
-	}
 
-	public function get_laporan_transaksi_outlet($data)
-	{
-		$tgl_awal = $data['tgl_awal'];
-		$tgl_akhir = $data['tgl_akhir'];
-		$tipe_transaksi = $data['tipe_trx'];
-		$outlet = $data['outlet'];
-		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
-		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
-		$out_nama = $this->get_nama_outlet($outlet);
+		$this->db->select('SUM(trx_subtotal) AS trx_subtotal, SUM(trx_discount) AS trx_discount')
+			->select('SUM(trx_tax_ppn) AS trx_tax_ppn, SUM(trx_tax_service) AS trx_tax_service')
+			->select('SUM(trx_grand_total) AS trx_grand_total')
+			->select("trx_date, '$out_nama' AS out_nama, DATE(trx_date) AS periode")
+			->from("tbl_lap_trx_$outlet")
+			->where("DATE(trx_date) >=", $tgl_awal)
+			->where("DATE(trx_date) <=", $tgl_akhir)
+			->order_by('trx_date', 'DESC');
 
-		$this->db->select("*, '$out_nama' AS out_nama, ");
-		$this->db->from("tbl_lap_trx_$outlet");
-		$this->db->join("tbl_lap_order_$outlet", "tbl_lap_trx_$outlet.trx_id=tbl_lap_order_$outlet.order_trx_reff", "left");
-		$this->db->where("DATE(trx_date) >=", $tgl_awal);
-		$this->db->where("DATE(trx_date) <=", $tgl_akhir);
-		if ($tipe_transaksi != 'all') {
-			$this->db->where("trx_tipe", $tipe_transaksi);
-		}
-		$this->db->order_by("tbl_lap_trx_$outlet.trx_date", 'DESC');
 		$query = $this->db->get();
 		return $query->result_array();
 	}

@@ -41,6 +41,48 @@ class Settings extends MY_Controller
 			'kas_saldo_akhir' => preg_replace('/[^0-9]/', '', $kas_saldo_akhir),
 		];
 		$this->M_crud->update("tbl_kas_harian_$this->outlet", $data, 'kas_id', $this->input->post('kas_id'));
-		redirect('pos/dashboard');
+		// $this->send_mail(); Uncomment setelah settings email
+		redirect('login/logout');
+	}
+
+	public function send_mail()
+	{
+		$input_data = [
+			'tgl_awal' => date("Y-m-d"),
+			'tgl_akhir' => date("Y-m-d"),
+			'tipe_trx' => "all",
+			'outlet' => $this->outlet,
+		];
+		$data['data'] = $this->M_laporan->get_laporan_outlet($input_data);
+
+		$config = array(
+			'protocol' => 'smtp',
+			'smtp_host' => 'ssl://smtp.gmail.com',
+			'smtp_port' => 465,
+			'smtp_user' => 'example@gmail.com', // change it to yours
+			'smtp_pass' => '', // change it to yours
+			'mailtype' => 'html',
+			'charset' => 'iso-8859-1',
+			'newline' => "\r\n",
+			'smtp_timeout' => '7',
+			'wordwrap' => TRUE
+		);
+
+		$from_email = "";
+		$to_email = "";
+		$body = $this->load->view('pos/settings/v_email.php', $data, TRUE);
+
+		$this->load->library('email', $config);
+		$this->email->from($from_email, 'no-reply');
+		$this->email->to($to_email);
+		$this->email->subject('Laporan Transaksi - ' . date("d-M-Y"));
+		$this->email->message($body);
+
+		if ($this->email->send()) {
+			redirect('login/logout');
+		} else {
+			echo $this->email->print_debugger();
+			echo "success";
+		}
 	}
 }

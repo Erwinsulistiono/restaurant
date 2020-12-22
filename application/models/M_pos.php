@@ -59,10 +59,12 @@ class M_pos extends CI_Model
 
 	public function get_saldo_cash_in($tgl, $user, $outlet_id)
 	{
-		$query = $this->db->select("tbl_kas_harian_$outlet_id")
-			->where('kas_tgl', $tgl)
+		$query = $this->db->select()
+			->from("tbl_kas_harian_$outlet_id")
+			->where('kas_tgl >=', $tgl)
 			->where('kas_nm_kasir', $user)
-			->where('kas_saldo_akhir', 0);
+			->where('kas_saldo_akhir', 0)
+			->get();
 
 		return $query->row_array();
 	}
@@ -105,7 +107,8 @@ class M_pos extends CI_Model
 	{
 		$query = $this->db->select()
 			->from("tbl_lap_order_$outlet_id")
-			->where('order_trx_reff', $id);
+			->where('order_trx_reff', $id)
+			->get();
 
 		return $query->result_array();
 	}
@@ -116,7 +119,8 @@ class M_pos extends CI_Model
 		$query = $this->db->select('AUTO_INCREMENT')
 			->from('INFORMATION_SCHEMA.TABLES')
 			->where('TABLE_SCHEMA', $db)
-			->where('TABLE_NAME', "tbl_trx_pos_$outlet_id");
+			->where('TABLE_NAME', "tbl_trx_pos_$outlet_id")
+			->get();
 
 		return $query->row()->AUTO_INCREMENT;
 	}
@@ -129,7 +133,8 @@ class M_pos extends CI_Model
 			->join("tbl_meja_$outlet_id AS tbl3", 'tbl1.order_table = tbl3.meja_id', 'LEFT')
 			->join('tbl_area AS tbl4', 'tbl4.area_id = tbl3.meja_lokasi', 'LEFT')
 			->join('tbl_voucher AS tbl5', 'tbl5.voucher_id = tbl1.order_voucher_id', 'LEFT')
-			->group_by('order_userid');
+			->group_by('order_userid')
+			->get();
 
 		return $query->result_array();
 	}
@@ -140,7 +145,8 @@ class M_pos extends CI_Model
 			->from('tbl_ingredient AS tbl1')
 			->join("tbl_menu_$outlet_id AS tbl2", "tbl2.menu_id = tbl1.ing_menu_id", 'LEFT')
 			->join("tbl_stock_$outlet_id AS tbl3", "tbl3.stock_id = tbl1.ing_inv_id", 'LEFT')
-			->join('tbl_satuan AS tbl4', 'tbl4.satuan_id = tbl1.ing_satuan_id');
+			->join('tbl_satuan AS tbl4', 'tbl4.satuan_id = tbl1.ing_satuan_id')
+			->get();
 
 		return $query->result_array();
 	}
@@ -154,6 +160,7 @@ class M_pos extends CI_Model
 			->join('tbl_area AS tbl4', 'tbl4.area_id = tbl3.meja_lokasi', 'LEFT')
 			->group_by("order_userid")
 			->get();
+
 		return $query->result_array();
 	}
 }
