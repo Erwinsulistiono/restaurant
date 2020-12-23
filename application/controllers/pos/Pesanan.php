@@ -31,7 +31,7 @@ class Pesanan extends MY_Controller
 
 	public function clear_transaksi($trxId)
 	{
-		$orders = $this->M_pos->getAllOrderPos($trxId, $this->outlet);
+		$orders = $this->M_pos->select_order($trxId, $this->outlet);
 		$allOrdersAreNotCleared = false;
 		foreach ($orders as $order) {
 			if ($order['order_cancel_flg'] == 'N') {
@@ -60,7 +60,7 @@ class Pesanan extends MY_Controller
 		$data_tbl['meja_pelanggan'] = '0';
 		$data_plg['plg_order'] = '0';
 
-		$data_order = $this->M_pos->getAllOrderPos($trxId, $this->outlet);
+		$data_order = $this->M_pos->select_order($trxId, $this->outlet);
 
 		//clearing all flag and save transaction data
 		$this->M_crud->insert('tbl_lap_trx_' . $this->outlet, $data_trx);

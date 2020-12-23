@@ -293,7 +293,7 @@ class M_laporan extends CI_Model
 
 		$this->db->select("*, '$out_nama' AS out_nama, ")
 			->from("tbl_lap_trx_$outlet AS tbl1")
-			->join("tbl_lap_order_$outlet  AS tbl2", "tbl1.trx_id = tbl2.order_trx_reff", "LEFT")
+			->join("tbl_lap_order_$outlet  AS tbl2", "tbl2.order_trx_reff = tbl1.trx_id", "LEFT")
 			->where("DATE(trx_date) >=", $tgl_awal)
 			->where("DATE(trx_date) <=", $tgl_akhir)
 			->order_by("trx_date", 'DESC');

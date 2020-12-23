@@ -55,7 +55,7 @@ class Pos extends MY_Controller
 			$activeTransaksi = $orderItemMobile;
 			$activeTransaksi['is_mobile'] = 'true';
 		} else {
-			$orderItem = $this->M_pos->getAllOrderPos($tbl_pelanggan['plg_order'], $this->outlet);
+			$orderItem = $this->M_pos->select_order($tbl_pelanggan['plg_order'], $this->outlet);
 			foreach ($orderItem as $items) {
 				$dataOrder[] = [
 					'id' => $items['menu_id'],
@@ -279,17 +279,18 @@ class Pos extends MY_Controller
 		$data_tbl['meja_pelanggan'] = '0';
 		$data_plg['plg_order'] = '0';
 
-		$data_order = $this->M_pos->getAllOrderPos($trx_id, $this->outlet);
+		$data_order = $this->M_pos->select_order($trx_id, $this->outlet);
 
 		//clearing all flag and save transaction data
-		$this->M_crud->insert('tbl_lap_trx_' . $this->outlet, $data_trx);
+		$this->M_crud->insert("tbl_lap_trx_$this->outlet", $data_trx);
 		$order_trx_reff = $this->db->insert_id();
-		$this->M_crud->update('tbl_trx_pos_' . $this->outlet, $data_trx, 'trx_id', $trx_id);
+		$this->M_crud->update("tbl_trx_pos_$this->outlet", $data_trx, 'trx_id', $trx_id);
 		foreach ($data_order as $items) {
 			(($items['order_waitress_flg'] == 'Y') &&
-				$this->M_crud->delete('tbl_order_' . $this->outlet, 'order_id', $items['order_id']));
+				$this->M_crud->delete("tbl_order_$this->outlet", 'order_id', $items['order_id']));
 
 			$items['order_trx_reff'] = $order_trx_reff;
+			$items['order_menu'] = $items['menu_nama'];
 			unset($items['order_kitchen_flg']);
 			unset($items['order_waitress_flg']);
 			unset($items['order_cancel_flg']);
@@ -400,7 +401,7 @@ class Pos extends MY_Controller
 	{
 		$data = [
 			'trx' => $this->M_crud->select('tbl_trx_pos_' . $this->outlet, 'trx_id', $order_trx_reff),
-			'order' => $this->M_pos->getAllOrderPos($order_trx_reff, $this->outlet),
+			'order' => $this->M_pos->select_order($order_trx_reff, $this->outlet),
 			'outlet' => $this->M_crud->select('tbl_outlet', 'out_id', $this->outlet),
 			'pt' => $this->M_crud->select('tbl_pt', 'pt_id', 1),
 		];

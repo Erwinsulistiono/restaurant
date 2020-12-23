@@ -23,12 +23,12 @@ class M_pos extends CI_Model
 			->update('tbl_voucher');
 	}
 
-	public function getAllOrderPos($id, $outlet_id)
+	public function select_order($trx_id, $outlet_id)
 	{
 		$query = $this->db->select()
 			->from("tbl_order_$outlet_id AS tbl1")
-			->where('order_trx_reff', $id)
-			->join("tbl_menu_$outlet_id AS tbl2", "tbl1.order_menu=tbl2.menu_id", "LEFT")
+			->where('order_trx_reff', $trx_id)
+			->join("tbl_menu_$outlet_id AS tbl2", "tbl2.menu_id = tbl1.order_menu", "LEFT")
 			->get();
 
 		return $query->result_array();
