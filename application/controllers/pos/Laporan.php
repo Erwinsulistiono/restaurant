@@ -14,6 +14,7 @@ class Laporan extends MY_Controller
 		$this->load->model('M_crud');
 		$this->load->model('M_laporan');
 		$this->outlet = $this->session->userdata('pengguna_outlet');
+		$this->user = $this->session->userdata("idadmin");
 	}
 
 	public function index()
@@ -24,16 +25,21 @@ class Laporan extends MY_Controller
 
 	public function laporan($kasir_id = null, $outlet_id = null)
 	{
-		if (isset($kasir_id) && $kasir_id != md5($this->session->userdata("pengguna_id")) && $outlet_id != md5($this->outlet)) {
+		if (
+			isset($kasir_id) &&
+			$kasir_id != md5($this->user) &&
+			$outlet_id != md5($this->outlet)
+		) {
 			$this->session->set_flashdata('msg', '<div class="alert alert-warning"><button type="button" class="close" data-dismiss="alert">&times;</button>Uknown Error</div>');
 			$this->index();
 		}
 		$input_data = [
 			'tgl_awal' => ($kasir_id) ? date("Y-m-d") : $this->input->post('tgl_awal'),
 			'tgl_akhir' => ($kasir_id) ? date("Y-m-d") : $this->input->post('tgl_akhir'),
-			'tipe_trx' => ($kasir_id) ? "all" : $this->input->post('tipe_trx'),
+			'tipe_trx' => ($kasir_id) ? 'all' : $this->input->post('tipe_trx'),
 			'outlet' => $this->outlet,
 			'group' => ($kasir_id) ? "trx" : $this->input->post('group'),
+			'user' => ($kasir_id) ? $this->user : 'all',
 		];
 
 		switch ($input_data["group"]) {
