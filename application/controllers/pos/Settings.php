@@ -13,6 +13,8 @@ class Settings extends MY_Controller
 		$this->load->model('M_crud');
 		$this->load->model('M_pos');
 		$this->load->model('M_laporan');
+		$this->load->model('M_laporan_harian');
+		$this->load->model('M_laporan_pendapatan');
 		$this->user = $this->session->userdata('idadmin');
 		$this->outlet = $this->session->userdata('pengguna_outlet');
 	}
@@ -44,6 +46,24 @@ class Settings extends MY_Controller
 		// $this->send_mail(); Uncomment setelah settings email
 		redirect('login/logout');
 	}
+
+
+	public function laporan_harian()
+	{
+		isset($this->M_laporan_harian->count_total_porsi()['total_porsi']) ? $total_porsi = $this->M_laporan_harian->count_total_porsi()['total_porsi'] : $total_porsi = '';
+		$data = [
+			'penjualan_per_menu' => $this->M_laporan_harian->get_sales_per_kategori(),
+			'summary' => $this->M_laporan_harian->get_laporan_harian(),
+			'taxresto' => $this->M_crud->select('tbl_tax', 'tax_id', '2')['tax_persen'],
+			'taxservice' => $this->M_crud->select('tbl_tax', 'tax_id', '1')['tax_persen'],
+			'payment_method' => $this->M_crud->read('tbl_payment'),
+			'trx' => $this->M_laporan_harian->get_today_trx(),
+			'total_order' => $total_porsi,
+			'total_trx' => $this->M_laporan_harian->count_total_trx(),
+		];
+		$this->load->view('pos/settings/v_laporan_harian', $data);
+	}
+
 
 	public function send_mail()
 	{

@@ -15,9 +15,15 @@ class Inventory extends MY_Controller
     $this->load->model('M_log');
   }
 
+  public function index()
+  {
+    $data['outlet'] = $this->M_crud->read('tbl_outlet');
+    $this->render('admin/katalog/v_inventory', $data);
+  }
+
   public function outlet($outlet = null)
   {
-    ($outlet) ? $outlet_id = $outlet : $outlet_id = $this->input->post('pilih_outlet');
+    ($outlet) ? $outlet_id = $outlet : $outlet_id = $this->input->post('outlet_id');
     $data = [
       'outlet_id' => $outlet_id,
       'outlet' => $this->M_crud->read('tbl_outlet'),
@@ -27,11 +33,6 @@ class Inventory extends MY_Controller
     $this->render('admin/katalog/v_inventory_outlet', $data);
   }
 
-  public function index()
-  {
-    $data['outlet'] = $this->M_crud->read('tbl_outlet');
-    $this->render('admin/katalog/v_inventory', $data);
-  }
 
   public function simpan_inventory($outlet_id)
   {
@@ -53,7 +54,7 @@ class Inventory extends MY_Controller
 
       $this->M_log->simpan_log($reff_id, 'INVENTORY', null, $log_newval);
       $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>' . $data['nm_brg'] . '</b> Berhasil ditambah/diupdate.</div>');
-      $this->outlet($outlet_id);
+      redirect('admin/inventory/outlet/' . $outlet_id);
     }
     $data_old = $this->M_crud->select("tbl_stock_${outlet_id}", 'stock_id', $stock_id);
     $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
@@ -61,7 +62,7 @@ class Inventory extends MY_Controller
     $this->M_crud->update("tbl_stock_${outlet_id}", $data, 'stock_id', $stock_id);
     $this->M_log->simpan_log($stock_id, 'INVENTORY', $log_oldval, $log_newval);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>' . $data['nm_brg'] . '</b> Berhasil ditambah/diupdate.</div>');
-    $this->outlet($outlet_id);
+    redirect('admin/inventory/outlet/' . $outlet_id);
   }
 
   public function hapus_inventory($outlet_id, $stock_id)
@@ -72,7 +73,7 @@ class Inventory extends MY_Controller
     $this->M_log->simpan_menu($stock_id, 'INVENTORY', $log_oldval);
     $this->M_crud->delete("tbl_stock_${outlet_id}", 'stock_id', $stock_id);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Berhasil di hapus.</div>');
-    $this->outlet($outlet_id);
+    redirect('admin/inventory/outlet/' . $outlet_id);
   }
 
   public function tambah_inventory($outlet_id)
@@ -88,7 +89,7 @@ class Inventory extends MY_Controller
 
     $this->M_log->simpan_log($stock_id, 'INVENTORY (TAMBAH STOCK)', $log_oldval, $log_newval);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Berhasil di hapus.</div>');
-    $this->outlet($outlet_id);
+    redirect('admin/inventory/outlet/' . $outlet_id);
   }
 
   public function transfer_inventory($outlet_id)
@@ -118,6 +119,6 @@ class Inventory extends MY_Controller
 
     $this->M_log->simpan_log($reff_id, 'INVENTORY TRANSFER STOCK', $log_oldval, $log_newval);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Berhasil di transfer.</div>');
-    $this->outlet($outlet_id);
+    redirect('admin/inventory/outlet/' . $outlet_id);
   }
 }

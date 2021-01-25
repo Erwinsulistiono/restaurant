@@ -29,24 +29,26 @@ class Pos extends MY_Controller
 	function simpan_payment()
 	{
 		$payment_id = $this->input->post('payment_id');
-		$image = $_FILES['payment_qrcode']['name'];
+		$nmfile = str_replace(' ', '_', $_FILES['payment_qrcode']['name']);
+		$config['upload_path'] = './assets/img'; //path folder
+		$config['allowed_types'] = 'gif|jpg|png|jpeg|bmp'; //type yang dapat diakses bisa anda sesuaikan
+		$config['max_size'] = '1024';
+		$config['file_name'] = $nmfile;
 
-		if ($image) {
-			$config['allowed_types'] = 'gif|jpg|png|jpeg|bmp';
-			$config['max_size'] = '2024';
-			$config['upload_path'] = './assets/img/';
-
+		if ($nmfile) {
 			$this->upload->initialize($config);
 			$this->load->library('upload', $config);
-			$this->upload->do_upload('payment_qrcode');
+
+			if ($this->upload->do_upload('payment_qrcode')) {
+				$data['payment_qrcode'] = $nmfile;
+			}
 		}
 
-		if ((!$image) && ($payment_id)) {
-			$image = $this->input->post('old_payment_qrcode');
-		}
-
-		if ($this->upload->do_upload('payment_qrcode')) {
-			$data['payment_qrcode'] = $image;
+		if (empty($nmfile)) {
+			$nmfile = $this->M_crud->select('tbl_payment', 'payment_id', $payment_id)['payment_qrcode'];
+			$data['payment_qrcode'] = $nmfile;
+		} else {
+			$data['payment_qrcode'] = $nmfile;
 		}
 
 		$data = [
@@ -55,7 +57,7 @@ class Pos extends MY_Controller
 			'payment_bank' => $this->input->post('payment_bank'),
 			'useride' => $this->user_nama,
 			'updatedte' => date('Y-m-d H:i:s'),
-			'payment_qrcode' => $image
+			'payment_qrcode' => $nmfile,
 		];
 		$log_newval = strtr(json_encode($data), array(',' => ' | ', '{' => '', '}' => '', '"' => ' '));
 
@@ -65,7 +67,7 @@ class Pos extends MY_Controller
 
 			$this->M_log->simpan_log($reff_id, 'PAYMENT POS', null, $log_newval);
 			$this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Data Payment <b>' . $data['payment_nama'] . '</b> Berhasil disimpan ke database.</div>');
-			$this->payment();
+			redirect('admin/pos/payment');
 		}
 		$data_old = $this->M_crud->select('tbl_payment', 'payment_id', $payment_id);
 		$log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
@@ -73,7 +75,7 @@ class Pos extends MY_Controller
 		$this->M_log->simpan_log($payment_id, 'PAYMENT POS', $log_oldval, $log_newval);
 		$this->M_crud->update('tbl_payment', $data, 'payment_id', $payment_id);
 		$this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Data Payment <b>' . $data['payment_nama'] . '</b> Berhasil disimpan ke database.</div>');
-		$this->payment();
+		redirect('admin/pos/payment');
 	}
 
 	function hapus_payment($payment_id)
@@ -84,7 +86,7 @@ class Pos extends MY_Controller
 		$this->M_log->simpan_log($payment_id, 'PAYMENT POS', $log_oldval);
 		$this->M_crud->delete('tbl_payment', 'payment_id', $payment_id);
 		$this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Data Payment <b>' . $this->input->post('payment_nama') . '</b> Berhasil dihapus dari database.</div>');
-		$this->payment();
+		redirect('admin/pos/payment');
 	}
 
 
@@ -140,7 +142,7 @@ class Pos extends MY_Controller
 
 			$this->M_log->simpan_log($reff_id, 'SALDO AWAL', null, $log_newval);
 			$this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>Saldo awal ' . $data['kas_saldo_awal'] . '</b> Berhasil ditambah.</div>');
-			$this->saldo_kas_harian($pengguna_kasir, $tgl_awal, $tgl_akhir, $outlets);
+			redirect('admin/pos/saldo_kas_harian/' . $pengguna_kasir . '/' . $tgl_awal . '/' . $tgl_akhir . '/' . $outlets);
 		}
 
 		$data_old = $this->M_crud->select("tbl_kas_harian_$outlet_id", 'kas_id', $kas_id);
@@ -149,7 +151,7 @@ class Pos extends MY_Controller
 		$this->M_crud->update("tbl_kas_harian_$outlet_id", $data, 'kas_id', $kas_id);
 		$this->M_log->simpan_log($kas_id, 'SALDO AWAL', $log_oldval, $log_newval);
 		$this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>Saldo akhir ' . $data['kas_saldo_akhir'] . '</b> Berhasil di input.</div>');
-		$this->saldo_kas_harian($pengguna_kasir, $tgl_awal, $tgl_akhir, $outlets);
+		redirect('admin/pos/saldo_kas_harian/' . $pengguna_kasir . '/' . $tgl_awal . '/' . $tgl_akhir . '/' . $outlets);
 	}
 
 
@@ -265,7 +267,7 @@ class Pos extends MY_Controller
 
 			$this->M_log->simpan_log($reff_id, 'KITCHEN ' . $outlet_id, null, $log_newval);
 			$this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Kitchen <b>' . $data['kitchen_nama'] . '</b> Berhasil disimpan ke database.</div>');
-			$this->kitchen($outlet_id);
+			redirect('admin/pos/kitchen/' . $outlet_id);
 		}
 		$data_old = $this->M_crud->select("tbl_kitchen_${outlet_id}", 'kitchen_id', $kitchen_id);
 		$log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
@@ -273,7 +275,7 @@ class Pos extends MY_Controller
 		$this->M_crud->update("tbl_kitchen_${outlet_id}", $data2, 'kitchen_id', $kitchen_id);
 		$this->M_log->simpan_log($kitchen_id, 'KITCHEN ' . $outlet_id, $log_oldval, $log_updateval);
 		$this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Kitchen <b>' . $data2['kitchen_nama'] . '</b> Berhasil disimpan ke database.</div>');
-		$this->kitchen($outlet_id);
+		redirect('admin/pos/kitchen/' . $outlet_id);
 	}
 
 	function hapus_kitchen($outlet_id, $kitchen_id)
@@ -284,6 +286,6 @@ class Pos extends MY_Controller
 		$this->M_crud->delete("tbl_kitchen_${outlet_id}", 'kitchen_id', $kitchen_id);
 		$this->M_log->simpan_log($kitchen_id, 'KITCHEN ' . $outlet_id, $log_oldval);
 		$this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Kitchen Berhasil dihapus dari database.</div>');
-		$this->kitchen($outlet_id);
+		redirect('admin/pos/kitchen/' . $outlet_id);
 	}
 }

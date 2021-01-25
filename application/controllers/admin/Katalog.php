@@ -31,7 +31,7 @@ class Katalog extends MY_Controller
     $this->form_validation->set_rules('kategori_nama', 'Kategori', 'is_unique[tbl_kategori.kategori_nama]');
     if ($this->form_validation->run() == FALSE) {
       $this->session->set_flashdata('msg', '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><b></b>Nama Kategori ini sudah ada !</div>');
-      $this->kategori_menu();
+      redirect('admin/katalog/kategori_menu');
     }
     $data['kategori_nama'] = $this->input->post('kategori_nama');
     $log_newval = strtr(json_encode($data), array(',' => ' | ', '{' => '', '}' => '', '"' => ' '));
@@ -42,7 +42,7 @@ class Katalog extends MY_Controller
 
       $this->M_log->simpan_log($reff_id, 'KATEGORI', null, $log_newval);
       $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Kategori <b>' . $data['kategori_nama'] . '</b> Berhasil disimpan ke database.</div>');
-      $this->kategori_menu();
+      redirect('admin/katalog/kategori_menu');
     }
     $data_old = $this->M_crud->select('tbl_kategori', 'kategori_id', $kategori_id);
     $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
@@ -50,7 +50,7 @@ class Katalog extends MY_Controller
     $this->M_crud->update('tbl_kategori', $data, 'kategori_id', $kategori_id);
     $this->M_log->simpan_log($kategori_id, 'KATEGORI', $log_oldval, $log_newval);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Kategori <b>' . $data['kategori_nama'] . '</b> Berhasil disimpan ke database.</div>');
-    $this->kategori_menu();
+    redirect('admin/katalog/kategori_menu');
   }
 
   function hapus_kategori_menu($kategori_id)
@@ -63,7 +63,7 @@ class Katalog extends MY_Controller
     $this->M_crud->delete('tbl_kategori', 'kategori_id', $kategori_id);
     $this->M_crud->delete('tbl_menu_kat', 'kategori_id', $kategori_id);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>kategori <b>' . $this->input->post('kategori_nama') . '</b> Berhasil dihapus dari database.</div>');
-    $this->kategori_menu();
+    redirect('admin/katalog/kategori_menu');
   }
 
 
@@ -89,7 +89,7 @@ class Katalog extends MY_Controller
       'voucher_periode_awal' => $this->input->post('voucher_periode_awal'),
       'voucher_periode_akhir' => $this->input->post('voucher_periode_akhir'),
       'voucher_limit' => $this->input->post('voucher_limit'),
-      'voucher_syarat' => $this->input->post('voucher_syarat'),
+      'voucher_tandc' => $this->input->post('voucher_tandc'),
     ];
     $log_newval = strtr(json_encode($data), array(',' => ' | ', '{' => '', '}' => '', '"' => ' '));
 
@@ -99,7 +99,7 @@ class Katalog extends MY_Controller
 
       $this->M_log->simpan_log($reff_id, 'VOUCHER', null,  $log_newval);
       $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>voucher <b>' . $data['voucher_nama'] . '</b> Berhasil disimpan ke database.</div>');
-      $this->voucher();
+      redirect('admin/katalog/voucher');
     }
     $data_old = $this->M_crud->select('tbl_voucher', 'voucher_id', $voucher_id);
     $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
@@ -107,7 +107,7 @@ class Katalog extends MY_Controller
     $this->M_crud->update('tbl_voucher', $data, 'voucher_id', $this->input->post('voucher_id'));
     $this->M_log->simpan_log($voucher_id, 'VOUCHER', $log_oldval, $log_newval);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>voucher <b>' . $data['voucher_nama'] . '</b> Berhasil disimpan ke database.</div>');
-    $this->voucher();
+    redirect('admin/katalog/voucher');
   }
 
   function hapus_voucher($voucher_id)
@@ -118,7 +118,7 @@ class Katalog extends MY_Controller
     $this->M_log->simpan_log($voucher_id, 'VOUCHER', $log_oldval);
     $this->M_crud->delete('tbl_voucher', 'voucher_id', $voucher_id);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>voucher <b>' . $data_old['voucher_nama'] . '</b> Berhasil dihapus dari database.</div>');
-    $this->voucher();
+    redirect('admin/katalog/voucher');
   }
 
 
@@ -132,24 +132,31 @@ class Katalog extends MY_Controller
   function simpan_gallery()
   {
     $galeri_id = $this->input->post('galeri_id');
-    $nmfile = "file_" . time() . '.jpg'; //nama file saya beri nama langsung dan diikuti fungsi time
+    $nmfile = str_replace(' ', '_', $_FILES['filefoto']['name']);
     $config['upload_path'] = './assets/galeries'; //path folder
     $config['allowed_types'] = 'gif|jpg|png|jpeg|bmp'; //type yang dapat diakses bisa anda sesuaikan
-    $config['max_size'] = '1024'; //maksimum besar file 2M
-    $config['max_width']  = '900'; //lebar maksimum 1288 px
-    $config['max_height']  = '800'; //tinggi maksimu 1000 px
-    $config['file_name'] = $nmfile; //nama yang terupload nantinya
+    $config['max_size'] = '2024';
+    $config['file_name'] = $nmfile;
 
-    $this->upload->initialize($config);
-    $gbr = $this->upload->data();
+    if ($nmfile) {
+      $this->upload->initialize($config);
+      $gbr = $this->upload->data();
+      $this->load->library('upload', $config);
 
-    if (empty($_FILES['filefoto']['name']) || !$this->upload->do_upload('filefoto')) {
-      $this->session->set_flashdata('msg', '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>Menu tidak dapat ditambahkan, gambar tidak dapat diupload</div>');
-      $this->gallery();
+      if ($this->upload->do_upload('filefoto')) {
+        $data['filefoto'] = $nmfile;
+      }
+    }
+
+    if (empty($nmfile)) {
+      $nmfile = $this->M_crud->select('tbl_galeri', 'galeri_id', $galeri_id)['galeri_gambar'];
+      $data['galeri_gambar'] = $nmfile;
+    } else {
+      $data['galeri_gambar'] = $nmfile;
     }
 
     $data = [
-      'galeri_gambar' => $gbr['file_name'],
+      'galeri_gambar' => $nmfile,
       'galeri_judul' => $this->input->post('galeri_judul'),
       'galeri_deskripsi' => $this->input->post('galeri_deskripsi'),
     ];
@@ -161,7 +168,7 @@ class Katalog extends MY_Controller
 
       $this->M_log->simpan_log($reff_id, 'GALLERY', null, $log_newval);
       $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Gallery <b>' . $data['galeri_judul'] . '</b> Berhasil disimpan ke database.</div>');
-      $this->gallery();
+      redirect('admin/katalog/gallery');
     }
     $data_old = $this->M_crud->select('tbl_galeri', 'galeri_id', $galeri_id);
     $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
@@ -169,7 +176,7 @@ class Katalog extends MY_Controller
     $this->M_crud->update('tbl_galeri', $data, 'galeri_id', $galeri_id);
     $this->M_log->simpan_log($galeri_id, 'GALLERY', $log_oldval, $log_newval);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Gallery <b>' . $data['galeri_judul'] . '</b> Berhasil disimpan ke database.</div>');
-    $this->gallery();
+    redirect('admin/katalog/gallery');
   }
 
   function hapus_gallery($galeri_id)
@@ -180,6 +187,6 @@ class Katalog extends MY_Controller
     $this->M_log->simpan_log($galeri_id, 'GALLERY', $log_oldval);
     $this->M_crud->delete('tbl_galeri', 'galeri_id', $galeri_id);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Gallery Berhasil dihapus dari database.</div>');
-    $this->gallery();
+    redirect('admin/katalog/gallery');
   }
 }

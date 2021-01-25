@@ -51,7 +51,7 @@ class Laporan extends MY_Controller
         break;
       default:
         $this->session->set_flashdata('msg', '<div class="alert alert-warning"><button type="button" class="close" data-dismiss="alert">&times;</button>pilih group.</div>');
-        $this->index();
+        redirect('admin/laporan');
     }
   }
 
@@ -86,7 +86,7 @@ class Laporan extends MY_Controller
         break;
       default:
         $this->session->set_flashdata('msg', '<div class="alert alert-warning"><button type="button" class="close" data-dismiss="alert">&times;</button>Unknown Error.</div>');
-        $this->index();
+        redirect('admin/laporan');
     }
   }
 
@@ -121,7 +121,7 @@ class Laporan extends MY_Controller
         break;
       default:
         $this->session->set_flashdata('msg', '<div class="alert alert-warning"><button type="button" class="close" data-dismiss="alert">&times;</button>Unknown Error.</div>');
-        $this->index();
+        redirect('admin/laporan');
     }
   }
 

@@ -60,7 +60,7 @@ class Menu extends MY_Controller
 
     if (empty($_FILES['filefoto']['name']) && !$menu_id) {
       $this->session->set_flashdata('msg', '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>Menu tidak dapat ditambahkan, file gambar yang Anda masukkan terlalu besar.</div>');
-      $this->outlet($outlet_id);
+      redirect('admin/menu/outlet' . $outlet_id);
     }
 
     if (empty($_FILES['filefoto']['name'])) {
@@ -88,7 +88,7 @@ class Menu extends MY_Controller
       $this->M_log->simpan_log($reff_id, 'MENU', null, $log_newval);
       $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Menu <b>' . $data['menu_nama'] . '</b> Berhasil disimpan ke database.</div>');
       $this->simpan_kategori($reff_id, $outlet_id);
-      $this->outlet($outlet_id);
+      redirect('admin/menu/outlet' . $outlet_id);
     }
 
     $data_old = $this->M_crud->select("tbl_menu_${outlet_id}", 'menu_id', $menu_id);
@@ -98,7 +98,7 @@ class Menu extends MY_Controller
     $this->M_crud->update("tbl_menu_${outlet_id}", $data, 'menu_id', $menu_id);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Menu <b>' . $data['menu_nama'] . '</b> Berhasil disimpan ke database.</div>');
     $this->simpan_kategori($menu_id, $outlet_id);
-    $this->outlet($outlet_id);
+    redirect('admin/menu/outlet' . $outlet_id);
   }
 
   /*-------------------SIMPAN KITCHEN ----------------------------*/
@@ -116,7 +116,7 @@ class Menu extends MY_Controller
 
     $this->M_crud->update("tbl_menu_${outlet_id}", $data, 'menu_id', $kitchen_id);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Menu <b>' . $data['menu_nama'] . '</b> Berhasil disimpan ke database.</div>');
-    $this->outlet($outlet_id);
+    redirect('admin/menu/outlet' . $outlet_id);
   }
 
 
@@ -164,7 +164,7 @@ class Menu extends MY_Controller
     $this->M_log->simpan_log($menu_id, 'MENU', $log_oldval);
     $this->M_crud->delete("tbl_menu_${outlet_id}", 'menu_id', $menu_id);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Menu Berhasil dihapus dari database.</div>');
-    $this->outlet($outlet_id);
+    redirect('admin/menu/outlet' . $outlet_id);
   }
 
 

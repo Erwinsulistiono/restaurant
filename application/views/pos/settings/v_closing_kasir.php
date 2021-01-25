@@ -68,5 +68,6 @@
     } else {
       alert('Data Berhasil Tersimpan');
     };
+    window.open("<?= base_url('pos/settings/laporan_harian/'); ?>");
   });
 </script>
