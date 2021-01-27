@@ -22,7 +22,7 @@
                       <div class="alert alert-callout <?= $color ?> no-margin">
                         <h1 class="pull-right text-success"><i class="fa fa-cutlery"></i></h1>
                         <strong class="text-xl"><?= $k["kitchen_nama"] ?></strong><br />
-                        <span class="opacity-50">Lorem Ipsum</span>
+                        <span class="opacity-50"></span>
                         <div class="stick-bottom-left-right">
                           <div class="height-2 sparkline-revenue" data-line-color="#bdc1c1"></div>
                         </div>

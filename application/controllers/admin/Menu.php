@@ -229,7 +229,7 @@ class Menu extends MY_Controller
   {
     $out_id = $this->input->post('outlet_tujuan');
     $outlet_tujuan = $this->M_crud->select('tbl_outlet', 'out_id', $out_id);
-    $duplicate_menu = $this->M_crud->select("tbl_menu_${out_id}", 'menu_reff_id', $menu_id);
+    $duplicate_menu = $this->M_crud->select("tbl_menu_${out_id}", 'menu_id', $menu_id);
     if ($duplicate_menu) {
       $this->session->set_flashdata('msg', '<div class="alert alert-warning"><button type="button" class="close" data-dismiss="alert">&times;</button>Menu <b>' . $duplicate_menu['menu_nama'] . ' </b>sudah ada di outlet <b>' . $outlet_tujuan['out_nama'] . '</b></div>');
       $this->outlet('master');
@@ -238,7 +238,7 @@ class Menu extends MY_Controller
     $nama_menu = $data['menu_nama'];
     $nama_outlet_tujuan = $outlet_tujuan['out_nama'];
     $log = "menu = ${nama_menu} | Outlet tujuan = ${nama_outlet_tujuan} ";
-    $data['menu_reff_id'] = $menu_id;
+    $data['menu_id'] = $menu_id;
 
     $this->M_crud->insert("tbl_menu_${out_id}", $data);
     $this->M_log->simpan_log($menu_id, 'TRANSFER MENU', $log, $log);

@@ -83,13 +83,13 @@
       <form class="form-horizontal" role="form" method="post" action="<?= base_url("admin/restaurant/simpan_meja/${outlet_id}"); ?>" enctype="multipart/form-data">
         <div class="modal-body">
           <div class="form-group">
-            <label class="col-sm-3 control-label">Nama Meja</label>
+            <label class="col-sm-3 control-label">Nama Meja <sup style="color: red;">&#10038<sup></label>
             <div class="col-sm-8">
               <input name="meja_nama" class="form-control" required>
             </div>
           </div>
           <div class="form-group">
-            <label class="col-sm-3 control-label">Lantai - Area</label>
+            <label class="col-sm-3 control-label">Lantai - Area <sup style="color: red;">&#10038<sup></label>
             <div class="col-sm-8">
               <select id="select13" name="meja_lokasi" class="form-control" required>
                 <option value="">&nbsp;</option>
@@ -127,13 +127,13 @@
           <input type="hidden" name="meja_id" value="<?= $table_content['meja_id']; ?>">
           <div class="modal-body">
             <div class="form-group">
-              <label class="col-sm-3 control-label">Nama Meja</label>
+              <label class="col-sm-3 control-label">Nama Meja <sup style="color: red;">&#10038<sup></label>
               <div class="col-sm-8">
                 <input name="meja_nama" value="<?= $table_content['meja_nama']; ?>" class="form-control" required>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-3 control-label">Lantai - Area</label>
+              <label class="col-sm-3 control-label">Lantai - Area <sup style="color: red;">&#10038<sup></label>
               <div class="col-sm-8">
                 <select id="select13" name="meja_lokasi" class="form-control" required>
                   <?php

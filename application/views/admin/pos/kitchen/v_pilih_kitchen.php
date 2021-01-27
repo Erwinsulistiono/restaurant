@@ -24,7 +24,7 @@
                   <h2><select name="outlet_id" class="form-control" required>
                       <option value="">&nbsp;</option>
                       <?php foreach ($outlets as $row) : ?>
-                        <option value="<?= $row['out_id']; ?>"><?= $row['out_nama']; ?></option>
+                        <option value="<?= $row['out_id']; ?>"><?= $row['out_kode']; ?> - <?= $row['out_nama']; ?></option>
                       <?php endforeach; ?>
                     </select></h2>
                 </div>

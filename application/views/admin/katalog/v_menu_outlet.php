@@ -49,7 +49,8 @@
                       <td style="vertical-align:middle;text-align:right;">
                         <b><?= 'Rp ' . number_format($table_content['menu_harga_baru']); ?></b>
                         <p style="font-size:9px;">
-                          <del><?= 'Rp ' . number_format($table_content['menu_harga_lama']); ?></del></p>
+                          <del><?= 'Rp ' . number_format($table_content['menu_harga_lama']); ?></del>
+                        </p>
                       </td>
                     <?php endif; ?>
                     <td>

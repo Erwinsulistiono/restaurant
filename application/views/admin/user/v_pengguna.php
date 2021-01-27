@@ -41,8 +41,22 @@
                   <tr>
                     <td><img style="width:40px;height:40px;" class="img-circle width-1" src="<?= base_url("assets/images/${pengguna_photo}"); ?>" alt="" /></td>
                     <td><?= $table_content['pengguna_nama']; ?></td>
-                    <?= ($table_content['pengguna_jenkel'] == '2') ? '<td>Perempuan</td>' : '<td>Laki - laki</td>'; ?>
-                    <td><?= $table_content['level_desc']; ?></td>
+                    <?= ($table_content['pengguna_jenkel'] == 'P') ? '<td>Perempuan</td>' : '<td>Laki - laki</td>'; ?>
+                    <td>
+                      <?php foreach ($level as $lev) :
+                        if ($table_content['pengguna_level'] == $lev['level_id']) :
+                          echo $lev['level_desc'];
+                        endif;
+                      endforeach;
+                      ?>
+
+                      <?php foreach ($level_pos as $lev) :
+                        if ($table_content['pengguna_level'] == $lev['level_id']) :
+                          echo $lev['level_desc'];
+                        endif;
+                      endforeach;
+                      ?>
+                    </td>
                     <?php if ($table_content['pengguna_dashboard'] == 1) : ?>
                       <td>Admin Dashboard</td>
                     <?php else : ?>
@@ -84,15 +98,15 @@
       <form class="form-horizontal" role="form" method="post" action="<?= base_url("admin/pengguna/simpan_pengguna/${outlet_id}"); ?>" enctype="multipart/form-data">
         <div class="modal-body">
           <div class="form-group">
-            <label class="col-sm-3 control-label">Nama</label>
+            <label class="col-sm-3 control-label">Nama <sup style="color: red;">&#10038<sup></label>
             <div class="col-sm-8">
               <input type="text" name="pengguna_nama" class="form-control" required>
             </div>
           </div>
           <div class="form-group">
-            <label for="select13" class="col-sm-3 control-label">Jenis Kelamin</label>
+            <label class="col-sm-3 control-label">Jenis Kelamin <sup style="color: red;">&#10038<sup></label>
             <div class="col-sm-8">
-              <select id="select13" name="pengguna_jenkel" class="form-control" required>
+              <select name="pengguna_jenkel" class="form-control" required>
                 <option value="">&nbsp;</option>
                 <option value="L">Laki-Laki</option>
                 <option value="P">Perempuan</option>
@@ -100,15 +114,15 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="col-sm-3 control-label">Username</label>
+            <label class="col-sm-3 control-label">Username <sup style="color: red;">&#10038<sup></label>
             <div class="col-sm-8">
               <input type="text" name="pengguna_username" class="form-control" required>
             </div>
           </div>
           <div class="form-group">
-            <label for="select13" class="col-sm-3 control-label">Jabatan</label>
+            <label class="col-sm-3 control-label">Jabatan <sup style="color: red;">&#10038<sup></label>
             <div class="col-sm-8">
-              <select id="select13" name="pengguna_level" class="form-control" required>
+              <select name="pengguna_level" class="form-control" required>
                 <option value="">&nbsp;</option>
                 <?php
                 foreach ($level as $table_content) : ?>
@@ -122,9 +136,9 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="select13" class="col-sm-3 control-label">Dashboard</label>
+            <label class="col-sm-3 control-label">Dashboard <sup style="color: red;">&#10038<sup></label>
             <div class="col-sm-8">
-              <select id="select13" name="pengguna_dashboard" class="form-control pengguna_dashboard" required>
+              <select name="pengguna_dashboard" class="form-control pengguna_dashboard" required>
                 <option value="">&nbsp;</option>
                 <option value="1">Admin Dashboard</option>
                 <option value="2">POS</option>
@@ -132,25 +146,25 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="password13" class="col-sm-3 control-label">Password</label>
+            <label class="col-sm-3 control-label">Password <sup style="color: red;">&#10038<sup></label>
             <div class="col-sm-8">
-              <input type="password" name="pengguna_password" class="form-control" id="password13" required>
+              <input type="password" name="pengguna_password" class="form-control" required>
             </div>
           </div>
           <div class="form-group">
-            <label for="password13" class="col-sm-3 control-label">Ulangi Password</label>
+            <label class="col-sm-3 control-label">Ulangi Password <sup style="color: red;">&#10038<sup></label>
             <div class="col-sm-8">
-              <input type="password" name="pengguna_password_confirmation" class="form-control" id="password13" required>
+              <input type="password" name="pengguna_password_confirmation" class="form-control" required>
             </div>
           </div>
           <div class="form-group">
-            <label class="col-sm-3 control-label">Email</label>
+            <label class="col-sm-3 control-label">Email <sup style="color: red;">&#10038<sup></label>
             <div class="col-sm-8">
               <input type="email" name="pengguna_email" class="form-control" required>
             </div>
           </div>
           <div class="form-group">
-            <label class="col-sm-3 control-label">Kontak Person</label>
+            <label class="col-sm-3 control-label">Kontak Person <sup style="color: red;">&#10038<sup></label>
             <div class="col-sm-8">
               <input type="text" name="pengguna_nohp" class="form-control" required>
             </div>
@@ -183,19 +197,19 @@ foreach ($data as $table_content) :
             <span class="fa fa-times"></span></button>
           <h3 class="modal-title" id="myModalLabel">Edit Pengguna</h3>
         </div>
-        <form class="form-horizontal" role="form" method="post" action="<?= base_url("admin/pengguna/simpan_pengguna/${outlet_id}"); ?>" enctype="multipart/form-data">
+        <form class="form-horizontal" role="form" method="post" action="<?= base_url() . 'admin/pengguna/simpan_pengguna/' . $outlet_id ?>" enctype="multipart/form-data">
           <div class="modal-body">
             <div class="form-group">
-              <label class="col-sm-3 control-label">Nama</label>
+              <label class="col-sm-3 control-label">Nama <sup style="color: red;">&#10038<sup></label>
               <div class="col-sm-8">
                 <input type="hidden" name="pengguna_id" value="<?= $table_content['pengguna_id']; ?>">
                 <input type="text" name="pengguna_nama" value="<?= $table_content['pengguna_nama']; ?>" class="form-control" required>
               </div>
             </div>
             <div class="form-group">
-              <label for="select13" class="col-sm-3 control-label">Jenis Kelamin</label>
+              <label class="col-sm-3 control-label">Jenis Kelamin <sup style="color: red;">&#10038<sup></label>
               <div class="col-sm-8">
-                <select id="select13" name="pengguna_jenkel" class="form-control" required>
+                <select name="pengguna_jenkel" class="form-control" required>
                   <option value="">&nbsp;</option>
                   <?php if ($table_content['pengguna_jenkel'] == 'L') : ?>
                     <option value="L" selected>Laki-Laki</option>
@@ -208,15 +222,15 @@ foreach ($data as $table_content) :
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-3 control-label">Username</label>
+              <label class="col-sm-3 control-label">Username <sup style="color: red;">&#10038<sup></label>
               <div class="col-sm-8">
                 <input type="text" name="pengguna_username" value="<?= $table_content['pengguna_username']; ?>" class="form-control" required>
               </div>
             </div>
             <div class="form-group">
-              <label for="select13" class="col-sm-3 control-label">Jabatan</label>
+              <label class="col-sm-3 control-label">Jabatan <sup style="color: red;">&#10038<sup></label>
               <div class="col-sm-8">
-                <select id="select13" name="pengguna_level" class="form-control" required>
+                <select name="pengguna_level" class="form-control" required>
                   <option value="">&nbsp;</option>
                   <?php
                   foreach ($level as $table_content_level) :
@@ -230,13 +244,16 @@ foreach ($data as $table_content) :
                   foreach ($level_pos as $table_content_level) :
                     $k_id = $table_content_level['level_id'];
                     $k_nama = $table_content_level['level_desc'];
-                    echo "<option value='$k_id'>$k_nama</option>";
+                    if ($table_content['pengguna_level'] == $k_id)
+                      echo "<option value='$k_id' selected>$k_nama</option>";
+                    else
+                      echo "<option value='$k_id'>$k_nama</option>";
                   endforeach; ?>
                 </select>
               </div>
             </div>
             <div class="form-group">
-              <label for="select13" class="col-sm-3 control-label">Dashboard</label>
+              <label class="col-sm-3 control-label">Dashboard <sup style="color: red;">&#10038<sup></label>
               <div class="col-sm-8">
                 <select name="pengguna_dashboard" class="form-control pengguna_dashboard" required>
                   <option value="">&nbsp;</option>
@@ -253,25 +270,27 @@ foreach ($data as $table_content) :
               </div>
             </div>
             <div class="form-group">
-              <label for="password13" class="col-sm-3 control-label">Password</label>
+              <label class="col-sm-3 control-label">Password <sup style="color: red;">&#10038<sup></label>
               <div class="col-sm-8">
-                <input type="password" name="pengguna_password" class="form-control" id="password13">
+                <input type="password" name="pengguna_password" class="form-control">
+                <small style="color: #8B0000;">jika tidak di isi maka akan pakai password sebelumnya</small>
               </div>
             </div>
             <div class="form-group">
-              <label for="password13" class="col-sm-3 control-label">Ulangi Password</label>
+              <label class="col-sm-3 control-label">Ulangi Password <sup style="color: red;">&#10038<sup></label>
               <div class="col-sm-8">
-                <input type="password" name="pengguna_password_confirmation" class="form-control" id="password13">
+                <input type="password" name="pengguna_password_confirmation" class="form-control">
+                <small style="color: #8B0000;">jika tidak di isi maka akan pakai password sebelumnya</small>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-3 control-label">Email</label>
+              <label class="col-sm-3 control-label">Email <sup style="color: red;">&#10038<sup></label>
               <div class="col-sm-8">
                 <input type="email" name="pengguna_email" class="form-control" value="<?= $table_content['pengguna_email']; ?>" required>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-3 control-label">Kontak Person</label>
+              <label class="col-sm-3 control-label">Kontak Person <sup style="color: red;">&#10038<sup></label>
               <div class="col-sm-8">
                 <input type="text" name="pengguna_nohp" class="form-control" value="<?= $table_content['pengguna_nohp']; ?>" required>
               </div>
@@ -280,7 +299,7 @@ foreach ($data as $table_content) :
               <label class="col-sm-3 control-label">Photo</label>
               <div class="col-sm-8">
                 <input type="file" name="filefoto" class="form-control" value="<?= $table_content['pengguna_photo']; ?>">
-                <small><?= $table_content['pengguna_photo']; ?></small>
+                <small style="color: #8B0000;">jika tidak di isi maka akan pakai photo sebelumnya</small>
               </div>
             </div>
 

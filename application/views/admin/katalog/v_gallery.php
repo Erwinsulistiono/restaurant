@@ -57,22 +57,22 @@
 						<span class="fa fa-times"></span></button>
 					<h3 class="modal-title" id="myModalLabel">Tambah Gallery</h3>
 				</div>
-				<form class="form-horizontal" role="form" method="post" action="<?= base_url('admin/katalog/simpan_gallery');  ?>" enctype="multipart/form-data">
+				<form class="form-horizontal" role="form" method="post" action="<?= base_url() . 'admin/katalog/simpan_gallery' ?>" enctype="multipart/form-data">
 					<div class="modal-body">
 						<div class="form-group">
-							<label class="col-sm-3 control-label">Judul</label>
+							<label class="col-sm-3 control-label">Judul <sup style="color: red;">&#10038<sup></label>
 							<div class="col-sm-8">
 								<input type="text" name="galeri_judul" class="form-control" required>
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="textarea13" class="col-sm-3 control-label">Deskripsi</label>
+							<label for="textarea13" class="col-sm-3 control-label">Deskripsi <sup style="color: red;">&#10038<sup></label>
 							<div class="col-sm-8">
 								<textarea name="galeri_deskripsi" id="textarea13" class="form-control" rows="3" placeholder="" required></textarea>
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-3 control-label">Gambar</label>
+							<label class="col-sm-3 control-label">Gambar <sup style="color: red;">&#10038<sup></label>
 							<div class="col-sm-8">
 								<input type="file" name="filefoto" class="form-control" required>
 							</div>
@@ -97,25 +97,26 @@
 							<span class="fa fa-times"></span></button>
 						<h3 class="modal-title" id="myModalLabel">Edit Gallery</h3>
 					</div>
-					<form class="form-horizontal" role="form" method="post" action="<?= base_url('admin/katalog/simpan_gallery'); ?>" enctype="multipart/form-data">
+					<form class="form-horizontal" role="form" method="post" action="<?= base_url() . 'admin/katalog/simpan_gallery' ?>" enctype="multipart/form-data">
 						<div class="modal-body">
 							<div class="form-group">
-								<label class="col-sm-3 control-label">Judul</label>
+								<label class="col-sm-3 control-label">Judul <sup style="color: red;">&#10038<sup></label>
 								<div class="col-sm-8">
 									<input type="hidden" name="galeri_id" value="<?= $table_content['galeri_id']; ?>">
 									<input type="text" name="galeri_judul" value="<?= $table_content['galeri_judul']; ?>" class="form-control" required>
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="textarea13" class="col-sm-3 control-label">Deskripsi</label>
+								<label for="textarea13" class="col-sm-3 control-label">Deskripsi <sup style="color: red;">&#10038<sup></label>
 								<div class="col-sm-8">
 									<textarea name="galeri_deskripsi" id="textarea13" class="form-control" rows="3" placeholder="" required><?= $table_content['galeri_deskripsi']; ?></textarea>
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-sm-3 control-label">Gambar</label>
+								<label class="col-sm-3 control-label">Gambar <sup style="color: red;">&#10038<sup></label>
 								<div class="col-sm-8">
 									<input type="file" name="filefoto" class="form-control">
+									<small style="color: #8B0000;">jika tidak di isi maka akan menggunakan gambar sebelumnya</small>
 								</div>
 							</div>
 						</div>

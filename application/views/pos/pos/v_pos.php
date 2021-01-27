@@ -68,6 +68,7 @@
                         $valueSubTotal = 0;
                         foreach ($cart as $c) :
                         ?>
+                          <?php $disabledDeletion = ''; ?>
                           <?php if (isset($c['options']['flg_cancel'])) : ?>
                             <?php (($c['options']['flg_cancel'] == 'N') && isset($trx['trx_payment']) ? $disabledDeletion = 'disabled' : $disabledDeletion = '') ?>
                           <?php endif; ?>
@@ -95,7 +96,8 @@
                         <tr>
                           <?php (isset($valueDiscount)) ? $valueDiscount = $valueDiscount : $valueDiscount = 0; ?>
                           <th style="text-align:left;" colspan="3">Discount
-                            <input type="text" style="width: 55px;height: 10px;padding:10px;" id="percentageDiscount" name="discount" autocomplete="off"> %</th>
+                            <input type="text" style="width: 55px;height: 10px;padding:10px;" id="percentageDiscount" name="discount" autocomplete="off"> %
+                          </th>
                           <th style="text-align:center;">
                             <input type="text" class="form-control " id="discount" name="discount" value="<?= number_format($valueDiscount, 0, '', '.'); ?> " data-type="currency">
                           </th>
@@ -222,7 +224,8 @@
                     $menu_gambar = $table_content['menu_gambar'];
                   ?>
                     <div class="col-md-4 col-lg-3 col-sm-6">
-                      <div class="no-padding card thumbnail btn" style="box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.33)">
+                      <?php $trx_prop['trx_tipe'] == "" ? $disabled = 'disabled' : $disabled = ''; ?>
+                      <div class="no-padding card thumbnail btn" style="box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.33)" <?= $disabled; ?>>
                         <a data-toggle="modal" data-target="#option_menu<?= $table_content['menu_id'] ?>">
                           <td>
                             <img loading="lazy" style="width:auto;height:12rem;border-radius:4px" class="width-1 img-responsive rounded" src="<?= base_url("assets/gambar/${menu_gambar}"); ?>" alt="" />
@@ -231,7 +234,8 @@
                             <h5 class="text-light">&nbsp;<?= $table_content['menu_nama']; ?></h5>
                             <div>
                               <h5 class="text-light">
-                                <strong>&nbsp;<?= number_format($table_content['menu_harga_baru']); ?></strong></h5>
+                                <strong>&nbsp;<?= number_format($table_content['menu_harga_baru']); ?></strong>
+                              </h5>
                         </a>
                       </div>
                     </div>
@@ -247,8 +251,8 @@
                 ?>
                   <?php if (($table_content['kategori_id'] == $tab['kategori_id']) && $table_content['menu_nama'] != '') : ?>
                     <div class="col-md-4 col-lg-3 col-sm-6">
-
-                      <div class="no-padding card thumbnail btn" style="box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.33)">
+                      <?php $trx_prop['trx_tipe'] == "" ? $disabled = 'disabled' : $disabled = ''; ?>
+                      <div class="no-padding card thumbnail btn" style="box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.33)" <?= $disabled; ?>>
                         <a data-toggle="modal" data-target="#option_menu<?= $table_content['menu_id'] ?>">
                           <td>
                             <img loading="lazy" style="width:auto;height:12rem;border-radius:4px" class="width-1 img-responsive rounded" src="<?= base_url("assets/gambar/${menu_gambar}"); ?>" alt="" />
@@ -256,7 +260,8 @@
                           <div class="caption text-left no-padding">
                             <h5 class="text-light">&nbsp;<?= $table_content['menu_nama']; ?></h5>
                             <h5 class="text-light">
-                              <strong>&nbsp;<?= number_format($table_content['menu_harga_baru']); ?></strong></h5>
+                              <strong>&nbsp;<?= number_format($table_content['menu_harga_baru']); ?></strong>
+                            </h5>
 
                           </div>
                         </a>
@@ -315,7 +320,15 @@
 
           <?php if ($t['tipe_transaksi_id'] == 1) : ?>
             <?php foreach ($alltable as $row) : ?>
-              <?php ($row['meja_pelanggan']) ? $style = "style-success" : $style = "style-default"; ?>
+              <?php $style = "style-default"; ?>
+              <?php if ($row['meja_pelanggan']) {
+                $style = "style-success";
+              } ?>
+              <?php foreach ($customer as $c) : ?>
+                <?php if (($row['meja_pelanggan'] == $c['plg_id']) && ($c['plg_order'] != 0)) {
+                  $style = "style-info";
+                }   ?>
+              <?php endforeach; ?>
               <form role="form" method="post" action="<?= base_url() . 'pos/pos/' ?>">
                 <div class="col-md-3 col-sm-4 col-xs-6">
                   <div class="card">
@@ -1362,6 +1375,8 @@ foreach ($payment as $k) :
     $("#targetMobileOrder").html(card);
   }
 </script>
+
+
 </div>
 </div>
 </body>

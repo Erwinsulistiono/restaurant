@@ -16,7 +16,7 @@
                       <option value="">&nbsp;</option>
                       <option value="master">Master Inventory</option>
                       <?php foreach ($outlet as $row) : ?>
-                        <option value="<?= $row['out_id']; ?>"><?= $row['out_nama']; ?></option>
+                        <option value="<?= $row['out_id']; ?>"><?= $row['out_kode']; ?> - <?= $row['out_nama']; ?></option>
                       <?php endforeach; ?>
                     </select></h2>
                 </div>

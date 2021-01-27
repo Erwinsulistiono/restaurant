@@ -55,7 +55,7 @@
                         <option value="">&nbsp;</option>
                         <option value="all">All</option>
                         <?php foreach ($outlet as $out) : ?>
-                          <option value="<?= $out['out_id'] ?>"><?= $out['out_nama'] ?></option>
+                          <option value="<?= $out['out_id'] ?>"><?= $out['out_kode']; ?> - <?= $out['out_nama'] ?></option>
                         <?php endforeach ?>
                       </select>
                     </div>

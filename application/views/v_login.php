@@ -14,8 +14,11 @@
               <label for="username">Username</label>
             </div>
             <div class="form-group">
-              <input type="password" class="form-control" id="password" name="password" required>
+              <input type="password" class="form-control" id="form-password" name="password" required>
               <label for="password">Password</label>
+            </div>
+            <div style="color: #abacae">
+              <input type="checkbox" class="form-checkbox"><label>&nbsp;Show Password</label>
             </div>
             <br />
             <div class="row">
@@ -31,3 +34,17 @@
     </div>
   </div>
 </section>
+
+<script src="<?= base_url('assets/js/jquery-3.4.1.min.js'); ?>"></script>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $(".form-checkbox").click(function() {
+      if($(this).is(':checked')){
+        $("#form-password").attr("type","text");
+      }else{
+        $("#form-password").attr("type","password");
+      }
+    });
+  });
+</script>

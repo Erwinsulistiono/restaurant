@@ -26,11 +26,11 @@ class M_menu extends CI_Model
 
     function get_kategori($outlet, $id)
     {
-        $query = $this->db->select('kategori_nama')
+        $query = $this->db->select()
             ->from('tbl_menu_kat')
             ->join('tbl_kategori', 'tbl_menu_kat.kategori_id=tbl_kategori.kategori_id', 'LEFT')
             ->join("tbl_menu_$outlet", "tbl_menu_kat.menu_id=tbl_menu_$outlet.menu_id", 'LEFT')
-            ->where('menu_id', $id)
+            ->where('tbl_menu_kat.menu_id', $id)
             ->get();
 
         return $query->result_array();

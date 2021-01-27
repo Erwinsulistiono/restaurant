@@ -53,7 +53,7 @@
                         <a href="#" class="btn btn-icon-toggle btn-raised" title="Transfer Stock Barang" data-toggle="modal" data-target="#modal_transfer_stock<?= $table_content['stock_id'] ?>"><i class="fa fa-exchange text-primary-dark" <?= $visibility ?>></i></a>
                       </span>
                       <a href="#" class="btn btn-icon-toggle btn-raised" title="Edit Stock Barang" data-toggle="modal" data-target="#modal_edit_stock<?= $table_content['stock_id'] ?>"><i class="fa fa-pencil text-warning" <?= $visibility ?>></i></a>
-                      <a href="<?= base_url("admin/inventory/hapus_inventory/${outlet_id}/${$stock_id}"); ?>" class="btn btn-icon-toggle btn-raised" title="Hapus Barang">
+                      <a href="<?= base_url("admin/inventory/hapus_inventory/${outlet_id}/${stock_id}"); ?>" class="btn btn-icon-toggle btn-raised" title="Hapus Barang">
                         <i class="fa fa-trash-o text-danger"></i></a>
                     </td>
                   </tr>

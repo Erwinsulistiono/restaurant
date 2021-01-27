@@ -18,6 +18,7 @@ class Order extends CI_Controller
     public function outlet($outlet)
     {
         $data['outlet'] = $outlet;
+        $data['galeri'] = $this->M_crud->read('tbl_galeri');
         $this->load->view('mobile/v_index', $data);
     }
 }

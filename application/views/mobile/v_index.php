@@ -15,6 +15,8 @@
     <link type="text/css" rel="stylesheet" href="<?= base_url() . 'assets/font-awesome/css/font-awesome.css' ?>" />
     <link type="text/css" rel="stylesheet" href="<?= base_url() . 'assets/css/style-material.css' ?>" />
     <link type="text/css" rel="stylesheet" href="<?= base_url() . 'assets/css/style.css' ?>" />
+    <!-- <link type="text/css" rel="stylesheet" href="<= base_url() . 'assets/css/bootstrap.min.css' ?>" /> -->
+
 </head>
 <img id="loading-screen" src="<?= base_url('assets/img/loading.svg') ?>" class="img-responsive" alt="" />
 <div id="base">
@@ -25,12 +27,42 @@
                 <button onclick="window.history.back()" class="btn btn-primary"><span class="fa fa-chevron-left "></span> Back</button>
             </div>
             <!--end .card-head -->
-            <div class="card-body" style="min-height:89vh; padding-top:9vh">
+            <div class="card-body" style="min-height:89vh; padding-top:2vh;">
                 <div class="col-xs-12">
                     <div class="msg"><?= $this->session->flashdata('msg'); ?></div>
-                    <div class="container" style="transform: translateY(10vh)">
-                        <img class="img-circle img-responsive pull-left" src="<?= base_url('assets/img/outlet.svg') ?>" alt="" />
-                        <button onclick="redirectPage()" class="btn btn-block btn-primary btn-raised">Order</button>
+                    <div style="transform: translateY(6vh)">
+                        <!-- <img class="img-circle img-responsive pull-left" src="<?= base_url('assets/img/outlet.svg') ?>" alt="" /> -->
+
+                        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                            <ol class="carousel-indicators">
+                                <?php
+                                foreach ($galeri as $key => $value) {
+                                    $active = ($key == 0) ? 'active' : '';
+                                    echo '<li data-target="#carouselExampleIndicators" data-slide-to="' . $key . '" class="' . $active . '"></li>';
+                                }
+                                ?>
+                            </ol>
+                            <div class="carousel-inner" role="listbox">
+                                <?php
+                                foreach ($galeri as $key => $value) {
+                                    $active = ($key == 0) ? 'active' : '';
+                                    echo '<div class="carousel-item ' . $active . '">
+                             <img class="d-block img-responsive pull-left" style="height: 80vh; width: 100vw;" src="' . base_url('assets/galeries/') . $value['galeri_gambar'] . '" alt="">
+                            </div>';
+                                }
+                                ?>
+                            </div>
+                            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+
+                        <button onclick="redirectPage()" class="btn btn-block btn-info btn-raised">Order</button>
                         <div class="row no-padding no-margin">
                             <div class="col-xs-5 no-padding no-margin">
                                 <div style="border:solid; border-width:1px; border-color:#b6b6b6;margin-top:10px"></div>
@@ -49,6 +81,16 @@
         </div>
     </section>
 </div>
+<!-- 
+<script src="?= base_url('assets/js/bootstrap/bootstrap.min.js'); ?>"></script>
+<script src="?= base_url('assets/js/spin/spin.min.js'); ?>"></script>
+<script src="?= base_url('assets/js/autosize/jquery.autosize.min.js'); ?>"></script>
+<script src="?= base_url('assets/js/moment/moment.min.js'); ?>"></script>
+<script src="?= base_url('assets/js/jquery-ui.js'); ?>"></script>
+<script src="?= base_url('assets/js/jquery-3.4.1.min.js'); ?>"></script>
+<script src="?= base_url('assets/js/bootstrap.bundle.js'); ?>"></script>
+<script src="?= base_url('assets/js/bootstrap-select.js'); ?>"></script> -->
+
 <!-- <script src="?= base_url('assets/js/jquery-3.4.1.min.js'); ?>"></script>
 <script src="?= base_url('assets/js/source/App.js'); ?>"></script>
 <script src="?= base_url('assets/js/source/AppNavSearch.js'); ?>"></script> -->
