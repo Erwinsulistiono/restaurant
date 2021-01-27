@@ -27,7 +27,7 @@ class Parameter extends MY_Controller
   {
     $pt_id = $this->input->post('pt_id');
 
-    $this->form_validation->set_rules('out_email', 'Email', 'required|valid_email');
+    $this->form_validation->set_rules('pt_email', 'Email', 'required|valid_email');
     if ($this->form_validation->run() == FALSE) {
       $this->session->set_flashdata('msg', '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><b>Email tidak valid</b> Data tidak dapat disimpan</div>');
       redirect('admin/parameter/profile_company');
@@ -43,6 +43,7 @@ class Parameter extends MY_Controller
       'pt_email' => $this->input->post('pt_email'),
       'pt_website' => $this->input->post('pt_website'),
     ];
+
     $log_newval = strtr(json_encode($data), array(',' => ' | ', '{' => '', '}' => '', '"' => ' '));
     $data_old = $this->M_crud->select('tbl_pt', 'pt_id', $pt_id);
     $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));

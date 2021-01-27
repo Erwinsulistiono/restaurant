@@ -18,11 +18,10 @@
 
                   <div class="col-xs-12">
                     <div class="text-center">
-                      <img class="img-circle size-3" src="<?= base_url() . 'assets/images/user_blank.png' ?>"
-                        alt="user" />
+                      <img class="img-circle size-3" src="<?= base_url("assets/images/user_blank.png"); ?>" alt="user" />
                       <div>
                         <br>
-                        <h1 class="text-light no-margin"><?= $this->session->userdata('user_nama') ?></h1>
+                        <h1 class="text-light no-margin"><?= $this->session->userdata("user_nama") ?></h1>
                         <h5>
                           Administrator
                         </h5>
@@ -36,20 +35,17 @@
                 <div class="row">
                   <div class="card-body">
                     <br />
-                    <form class="form" action="<?= base_url('admin/profile/update'); ?>" method="post">
+                    <form class="form" action="<?= base_url("admin/profile/update"); ?>" method="post">
                       <div class="form-group">
-                        <input class="form-control" name="username" id="pengguna_username"
-                          value="<?= $this->session->userdata('pengguna_username') ?>">
+                        <input class="form-control" name="username" id="pengguna_username" value="<?= $this->session->userdata('pengguna_username') ?>">
                         <label for="pengguna_username">Username</label>
                       </div>
                       <div class="form-group">
-                        <input type="email" class="form-control" name="email" id="pengguna_email"
-                          value="<?= $this->session->userdata('pengguna_email') ?>">
+                        <input type="email" class="form-control" name="email" id="pengguna_email" value="<?= $this->session->userdata('pengguna_email') ?>">
                         <label for="pengguna_email">E-Mail</label>
                       </div>
                       <div class="form-group">
-                        <input class="form-control" name="kontak" id="pengguna_nohp"
-                          value="<?= $this->session->userdata('pengguna_nohp') ?>">
+                        <input class="form-control" name="kontak" id="pengguna_nohp" value="<?= $this->session->userdata('pengguna_nohp') ?>">
                         <label for="pengguna_nohp">Contact Person</label>
                       </div>
                       <div class="row">
@@ -68,8 +64,7 @@
                         </div>
                         <div class="col-sm-6">
                           <div class="form-group">
-                            <input type="password" class="form-control" name="password_confirmation"
-                              id="pengguna_password_conf">
+                            <input type="password" class="form-control" name="password_confirmation" id="pengguna_password_conf">
                             <label for="pengguna_password_conf">Confirm Password</label>
                           </div>
                         </div>

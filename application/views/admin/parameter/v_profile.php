@@ -1,12 +1,9 @@
 <!-- BEGIN BASE-->
 <div id="base">
-  <!-- BEGIN OFFCANVAS LEFT -->
+
   <div class="offcanvas">
   </div>
-  <!--end .offcanvas-->
-  <!-- END OFFCANVAS LEFT -->
 
-  <!-- BEGIN CONTENT-->
   <div id="content">
     <section>
       <div class="section-header">
@@ -17,13 +14,12 @@
       <br>
       <div class="section-body">
         <div class="card">
-          <!-- BEGIN CONTACT DETAILS -->
+
           <div class="card-tiles">
             <div class="hbox-md col-md-12">
               <div class="hbox-column col-md-12  style-default-light">
                 <div class="row">
 
-                  <!-- BEGIN CONTACTS MAIN CONTENT -->
                   <div class="col-xs-12">
                     <div class="row text-center">
                       <img class="img-circle size-3" src="<?= base_url('assets/images/user_blank.png'); ?>" alt="user" />
@@ -107,29 +103,15 @@
                           </div>
                         </form>
                       </div>
-                      <!--end .col -->
                     </div>
-                    <!--end .tab-content -->
                   </div>
-                  <!--end .col -->
                 </div>
-                <!--end .row -->
               </div>
-              <!--end .hbox-column -->
             </div>
-            <!--end .hbox-md -->
           </div>
-          <!--end .card-tiles -->
-          <!-- END CONTACT DETAILS -->
         </div>
-        <!--end .card -->
       </div>
-      <!--end .section-body -->
     </section>
 
   </div>
-  <!--end #content-->
-  <!-- END CONTENT -->
 </div>
-<!--end #base-->
-<!-- END BASE -->
