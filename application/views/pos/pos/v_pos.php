@@ -10,6 +10,9 @@
 
   <!-- BEGIN CONTENT-->
   <div id="content">
+    <!-- <pre>
+      <php var_dump($trx_prop) ?>
+    </pre> -->
     <section>
       <div class="section-header">
         <h2><span class="fa fa-cutlery"></span> Point of Sale</h2>
@@ -195,6 +198,13 @@
                               <li><a href="#" data-toggle="modal" data-target="#modal_bayar<?= $k_id ?>" class="modalPembayaran" <?= $disabledBayar; ?>><?= $k_nama; ?></a></li>
                             <?php endforeach; ?>
                           <?php endif; ?>
+
+                          <?php if (@$trx_prop['plg_telp'] != '') : ?>
+                            <?php
+                            $phone = substr($trx_prop['plg_telp'], 1);
+                            ?>
+                            <li><a href="https://web.whatsapp.com/send?phone=62<?= $phone; ?>" target="_blank" class="modalPembayaran" <?= $disabledBayar; ?>>Whatsapp</a></li>
+                          <?php endif; ?>
                         </ul>
                       </div>
                     </div>
@@ -319,21 +329,54 @@
         <div class="table-responsive">
 
           <?php if ($t['tipe_transaksi_id'] == 1) : ?>
+
             <?php foreach ($alltable as $row) : ?>
+
               <?php $style = "style-default"; ?>
-              <?php if ($row['meja_pelanggan']) {
-                $style = "style-success";
-              } ?>
-              <?php foreach ($customer as $c) : ?>
-                <?php if (($row['meja_pelanggan'] == $c['plg_id']) && ($c['plg_order'] != 0)) {
-                  $style = "style-info";
-                }   ?>
+              <?php $status = "" ?>
+              <?php $prev_status = '' ?>
+
+              <?php if ($row['meja_pelanggan']) : ?>
+                <?php $style = "style-accent"; ?>
+                <?php $status = " - (Kasir)"; ?>
+              <?php endif; ?>
+
+              <?php foreach ($all_order as $o) : ?>
+                <?php
+                if ((($row['plg_order'] == $o['order_trx_reff']) &&
+                    (($o['order_kitchen_flg'] == 'N') &&
+                      ($o['order_waitress_flg'] == 'N'))) &&
+                  ($prev_status == '')
+                ) : ?>
+                  <?php $style = "style-danger"; ?>
+                  <?php $status = " - (Cooking)"; ?>
+                  <?php $prev_status = $status; ?>
+                <?php
+                elseif ((($row['plg_order'] == $o['order_trx_reff']) &&
+                    (($o['order_kitchen_flg'] == 'Y') &&
+                      ($o['order_waitress_flg'] == 'N'))) &&
+                  ($prev_status == '')
+                ) : ?>
+                  <?php $style = "style-warning"; ?>
+                  <?php $status = " - (preparing)"; ?>
+                  <?php $prev_status = $status; ?>
+                <?php
+                elseif ((($row['plg_order'] == $o['order_trx_reff']) &&
+                    (($o['order_kitchen_flg'] == 'Y') &&
+                      ($o['order_waitress_flg'] == 'Y'))) &&
+                  ($prev_status == '')
+                ) : ?>
+                  <?php $style = "style-success"; ?>
+                  <?php $status = " - (done)"; ?>
+                  <?php $prev_status = $status; ?>
+                <?php endif; ?>
               <?php endforeach; ?>
-              <form role="form" method="post" action="<?= base_url() . 'pos/pos/' ?>">
+
+              <form role="form" method="post" action="<?= base_url('pos/pos/'); ?>">
                 <div class="col-md-3 col-sm-4 col-xs-6">
                   <div class="card">
                     <div class="card-head <?= $style ?>">
-                      <h3 class="text-center text-light"><?= $row['meja_nama']; ?></h3>
+                      <h3 class="text-center text-light"><?= $row['meja_nama']; ?><?= $status; ?></h3>
                     </div>
                     <div class="card-body no-padding card-type-pricing">
                       <ul class="list-unstyled">
@@ -364,7 +407,7 @@
                       <datalist id="pelanggan-<?= $row['meja_id'] ?>">
                         <?php foreach ($customer as $c) : ?>
                           <?php if ($c['plg_login_flg'] == 'Y') : ?>
-                            <?php (($row['meja_pelanggan'] == $c['plg_id']) && ($c['plg_order'] != 0)) ? $p = $c['plg_nama'] : "" ?>
+                            <?php ($row['meja_pelanggan'] == $c['plg_id']) ? $p = $c['plg_nama'] : "" ?>
                             <option data-value="<?= $c['plg_id'] ?>"><?= $c['plg_nama'] ?></option>
                           <?php endif; ?>
                         <?php endforeach; ?>
@@ -372,7 +415,7 @@
 
                       <?php isset($p) && ($p !== "") ? $pelangganValue = $p : $pelangganValue = ""; ?>
                       <?php isset($p) && ($p !== "") ? $readonly = 'readonly' : $readonly = ""; ?>
-                      <input class="form-control" list="pelanggan-<?= $row['meja_id'] ?>" id="list-<?= $row['meja_id'] ?>" value="<?= $pelangganValue ?>" <?= $readonly ?>>
+                      <input class="form-control" name="plg_nama" list="pelanggan-<?= $row['meja_id'] ?>" id="list-<?= $row['meja_id'] ?>" value="<?= $row['plg_nama'] ?>" <?= $readonly ?>>
                       <input type="hidden" name="plg_id" id="list-<?= $row['meja_id'] ?>-hidden" value="<?= $row['meja_pelanggan']; ?>">
                       <?php $p = ""; ?>
                       <div class="card-body text-center">
@@ -389,8 +432,8 @@
             <?php foreach ($all_trx as $row) : ?>
               <?php if ($row['trx_tipe'] == $t['tipe_transaksi_id']) : ?>
                 <?php $queue += 1; ?>
-                <form role="form" method="post" action="<?= base_url() . 'pos/pos/' ?>">
-                  <div class="col-md-3">
+                <form role="form" method="post" action="<?= base_url('pos/pos/'); ?>">
+                  <div class="col-xs-6 col-sm-4 col-md-3">
                     <div class="card style-gray">
                       <div class="card-head">
                         <h3 class="text-center text-light"><?= $t['tipe_transaksi_nama'] . ' - ' . $queue ?></h3>
@@ -507,7 +550,7 @@
                 </datalist>
 
                 <?php isset($p) && ($p !== "") ? $pelangganValue = $p : $pelangganValue = "" ?>
-                <input class="form-control" list="pelanggan-<?= $t['tipe_transaksi_nama']; ?>" id="list-<?= $t['tipe_transaksi_nama'] ?>" value="<?= $pelangganValue ?>">
+                <input class="form-control" name="plg_nama" list="pelanggan-<?= $t['tipe_transaksi_nama']; ?>" id="list-<?= $t['tipe_transaksi_nama'] ?>" value="<?= $pelangganValue ?>">
                 <input type="hidden" name="plg_id" id="list-<?= $t['tipe_transaksi_nama'] ?>-hidden" value="">
                 <?php $p = ""; ?>
               </div>
@@ -669,7 +712,10 @@ foreach ($payment as $k) :
                 <div class="col-xs-6">
                   <label for="nomorKartu" class="col-xs-4 control-label">No.HP/Kartu</label>
                   <div class="col-xs-7">
+                    <!-- nomor handphone dari mobile -->
                     <?php (isset($trx[0]['order_nomor_kartu'])) ? ($no_kartu = ($trx[0]['order_nomor_kartu'])) : ($no_kartu = '') ?>
+                    <!-- nomor handphone dari inputan kasir -->
+                    <?php (isset($trx_prop['plg_telp']) && isset($trx_prop['plg_telp']) != '') ? ($no_kartu = $trx_prop['plg_telp']) : ($no_kartu = '') ?>
                     <input type="<?= $type ?>" class="form-control trx_cardno_source_<?= $k_id ?>" value=<?= $no_kartu  ?>>
                     <input type="hidden" name="trx_cardno" class="form-control trx_cardno" id="nomorKartu">
                   </div>
@@ -816,23 +862,23 @@ foreach ($payment as $k) :
 <script type="text/javascript">
   let divs = document.querySelectorAll('input[list]');
   for (let i = 0; i < divs.length; i++) {
-    divs[i].addEventListener('input', function(e) {
-      let input = e.target,
-        list = input.getAttribute('list'),
-        options = document.querySelectorAll('#' + list + ' option'),
-        hiddenInput = document.getElementById(input.getAttribute('id') + '-hidden'),
-        label = input.value;
-      hiddenInput.value = label;
+    // divs[i].addEventListener('input', function(e) {
+    let input = e.target,
+      list = input.getAttribute('list'),
+      options = document.querySelectorAll('#' + list + ' option'),
+      hiddenInput = document.getElementById(input.getAttribute('id') + '-hidden'),
+      label = input.value;
+    hiddenInput.value = label;
 
-      for (let i = 0; i < options.length; i++) {
-        let option = options[i];
+    for (let i = 0; i < options.length; i++) {
+      let option = options[i];
 
-        if (option.innerText === label) {
-          hiddenInput.value = option.getAttribute('data-value');
-          break;
-        }
+      if (option.innerText === label) {
+        hiddenInput.value = option.getAttribute('data-value');
+        break;
       }
-    });
+    }
+    // });
   };
 </script>
 

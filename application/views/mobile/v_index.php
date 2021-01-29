@@ -15,7 +15,7 @@
     <link type="text/css" rel="stylesheet" href="<?= base_url() . 'assets/font-awesome/css/font-awesome.css' ?>" />
     <link type="text/css" rel="stylesheet" href="<?= base_url() . 'assets/css/style-material.css' ?>" />
     <link type="text/css" rel="stylesheet" href="<?= base_url() . 'assets/css/style.css' ?>" />
-    <!-- <link type="text/css" rel="stylesheet" href="<= base_url() . 'assets/css/bootstrap.min.css' ?>" /> -->
+    <link type="text/css" rel="stylesheet" href="<?= base_url() . 'assets/css/bootstrap.min.css' ?>" />
 
 </head>
 <img id="loading-screen" src="<?= base_url('assets/img/loading.svg') ?>" class="img-responsive" alt="" />
@@ -24,30 +24,30 @@
     <section class="style-default no-padding">
         <div class="card" style="min-height:100vh">
             <div class="card-head style-primary" style="position:fixed; top:0; left:0; right:0; z-index:10001">
-                <button onclick="window.history.back()" class="btn btn-primary"><span class="fa fa-chevron-left "></span> Back</button>
+                <button onclick="window.history.back()" class="btn btn-info"><span class="fa fa-chevron-left "></span> Back</button>
             </div>
             <!--end .card-head -->
-            <div class="card-body" style="min-height:89vh; padding-top:2vh;">
-                <div class="col-xs-12">
+            <div class="card-body no-padding" style="min-height:89vh; padding-top:2vh;">
+                <div class="col-xs-12 no-padding">
                     <div class="msg"><?= $this->session->flashdata('msg'); ?></div>
                     <div style="transform: translateY(6vh)">
                         <!-- <img class="img-circle img-responsive pull-left" src="<?= base_url('assets/img/outlet.svg') ?>" alt="" /> -->
 
                         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                            <ol class="carousel-indicators">
-                                <?php
-                                foreach ($galeri as $key => $value) {
-                                    $active = ($key == 0) ? 'active' : '';
-                                    echo '<li data-target="#carouselExampleIndicators" data-slide-to="' . $key . '" class="' . $active . '"></li>';
-                                }
-                                ?>
-                            </ol>
+                            <!-- <ol class="carousel-indicators">
+                            <php 
+                              foreach($galeri as $key => $value){
+                                $active = ($key == 0) ? 'active' : '';
+                                echo '<li data-target="#carouselExampleIndicators" data-slide-to="' . $key . '" class="' . $active . '"></li>';
+                              }
+                             ?>
+                          </ol> -->
                             <div class="carousel-inner" role="listbox">
                                 <?php
                                 foreach ($galeri as $key => $value) {
                                     $active = ($key == 0) ? 'active' : '';
                                     echo '<div class="carousel-item ' . $active . '">
-                             <img class="d-block img-responsive pull-left" style="height: 80vh; width: 100vw;" src="' . base_url('assets/galeries/') . $value['galeri_gambar'] . '" alt="">
+                             <img class="d-block img-responsive pull-left" style="height: 95vh; width: 100vw;" src="' . base_url('assets/galeries/') . $value['galeri_gambar'] . '" alt="">
                             </div>';
                                 }
                                 ?>
@@ -62,8 +62,8 @@
                             </a>
                         </div>
 
-                        <button onclick="redirectPage()" class="btn btn-block btn-info btn-raised">Order</button>
-                        <div class="row no-padding no-margin">
+                        <button onclick="redirectPage()" class="btn btn-info btn-raised" style="margin-left: 10%; width: 80%; transform: translateY(-18vh)">Order</button>
+                        <!-- <div class="row no-padding no-margin">
                             <div class="col-xs-5 no-padding no-margin">
                                 <div style="border:solid; border-width:1px; border-color:#b6b6b6;margin-top:10px"></div>
                             </div>
@@ -74,22 +74,22 @@
                                 <div style="border:solid; border-width:1px; border-color:#b6b6b6;margin-top:10px; transform: translatex(2vh)"></div>
                             </div>
                         </div>
-                        <a onclick="redirectCheckOrder()" href="<?= base_url("mobile/order/view_order/${outlet}") ?>" id="view_order" class="btn btn-flat btn-block btn-primary btn-raised" type="submit" style="border:solid; border-width:1px; border-color:#08867e">View Order</a>
+                        <a onclick="redirectCheckOrder()" href="<?= base_url("mobile/order/view_order/${outlet}") ?>" id="view_order" class="btn btn-flat btn-block btn-primary btn-raised" type="submit" style="border:solid; border-width:1px; border-color:#08867e">View Order</a> -->
                     </div>
                 </div>
             </div>
         </div>
     </section>
 </div>
-<!-- 
-<script src="?= base_url('assets/js/bootstrap/bootstrap.min.js'); ?>"></script>
-<script src="?= base_url('assets/js/spin/spin.min.js'); ?>"></script>
-<script src="?= base_url('assets/js/autosize/jquery.autosize.min.js'); ?>"></script>
-<script src="?= base_url('assets/js/moment/moment.min.js'); ?>"></script>
-<script src="?= base_url('assets/js/jquery-ui.js'); ?>"></script>
-<script src="?= base_url('assets/js/jquery-3.4.1.min.js'); ?>"></script>
-<script src="?= base_url('assets/js/bootstrap.bundle.js'); ?>"></script>
-<script src="?= base_url('assets/js/bootstrap-select.js'); ?>"></script> -->
+
+<script src="<?= base_url('assets/js/bootstrap/bootstrap.min.js'); ?>"></script>
+<script src="<?= base_url('assets/js/spin/spin.min.js'); ?>"></script>
+<script src="<?= base_url('assets/js/autosize/jquery.autosize.min.js'); ?>"></script>
+<script src="<?= base_url('assets/js/moment/moment.min.js'); ?>"></script>
+<script src="<?= base_url('assets/js/jquery-ui.js'); ?>"></script>
+<script src="<?= base_url('assets/js/jquery-3.4.1.min.js'); ?>"></script>
+<script src="<?= base_url('assets/js/bootstrap.bundle.js'); ?>"></script>
+<script src="<?= base_url('assets/js/bootstrap-select.js'); ?>"></script>
 
 <!-- <script src="?= base_url('assets/js/jquery-3.4.1.min.js'); ?>"></script>
 <script src="?= base_url('assets/js/source/App.js'); ?>"></script>

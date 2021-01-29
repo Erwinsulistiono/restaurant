@@ -14,6 +14,7 @@ class Waitress extends MY_Controller
 		$this->load->model('M_kitchen');
 		$this->load->model('M_pos');
 		$this->load->model('M_waitress');
+		$this->load->model('M_stock');
 		$this->outlet = $this->session->userdata('pengguna_outlet');
 	}
 

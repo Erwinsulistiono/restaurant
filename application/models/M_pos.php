@@ -2,6 +2,17 @@
 class M_pos extends CI_Model
 {
 
+	public function get_all_table($outlet_id)
+	{
+		$query = $this->db->select()
+			->from("tbl_meja_$outlet_id AS tbl1")
+			->join('tbl_area AS tbl2', 'tbl1.meja_lokasi = tbl2.area_id', 'LEFT')
+			->join('tbl_pelanggan AS tbl3', 'tbl1.meja_pelanggan = tbl3.plg_id', 'LEFT')
+			->get();
+
+		return $query->result_array();
+	}
+
 	public function search_voucher($title)
 	{
 		$date = date('Y-m-d');
