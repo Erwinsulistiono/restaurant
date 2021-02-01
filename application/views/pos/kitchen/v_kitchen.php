@@ -136,10 +136,17 @@
       let printCardHeader = (t) => {
         let headerStyle = "style-gray-light";
         let headerText = "";
+        let headerTipeOrder = "";
         let buttonAttribute = "";
         let card = "";
         let isOrderCanceledByKitchen = t.order_cancel_flg;
         let isTrxCanceledByKasir = t.trx_cancel_flg;
+
+        if (t.trx_table == t.trx_cust) {
+          headerTipeOrder = `Take Away - ${t.trx_cust}`;
+        } else {
+          headerTipeOrder = `${t.trx_table} - ${t.trx_cust}`;
+        }
 
         if (currTrxId != t.trx_id) {
           currTrxId = t.trx_id;
@@ -153,7 +160,7 @@
             let form = document.querySelectorAll(`.form-${t.trx_id}`)
             form.forEach(h => {
               h.querySelector('.card-head').style.backgroundColor = '#f44336'
-              h.querySelector('h3').innerHTML = `${t.trx_table} - (Canceled)`
+              h.querySelector('h3').innerHTML = `${headerTipeOrder} (Canceled)`
               if (isTrxCanceledByKasir == 'N') {
                 h.querySelectorAll('a')[0].setAttribute('disabled', buttonAttribute)
                 h.querySelectorAll('a')[1].setAttribute('disabled', buttonAttribute)
@@ -173,7 +180,7 @@
         <div class="col-md-3 col-sm-4 col-xs-6">
         <div class="card">
         <div class="card-head ${headerStyle}">
-        <h3 class="text-center text-light">${t.trx_table}${headerText}</h3>
+        <h3 class="text-center text-light">${headerTipeOrder} ${headerText}</h3>
         </div>
         <div class="card-body">`;
 

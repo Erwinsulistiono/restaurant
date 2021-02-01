@@ -30,11 +30,20 @@ class Restaurant extends MY_Controller
       'area_nama' => $this->input->post('area_nama'),
       'area_level' => $this->input->post('area_level')
     ];
+    $log_newval = strtr(json_encode($data), array(',' => ' | ', '{' => '', '}' => '', '"' => ' '));
+
     if (!$area_id) {
       $this->M_crud->insert('tbl_area', $data);
+      $reff_id = $this->db->insert_id();
+
+      $this->M_log->simpan_log($reff_id, "AREA", null, $log_newval);
       $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>' . $data['area_nama'] . '</b> Berhasil ditambah/diupdate.</div>');
       redirect('admin/restaurant/area');
     }
+    $data_old = $this->M_crud->select("tbl_area", 'area_id', $area_id);
+    $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
+
+    $this->M_log->simpan_log($area_id, "AREA", $log_oldval, $log_newval);
     $this->M_crud->update('tbl_area', $data, 'area_id', $this->input->post('area_id'));
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>' . $data['area_nama'] . '</b> Berhasil ditambah/diupdate.</div>');
     redirect('admin/restaurant/area');
@@ -42,6 +51,10 @@ class Restaurant extends MY_Controller
 
   public function hapus_area($area_id)
   {
+    $data_old = $this->M_crud->select("tbl_area", 'area_id', $area_id);
+    $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
+
+    $this->M_log->simpan_log($area_id, 'AREA', $log_oldval);
     $this->M_crud->delete('tbl_area', 'area_id', $area_id);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Area Berhasil dihapus.</div>');
     redirect('admin/restaurant/area');

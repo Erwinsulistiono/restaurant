@@ -57,6 +57,7 @@
       let trx;
       let order;
       let recipe;
+      let tipe;
       let getTrxKitchen = () => {
         $.ajax({
           type: 'GET',
@@ -70,6 +71,8 @@
             trx = data.trx;
             order = data.order;
             recipe = data.recipe;
+            tipe = data.tipe;
+            console.log(tipe);
             var no = 1;
 
             let filteredTrx = trx.filter((v, i, a) => a.findIndex(t => (t.trx_id === v.trx_id)) === i)
@@ -89,13 +92,19 @@
               let timerCard = '';
               let isOrderCanceled = t.trx_cancel_flg;
 
+              tipe.forEach(tp => {
+                if (t.trx_tipe == tp.tipe_transaksi_id) {
+                  tipe_order = tp.tipe_transaksi_nama;
+                }
+              });
+
               if (isOrderCanceled == 'N') {
                 cardHead +=
                   `<form role="form" class="form-${no} header-${t.trx_id}" method="post">
                   <div class="col-xs-12">
                   <div class="card">
                   <div class="card-head style-gray">
-                  <h3 class="text-center text-light">${t.trx_table}</h3>
+                  <h3 class="text-center text-light">${t.trx_table} - ${tipe_order}</h3>
                   </div>
                   <div class="card-body">`;
 
@@ -257,7 +266,7 @@
           if (o.order_waitress_flg == 'N') isOrderNotFinish = true;
         })
 
-        if (isOrderNotFinish) return alert("Beberapa Order Belum Selesai..");
+        // if (isOrderNotFinish) return alert("Beberapa Order Belum Selesai..");
 
         $.ajax({
           type: 'POST',

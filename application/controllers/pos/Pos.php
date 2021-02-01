@@ -237,7 +237,7 @@ class Pos extends MY_Controller
 			'trx_grand_total' => intval(preg_replace('/[^0-9]/', '', $this->input->post('grandtotal'))),
 			'trx_tipe' => $this->input->post('trx_tipe')
 		);
-		if (!$plg_nama['plg_order']) {
+		if ($plg_nama['plg_order'] == 0) {
 			$this->M_crud->insert('tbl_trx_pos_' . $this->outlet, $dataTrx);
 			$reff_id = $this->db->insert_id();
 		} else {

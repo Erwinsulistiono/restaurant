@@ -114,13 +114,18 @@
           let iterationReturnOrderToCashier = 0;
           let trxId = t.trx_id;
           let isTrxCanceled = (t.trx_cancel_flg == 'Y');
+          if (t.trx_table == t.trx_cust) {
+            headerTipeOrder = `Take Away - ${t.trx_cust}`;
+          } else {
+            headerTipeOrder = `${t.trx_table} - ${t.trx_cust}`;
+          }
 
           card +=
             `<form role="form" method="post" class="form-${no} header-${t.trx_id}">
               <div class="col-md-3 col-sm-4 col-xs-6">
                 <div class="card">
                   <div class="card-head style-gray">
-                    <h3 class="text-center text-light">${t.trx_table}</h3>
+                    <h3 class="text-center text-light">${headerTipeOrder}</h3>
                   </div>
                 <div class="card-body">`;
 

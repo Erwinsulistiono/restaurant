@@ -24,6 +24,7 @@ class Pesanan extends MY_Controller
 			'order' => $this->M_crud->left_join($tbl_order, $tbl_menu, "$tbl_order.order_menu=$tbl_menu.menu_id"),
 			'trx' => $this->M_kitchen->getOrder($this->outlet),
 			'recipe' => $this->M_kitchen->getOrderRecipe($this->outlet),
+			'tipe' => $this->M_crud->read('tbl_tipe_transaksi'),
 		];
 
 		echo json_encode($data);
@@ -86,7 +87,7 @@ class Pesanan extends MY_Controller
 		}
 
 		$this->M_crud->delete('tbl_trx_pos_' . $this->outlet, 'trx_id', $trxId);
-		$this->M_crud->update('tbl_meja_' . $this->outlet, array('meja_pelanggan' => '0'), 'meja_pelanggan', $plg_id);
+		$this->M_crud->update('tbl_meja_' . $this->outlet, array('meja_pelanggan' => 0), 'meja_pelanggan', $plg_id);
 		$this->M_crud->update('tbl_pelanggan', ['plg_order' => 0, 'plg_login_flg' => 'N'], 'plg_id', $plg_id);
 		if ($this->M_crud->select('cust_order_' . $this->outlet, 'order_userid', $plg_id)) {
 			$this->M_crud->delete('cust_order_' . $this->outlet, 'order_userid', $plg_id);
