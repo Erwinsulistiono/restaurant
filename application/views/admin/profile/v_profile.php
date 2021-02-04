@@ -18,7 +18,7 @@
 
                   <div class="col-xs-12">
                     <div class="text-center">
-                      <img class="img-circle size-3" src="<?= base_url("assets/images/user_blank.png"); ?>" alt="user" />
+                      <img class="img-circle size-3" src="<?= base_url("assets/images/${users['pengguna_photo']}"); ?>" alt="user" />
                       <div>
                         <br>
                         <h1 class="text-light no-margin"><?= $this->session->userdata("user_nama") ?></h1>
@@ -35,8 +35,9 @@
                 <div class="row">
                   <div class="card-body">
                     <br />
-                    <form class="form" action="<?= base_url("admin/profile/update"); ?>" method="post">
+                    <form class="form" action="<?= base_url("admin/profile/update"); ?>" method="post" enctype="multipart/form-data">
                       <div class="form-group">
+                        <input type="hidden" name="pengguna_id" value="<?= $this->session->userdata('idadmin'); ?>">
                         <input class="form-control" name="username" id="pengguna_username" value="<?= $this->session->userdata('pengguna_username') ?>">
                         <label for="pengguna_username">Username</label>
                       </div>

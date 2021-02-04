@@ -47,7 +47,7 @@
                       <td><?= $table_content['voucher_periode_awal'] . ' - ' . $table_content['voucher_periode_akhir']; ?>
                       </td>
                       <td><?= number_format($table_content['voucher_limit']); ?></td>
-                      <td><?= $table_content['voucher_syarat']; ?></td>
+                      <td><?= $table_content['voucher_tandc']; ?></td>
                       <td class="text-right">
                         <a href="#" class="btn btn-icon-toggle btn-raised" title="Edit row" data-toggle="modal" data-target="#modal_edit_voucher<?= $table_content['voucher_id']; ?>"><i class="fa fa-pencil"></i></a>
                         <a href="<?= base_url("admin/katalog/hapus_voucher/${voucher_id}"); ?>" onclick="return confirm('Apakah anda yakin menghapus voucher <?= $table_content['voucher_nama'] ?>?')" class="btn btn-icon-toggle text-danger btn-raised" title="Delete row"><i class="fa fa-trash-o"></i></a>

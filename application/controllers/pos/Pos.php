@@ -270,7 +270,7 @@ class Pos extends MY_Controller
 		$plg_order['plg_order'] = $reff_id;
 		$this->M_crud->update('tbl_pelanggan', $plg_order, 'plg_id', $plg_id);
 		if ($this->input->post('isMobile')) {
-			$this->M_crud->delete('cust_order_' . $this->outlet, 'order_userid', $plg_id);
+			$this->M_crud->delete("cust_order_$this->outlet", 'order_userid', $plg_id);
 		}
 
 		if (!$this->input->post('pay_first')) {
@@ -288,7 +288,7 @@ class Pos extends MY_Controller
 		$discount_nominal = $this->input->post('discount_nominal');
 		(($id_voucher) && $this->voucherPotongHargaTransaksi($id_voucher, $trx_id));
 		(($discount_nominal && !$id_voucher) && $this->potongHargaTransaksi($discount_nominal, $trx_id));
-		$data_trx = $this->M_crud->select('tbl_trx_pos_' . $this->outlet, 'trx_id', $trx_id);
+		$data_trx = $this->M_crud->select("tbl_trx_pos_$this->outlet", 'trx_id', $trx_id);
 
 		$data_trx['trx_notes'] = $this->input->post('trx_notes');
 		$data_trx['trx_payment'] = $this->input->post('trx_payment');
@@ -311,6 +311,9 @@ class Pos extends MY_Controller
 		$this->M_crud->insert("tbl_lap_trx_$this->outlet", $data_trx);
 		$order_trx_reff = $this->db->insert_id();
 		$this->M_crud->update("tbl_trx_pos_$this->outlet", $data_trx, 'trx_id', $trx_id);
+
+		$this->printPaid($trx_id);
+
 		foreach ($data_order as $items) {
 			(($items['order_waitress_flg'] == 'Y') &&
 				$this->M_crud->delete("tbl_order_$this->outlet", 'order_id', $items['order_id']));
@@ -329,17 +332,17 @@ class Pos extends MY_Controller
 			unset($items['menu_harga_baru']);
 			unset($items['menu_gambar']);
 			unset($items['menu_kitchen']);
-			$this->M_crud->insert('tbl_lap_order_' . $this->outlet, $items);
+			$this->M_crud->insert("tbl_lap_order_$this->outlet", $items);
 		}
-		if (!$this->M_crud->select('tbl_order_' . $this->outlet, 'order_trx_reff', $trx_id)) {
-			$this->M_crud->delete('tbl_trx_pos_' . $this->outlet, 'trx_id', $trx_id);
-			$this->M_crud->update('tbl_meja_' . $this->outlet, array('meja_pelanggan' => 0), 'meja_pelanggan', $plg_id);
+
+		if (!$this->M_crud->select("tbl_order_$this->outlet", 'order_trx_reff', $trx_id)) {
+			$this->M_crud->delete("tbl_trx_pos_$this->outlet", 'trx_id', $trx_id);
+			$this->M_crud->update("tbl_meja_$this->outlet", array('meja_pelanggan' => 0), 'meja_pelanggan', $plg_id);
 			$this->M_crud->update('tbl_pelanggan', ['plg_order' => 0, 'plg_login_flg' => 'N'], 'plg_id', $plg_id);
-			if ($this->M_crud->select('cust_order_' . $this->outlet, 'order_userid', $plg_id)) {
-				$this->M_crud->delete('cust_order_' . $this->outlet, 'order_userid', $plg_id);
+			if ($this->M_crud->select("cust_order_$this->outlet", 'order_userid', $plg_id)) {
+				$this->M_crud->delete("cust_order_$this->outlet", 'order_userid', $plg_id);
 			}
 		};
-		$this->printPaid($trx_id);
 	}
 
 
@@ -347,11 +350,11 @@ class Pos extends MY_Controller
 	{
 		$trx_id = $this->input->post('trx_id');
 		$plg_id = $this->M_crud->select('tbl_pelanggan', 'plg_order', $trx_id)['plg_id'];
-		$payment = $this->M_crud->select('tbl_trx_pos_' . $this->outlet, 'trx_id', $trx_id);
+		$payment = $this->M_crud->select("tbl_trx_pos_$this->outlet", 'trx_id', $trx_id);
 		if ($payment['trx_paid']) {
-			$this->M_crud->delete('tbl_trx_pos_' . $this->outlet, 'trx_id', $trx_id);
-			$this->M_crud->delete('tbl_order_' . $this->outlet, 'order_trx_reff', $trx_id);
-			$this->M_crud->update('tbl_meja_' . $this->outlet, array('meja_pelanggan' => 0), 'meja_pelanggan', $plg_id);
+			$this->M_crud->delete("tbl_trx_pos_$this->outlet", 'trx_id', $trx_id);
+			$this->M_crud->delete("tbl_order_$this->outlet", 'order_trx_reff', $trx_id);
+			$this->M_crud->update("tbl_meja_$this->outlet", array('meja_pelanggan' => 0), 'meja_pelanggan', $plg_id);
 			$this->M_crud->update('tbl_pelanggan', ['plg_order' => 0, 'plg_login_flg' => 'N'], 'plg_id', $plg_id);
 			echo json_encode(array('type' => 'success', 'message' => 'Pesanan telah selesai'));
 		} else {
@@ -366,7 +369,7 @@ class Pos extends MY_Controller
 		$id = $this->input->post('row_id');
 		$items = $this->cart->get_item($id);
 		if ($this->cart->has_options($row_id = $id)) {
-			$this->M_crud->delete('tbl_order_' . $this->outlet, 'order_id', $items['id']);
+			$this->M_crud->delete("tbl_order_$this->outlet", 'order_id', $items['id']);
 		}
 		$this->cart->remove($id);
 		echo $this->show_cart();
@@ -375,7 +378,7 @@ class Pos extends MY_Controller
 
 	public function potongHargaTransaksi($discount_nominal, $trx_id)
 	{
-		$data_trx = $this->M_crud->select('tbl_trx_pos_' . $this->outlet, 'trx_id', $trx_id);
+		$data_trx = $this->M_crud->select("tbl_trx_pos_$this->outlet", 'trx_id', $trx_id);
 		$data = [
 			'trx_discount' => $discount_nominal,
 			'trx_grand_total' => ($data_trx['trx_grand_total']) - $discount_nominal,
@@ -388,7 +391,7 @@ class Pos extends MY_Controller
 	{
 		$this->M_pos->potongQtyVoucher($id_voucher);
 		$voucher = $this->M_crud->select('tbl_voucher', 'voucher_id', $id_voucher);
-		$data_trx = $this->M_crud->select('tbl_trx_pos_' . $this->outlet, 'trx_id', $trx_id);
+		$data_trx = $this->M_crud->select("tbl_trx_pos_$this->outlet", 'trx_id', $trx_id);
 		$nominal = $voucher['voucher_nominal'];
 		$percentage = $voucher['voucher_discount'];
 
@@ -402,7 +405,7 @@ class Pos extends MY_Controller
 			'trx_discount' => $discount,
 			'trx_grand_total' => ($data_trx['trx_grand_total']) - $discount,
 		];
-		$this->M_crud->update('tbl_trx_pos_' . $this->outlet, $data, 'trx_id', $trx_id);
+		$this->M_crud->update("tbl_trx_pos_$this->outlet", $data, 'trx_id', $trx_id);
 		return;
 	}
 
@@ -422,11 +425,11 @@ class Pos extends MY_Controller
 		echo json_encode($data);
 	}
 
-
 	public function printPaid($order_trx_reff)
 	{
 		$data = [
-			'trx' => $this->M_crud->select('tbl_trx_pos_' . $this->outlet, 'trx_id', $order_trx_reff),
+			'trx_prop' => $this->M_pos->select_trx($this->outlet),
+			'trx' => $this->M_crud->select("tbl_trx_pos_$this->outlet", 'trx_id', $order_trx_reff),
 			'order' => $this->M_pos->select_order($order_trx_reff, $this->outlet),
 			'outlet' => $this->M_crud->select('tbl_outlet', 'out_id', $this->outlet),
 			'pt' => $this->M_crud->select('tbl_pt', 'pt_id', 1),
@@ -461,8 +464,8 @@ class Pos extends MY_Controller
 	public function getTransaksiMobile()
 	{
 		$data = [
-			'mobile_app_order_head' => $this->M_crud->left_join('cust_order_' . $this->outlet, 'tbl_pelanggan', 'cust_order_' . $this->outlet . '.order_userid=tbl_pelanggan.plg_id'),
-			'mobile_app_order' => $this->M_crud->read('cust_order_' . $this->outlet),
+			'mobile_app_order_head' => $this->M_crud->left_join("cust_order_$this->outlet", 'tbl_pelanggan', 'cust_order_' . $this->outlet . '.order_userid=tbl_pelanggan.plg_id'),
+			'mobile_app_order' => $this->M_crud->read("cust_order_$this->outlet"),
 			'mobile_app_order_header' => $this->M_pos->joinMobileOrderPelangganMeja($this->outlet),
 		];
 		echo json_encode($data);
@@ -482,7 +485,7 @@ class Pos extends MY_Controller
 
 	public function batalkan_pemesanan_mobile($mobile_order_user)
 	{
-		$this->M_crud->delete('cust_order_' . $this->outlet, 'order_userid', $mobile_order_user);
+		$this->M_crud->delete("cust_order_$this->outlet", 'order_userid', $mobile_order_user);
 		redirect('pos/pos');
 	}
 

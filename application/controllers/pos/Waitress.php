@@ -11,7 +11,6 @@ class Waitress extends MY_Controller
 			redirect($url);
 		};
 		$this->load->model('M_crud');
-		$this->load->model('M_kitchen');
 		$this->load->model('M_pos');
 		$this->load->model('M_waitress');
 		$this->load->model('M_stock');

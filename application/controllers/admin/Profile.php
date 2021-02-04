@@ -16,7 +16,8 @@ class Profile extends MY_Controller
 
 	function index()
 	{
-		$this->render('admin/profile/v_profile');
+		$data['users'] = $this->M_crud->select('tbl_pengguna', 'pengguna_id', $this->session->userdata('idadmin'));
+		$this->render('admin/profile/v_profile', $data);
 	}
 
 	function update()
@@ -28,29 +29,26 @@ class Profile extends MY_Controller
 			$this->session->set_flashdata('msg', '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>Password dan Ulangi Password yang Anda masukan tidak sama / kosong.</div>');
 			redirect('admin/profile');
 		}
-
 		$nmfile = str_replace(' ', '_', $_FILES['filefoto']['name']);
 		$config['upload_path'] = './assets/images'; //path folder
 		$config['allowed_types'] = 'gif|jpg|png|jpeg|bmp'; //type yang dapat diakses bisa anda sesuaikan
 		$config['max_size'] = '1024';
 		$config['file_name'] = $nmfile;
-		if ($nmfile) {
-			$this->upload->initialize($config);
-			$gbr = $this->upload->data();
-			$this->load->library('upload', $config);
 
-			if ($this->upload->do_upload('filefoto')) {
-				$data['filefoto'] = $nmfile;
-			}
+		$this->upload->initialize($config);
+		$gbr = $this->upload->data();
+		$this->load->library('upload', $config);
 
-
-			if (empty($nmfile)) {
-				$nmfile = $this->M_crud->select('tbl_pengguna', 'pengguna_id', $pengguna_id)['pengguna_photo'];
+		if ($this->upload->do_upload('filefoto')) {
 				$data['pengguna_photo'] = $nmfile;
-			} else {
-				$data['pengguna_photo'] = $nmfile;
-			}
 		}
+
+		if ($pengguna_id) {
+			if (empty($_FILES['filefoto']['name'])) {
+					$upload = $this->M_crud->select('tbl_pengguna', 'pengguna_id', $pengguna_id);
+					$nmfile = $upload['pengguna_photo'];
+				}
+			}
 
 		if (empty($password)) {
 			$passcode = $this->M_crud->select('tbl_pengguna', 'pengguna_id', $pengguna_id)['pengguna_password'];

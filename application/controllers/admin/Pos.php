@@ -142,7 +142,7 @@ class Pos extends MY_Controller
 
 			$this->M_log->simpan_log($reff_id, 'SALDO AWAL', null, $log_newval);
 			$this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>Saldo awal ' . $data['kas_saldo_awal'] . '</b> Berhasil ditambah.</div>');
-			redirect('admin/pos/saldo_kas_harian/' . $pengguna_kasir . '/' . $tgl_awal . '/' . $tgl_akhir . '/' . $outlets);
+			redirect("admin/pos/saldo_kas_harian/${pengguna_kasir}/${tgl_awal}/${tgl_akhir}/${outlets}");
 		}
 
 		$data_old = $this->M_crud->select("tbl_kas_harian_$outlet_id", 'kas_id', $kas_id);
@@ -151,7 +151,7 @@ class Pos extends MY_Controller
 		$this->M_crud->update("tbl_kas_harian_$outlet_id", $data, 'kas_id', $kas_id);
 		$this->M_log->simpan_log($kas_id, 'SALDO AWAL', $log_oldval, $log_newval);
 		$this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>Saldo akhir ' . $data['kas_saldo_akhir'] . '</b> Berhasil di input.</div>');
-		redirect('admin/pos/saldo_kas_harian/' . $pengguna_kasir . '/' . $tgl_awal . '/' . $tgl_akhir . '/' . $outlets);
+		redirect("admin/pos/saldo_kas_harian/${pengguna_kasir}/${tgl_awal}/${tgl_akhir}/${outlets}");
 	}
 
 
@@ -265,7 +265,7 @@ class Pos extends MY_Controller
 			$this->M_crud->insert("tbl_kitchen_${outlet_id}", $data);
 			$reff_id = $this->db->insert_id();
 
-			$this->M_log->simpan_log($reff_id, 'KITCHEN ' . $outlet_id, null, $log_newval);
+			$this->M_log->simpan_log($reff_id, "KITCHEN ${outlet_id}", null, $log_newval);
 			$this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Kitchen <b>' . $data['kitchen_nama'] . '</b> Berhasil disimpan ke database.</div>');
 			redirect('admin/pos/kitchen/' . $outlet_id);
 		}
@@ -273,7 +273,7 @@ class Pos extends MY_Controller
 		$log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
 
 		$this->M_crud->update("tbl_kitchen_${outlet_id}", $data2, 'kitchen_id', $kitchen_id);
-		$this->M_log->simpan_log($kitchen_id, 'KITCHEN ' . $outlet_id, $log_oldval, $log_updateval);
+		$this->M_log->simpan_log($kitchen_id, "KITCHEN ${outlet_id}", $log_oldval, $log_updateval);
 		$this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Kitchen <b>' . $data2['kitchen_nama'] . '</b> Berhasil disimpan ke database.</div>');
 		redirect('admin/pos/kitchen/' . $outlet_id);
 	}
@@ -284,7 +284,7 @@ class Pos extends MY_Controller
 		$log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
 
 		$this->M_crud->delete("tbl_kitchen_${outlet_id}", 'kitchen_id', $kitchen_id);
-		$this->M_log->simpan_log($kitchen_id, 'KITCHEN ' . $outlet_id, $log_oldval);
+		$this->M_log->simpan_log($kitchen_id, "KITCHEN ${outlet_id}", $log_oldval);
 		$this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Kitchen Berhasil dihapus dari database.</div>');
 		redirect('admin/pos/kitchen/' . $outlet_id);
 	}

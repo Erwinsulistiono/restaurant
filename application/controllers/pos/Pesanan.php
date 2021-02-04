@@ -22,8 +22,8 @@ class Pesanan extends MY_Controller
 		$tbl_menu = "tbl_menu_$this->outlet";
 		$data = [
 			'order' => $this->M_crud->left_join($tbl_order, $tbl_menu, "$tbl_order.order_menu=$tbl_menu.menu_id"),
-			'trx' => $this->M_kitchen->getOrder($this->outlet),
-			'recipe' => $this->M_kitchen->getOrderRecipe($this->outlet),
+			'trx' => $this->M_kitchen->get_order($this->outlet),
+			'recipe' => $this->M_kitchen->get_order_recipe($this->outlet),
 			'tipe' => $this->M_crud->read('tbl_tipe_transaksi'),
 		];
 
@@ -44,7 +44,7 @@ class Pesanan extends MY_Controller
 		}
 
 		$plg_id = $this->M_crud->select('tbl_pelanggan', 'plg_order', $trxId)['plg_id'];
-		$data_trx = $this->M_crud->select('tbl_trx_pos_' . $this->outlet, 'trx_id', $trxId);
+		$data_trx = $this->M_crud->select("tbl_trx_pos_$this->outlet", 'trx_id', $trxId);
 
 		$data_trx['trx_notes'] = "Cancel Order By Pelanggan";
 		$data_trx['trx_payment'] = "canceled";
@@ -64,11 +64,11 @@ class Pesanan extends MY_Controller
 		$data_order = $this->M_pos->select_order($trxId, $this->outlet);
 
 		//clearing all flag and save transaction data
-		$this->M_crud->insert('tbl_lap_trx_' . $this->outlet, $data_trx);
+		$this->M_crud->insert("tbl_lap_trx_$this->outlet", $data_trx);
 		$order_trx_reff = $this->db->insert_id();
-		$this->M_crud->update('tbl_trx_pos_' . $this->outlet, $data_trx, 'trx_id', $trxId);
+		$this->M_crud->update("tbl_trx_pos_$this->outlet", $data_trx, 'trx_id', $trxId);
 		foreach ($data_order as $items) {
-			$this->M_crud->delete('tbl_order_' . $this->outlet, 'order_id', $items['order_id']);
+			$this->M_crud->delete("tbl_order_$this->outlet", 'order_id', $items['order_id']);
 
 			$items['order_trx_reff'] = $order_trx_reff;
 			unset($items['order_kitchen_flg']);
@@ -83,14 +83,14 @@ class Pesanan extends MY_Controller
 			unset($items['menu_harga_baru']);
 			unset($items['menu_gambar']);
 			unset($items['menu_kitchen']);
-			$this->M_crud->insert('tbl_lap_order_' . $this->outlet, $items);
+			$this->M_crud->insert("tbl_lap_order_$this->outlet", $items);
 		}
 
-		$this->M_crud->delete('tbl_trx_pos_' . $this->outlet, 'trx_id', $trxId);
-		$this->M_crud->update('tbl_meja_' . $this->outlet, array('meja_pelanggan' => 0), 'meja_pelanggan', $plg_id);
+		$this->M_crud->delete("tbl_trx_pos_$this->outlet", 'trx_id', $trxId);
+		$this->M_crud->update("tbl_meja_$this->outlet", array('meja_pelanggan' => 0), 'meja_pelanggan', $plg_id);
 		$this->M_crud->update('tbl_pelanggan', ['plg_order' => 0, 'plg_login_flg' => 'N'], 'plg_id', $plg_id);
-		if ($this->M_crud->select('cust_order_' . $this->outlet, 'order_userid', $plg_id)) {
-			$this->M_crud->delete('cust_order_' . $this->outlet, 'order_userid', $plg_id);
+		if ($this->M_crud->select("cust_order_$this->outlet", 'order_userid', $plg_id)) {
+			$this->M_crud->delete("cust_order_$this->outlet", 'order_userid', $plg_id);
 		}
 
 		echo json_encode("transaksi cleared");

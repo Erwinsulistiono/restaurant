@@ -110,7 +110,7 @@ class Restaurant extends MY_Controller
     $data_old = $this->M_crud->select("tbl_meja_${outlet}", 'meja_id', $meja_id);
     $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
 
-    $this->M_log->simpan_log($meja_id, 'MEJA OUT ' . $outlet, $log_oldval);
+    $this->M_log->simpan_log($meja_id, "MEJA OUT ${outlet}", $log_oldval);
     $this->M_crud->delete("tbl_meja_${outlet}", 'meja_id', $meja_id);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Meja Berhasil dihapus dari database.</div>');
     redirect('admin/restaurant/meja/' . $outlet);

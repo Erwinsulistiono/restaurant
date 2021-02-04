@@ -398,11 +398,12 @@
         const data = await result[0];
         const tandc = Number(data.voucher_min_tandc)
 
-        voucher_id = Number(data.voucher_id);
-        voucher_nominal = (data.voucher_nominal != 0) ? data.voucher_nominal : data.voucher_discount;
         if (grandTotal < tandc) {
           return true
         }
+
+        voucher_id = Number(data.voucher_id);
+        voucher_nominal = (data.voucher_nominal != 0) ? data.voucher_nominal : data.voucher_discount;
 
         if (data.voucher_nominal == 0) {
           let discount = clearFormating(document.querySelector('#subTotal')) * dividedByOneHundred(data.voucher_discount);

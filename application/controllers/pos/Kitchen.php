@@ -33,7 +33,7 @@ class Kitchen extends MY_Controller
 		$dataPost = json_decode(file_get_contents('php://input'), true);
 
 		$this->M_crud->update("tbl_order_$this->outlet", ['order_cancel_flg' => 'Y'], 'order_id', $dataPost['orderId']);
-		$this->M_kitchen->addNotesReturnOrder($this->outlet, $dataPost['orderId'], $dataPost['notes']);
+		$this->M_kitchen->tambah_notes_pengembalian($this->outlet, $dataPost['orderId'], $dataPost['notes']);
 
 		echo json_encode($dataPost);
 	}
@@ -50,7 +50,6 @@ class Kitchen extends MY_Controller
 		foreach ($ingredient as $items) {
 			$this->M_crud->update("tbl_stock_$this->outlet", ["stock_qty" => $items["stock_qty"]], "stock_id",  $items["stock_id"]);
 		}
-
 		redirect('pos/pesanan/clear_transaksi/' . $trxId);
 	}
 

@@ -2,7 +2,7 @@
 
 class M_kitchen extends CI_Model
 {
-  public function getOrder($outlet)
+  public function get_order($outlet)
   {
     $query = $this->db->select()
       ->from("tbl_order_$outlet AS tbl1")
@@ -14,27 +14,13 @@ class M_kitchen extends CI_Model
     return $query->result_array();
   }
 
-  function addNotesReturnOrder($outlet, $order_id, $notes)
+  function tambah_notes_pengembalian($outlet, $order_id, $notes)
   {
     $this->db->where('order_id', $order_id)
       ->update("tbl_order_$outlet", ['order_notes' => $notes]);
   }
 
-  function updateFlgKitchen($outlet, $groupOrder, $groupId)
-  {
-    $this->db->where('order_trx_reff', $groupId)
-      ->where('order_date', $groupOrder)
-      ->update("tbl_order_$outlet", ['order_kitchen_flg' => 'Y']);
-  }
-
-  function updateFlgWaitress($outlet, $groupOrder, $groupId)
-  {
-    $this->db->where('order_trx_reff', $groupId)
-      ->where('order_date', $groupOrder)
-      ->update("tbl_order_$outlet", ['order_waitress_flg' => 'Y']);
-  }
-
-  function getOrderRecipe($outlet)
+  function get_order_recipe($outlet)
   {
     $query = $this->db->select()
       ->from("tbl_order_$outlet AS tbl1")

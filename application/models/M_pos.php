@@ -45,6 +45,16 @@ class M_pos extends CI_Model
 		return $query->result_array();
 	}
 
+	public function select_trx($outlet_id)
+	{
+		$query = $this->db->select()
+			->from("tbl_lap_trx_$outlet_id")
+			->order_by('trx_id')
+			->limit(1)
+			->get();
+
+		return $query->result_array();
+	}
 	public function getAllOrderFromMobilePos($id, $outlet_id)
 	{
 		$query = $this->db->select()
@@ -162,13 +172,14 @@ class M_pos extends CI_Model
 		return $query->result_array();
 	}
 
-	public function joinMobileOrderPelangganMeja($outlet_id)
+	public function get_customer_order_per_table($outlet_id)
 	{
 		$query = $this->db->select()
 			->from("cust_order_$outlet_id AS tbl1")
 			->join('tbl_pelanggan AS tbl2', 'tbl2.plg_id = tbl1.order_userid', 'LEFT')
 			->join("tbl_meja_$outlet_id AS tbl3", 'tbl3.meja_id = tbl2.plg_meja', 'LEFT')
 			->join('tbl_area AS tbl4', 'tbl4.area_id = tbl3.meja_lokasi', 'LEFT')
+			->join('tbl_voucher AS tbl5', 'tbl5.voucher_id = tbl1.order_voucher_id', 'LEFT')
 			->group_by("order_userid")
 			->get();
 

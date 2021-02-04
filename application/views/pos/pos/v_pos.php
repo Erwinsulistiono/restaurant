@@ -1,14 +1,9 @@
 <img id="loading-screen" src="<?= base_url('assets/img/loading.svg') ?>" class="img-responsive" alt="" style="display: block; position: fixed; top: 40%; left: 45%; z-index: 1001;" />
 <!-- BEGIN BASE-->
 <div id="base" style="display:none;">
-  <!-- BEGIN OFFCANVAS LEFT -->
   <div class="offcanvas">
 
   </div>
-  <!--end .offcanvas-->
-  <!-- END OFFCANVAS LEFT -->
-
-  <!-- BEGIN CONTENT-->
   <div id="content">
     <!-- <pre>
       <php var_dump($trx_prop) ?>
@@ -41,7 +36,6 @@
                   <a id="getTransaksiMobile" onclick="reloadMobileOrder();" class="btn btn-primary btn-raised" data-toggle="modal" data-target="#modal_view_cust_order">Customer &nbsp;
                     <sup id="mobile-order-notification" class="badge style-danger"></sup></a>
                   <a class="btn btn-primary btn-raised" onclick="window.open('<?= base_url('pos/pos/status_order') ?>', '_blank');" href="#">Status</a>
-                  <!-- <button id="getStatusPemesananPelanggan" class="btn btn-primary btn-raised" data-toggle="modal" data-target="#modal_status_order">Status</button> -->
                 </div>
 
                 <div class="pull-right">
@@ -97,12 +91,12 @@
                       </tr>
                       <div class="form-group">
                         <tr>
-                          <?php (isset($valueDiscount)) ? $valueDiscount = $valueDiscount : $valueDiscount = 0; ?>
+                          <?php (isset($discount)) ? $valueDiscount = (int)$discount : $valueDiscount = 0; ?>
                           <th style="text-align:left;" colspan="3">Discount
                             <input type="text" style="width: 55px;height: 10px;padding:10px;" id="percentageDiscount" name="discount" autocomplete="off"> %
                           </th>
                           <th style="text-align:center;">
-                            <input type="text" class="form-control " id="discount" name="discount" value="<?= number_format($valueDiscount, 0, '', '.'); ?> " data-type="currency">
+                            <input type="text" class="form-control " id="discount" name="discount" value="<?= number_format(@$discount, 0, '', '.'); ?> " data-type="currency">
                           </th>
                           <th class="no-padding no-margin">
                             <a href="#" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal_add_voucher" style="border:solid; border-width:1px; border-color:#08867e">Add</a>
@@ -1278,22 +1272,6 @@ foreach ($payment as $k) :
             </div>
             </li>`;
         }
-        // if (dH.order_nomor_kartu) {
-        //   card += `<li>
-        //     <div class="clearfix">
-        //     <div class="pull-left">No Kartu : </div>
-        //     <div class="pull-right"> ${dH.order_nomor_kartu} </div>
-        //     </div>
-        //     </li>`;
-        // }
-        // if (dH.order_nomor_reff) {
-        //   card += `<li>
-        //     <div class="clearfix">
-        //     <div class="pull-left">No Reff : </div>
-        //     <div class="pull-right"> ${dH.order_nomor_reff} </div>
-        //     </div>
-        //     </li>`;
-        // }
         if (dH.order_voucher_id) {
           card += `<li>
             <div class="clearfix">

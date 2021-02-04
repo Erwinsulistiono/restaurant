@@ -38,8 +38,8 @@
                                     <!-- BEGIN FIXED TIMELINE -->
                                     <ul class="timeline collapse-lg timeline-hairline">
                                         <li id="order-received">
-                                            <div class="timeline-circ circ-xl style-primary"><i class="fa fa-check"></i></div>
-                                            <div class="timeline-entry">
+                                            <div class="timeline-circ circ-xl style-primary" style="top:40px"><i class="fa fa-check"></i></div>
+                                            <div class="timeline-entry" style="padding: 12px">
                                                 <div class="card style-default-bright">
                                                     <div class="card-body">
                                                         <img class="img-responsive pull-left width-1" src="<?= base_url('assets/img/order_received.svg') ?>" alt="" />
@@ -61,7 +61,7 @@
                                         ?>
                                         <li id="order-payment">
                                             <div class="timeline-circ"></div>
-                                            <div class="timeline-entry">
+                                            <div class="timeline-entry" style="padding: 9px">
                                                 <div class="card style-default-bright">
                                                     <div class="card-body no-padding">
                                                         <img class="img-responsive pull-left width-1" src="<?= base_url('assets/img/credit_card.svg') ?>" alt="" />
@@ -74,7 +74,7 @@
                                         </li>
                                         <li id="order-cooking">
                                             <div class="timeline-circ"></div>
-                                            <div class="timeline-entry">
+                                            <div class="timeline-entry" style="padding: 9px">
                                                 <div class="card">
                                                     <div class="card-body no-padding">
                                                         <img class="img-circle img-responsive pull-left width-1" src="<?= base_url('assets/img/cooking.svg') ?>" alt="" />
@@ -94,7 +94,7 @@
                                         </li>
                                         <li class="timeline-inverted" id="order-done">
                                             <div class="timeline-circ"></div>
-                                            <div class="timeline-entry">
+                                            <div class="timeline-entry" style="padding: 9px">
                                                 <div class="card">
                                                     <div class="card-body no-padding">
                                                         <img class="img-circle img-responsive pull-left width-1" src="<?= base_url('assets/img/preparing.svg') ?>" alt="" />

@@ -23,7 +23,7 @@ class Order extends CI_Controller
         }
 
 
-        $data['data'] = $this->M_crud->left_join('tbl_meja_' . $outlet, 'tbl_area', 'tbl_meja_' . $outlet . '.meja_lokasi=tbl_area.area_id');
+        $data['data'] = $this->M_crud->left_join("tbl_meja_$outlet", 'tbl_area', "tbl_meja_$outlet.meja_lokasi=tbl_area.area_id");
         $data['outlet'] = $this->M_crud->select('tbl_outlet', 'out_id', $outlet);
         $data['method_of_order'] = $this->M_crud->read('tbl_tipe_transaksi');
         $this->load->view('mobile/v_register', $data);
@@ -35,7 +35,7 @@ class Order extends CI_Controller
         if ($authPelanggan == $dataPost) {
             $this->order_detail($outlet, $plg_id);
         } else {
-            $data['data'] = $this->M_crud->left_join('tbl_meja_' . $outlet, 'tbl_area', 'tbl_meja_' . $outlet . '.meja_lokasi=tbl_area.area_id');
+            $data['data'] = $this->M_crud->left_join("tbl_meja_$outlet", 'tbl_area', "tbl_meja_$outlet.meja_lokasi=tbl_area.area_id");
             $data['outlet'] = $outlet;
             $data['authPelanggan'] = $authPelanggan;
             $data['dataPost'] = $dataPost;

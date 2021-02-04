@@ -6,7 +6,7 @@
       <div class="section-header">
         <p><a href="<?= base_url('pos/laporan_pendapatan'); ?>" onclick="" class="popup-btn btn btn-primary btn-raised"><span class="fa fa-arrow-left"></span>
             Kembali</a>
-          <h2><span class="	fa fa-map-marker"></span> Data Transaksi</h2>
+        <h2><span class="	fa fa-map-marker"></span> Data Transaksi</h2>
       </div>
       <?= $this->session->flashdata('msg'); ?>
       <!-- <pre>
@@ -20,7 +20,6 @@
                 <tr>
                   <th>No</th>
                   <th>Periode</th>
-                  <th>Date</th>
                   <th>Sub Total</th>
                   <th>Discount</th>
                   <th>Ppn</th>
@@ -37,7 +36,6 @@
                   <tr>
                     <td><?= $no; ?></td>
                     <td><?= $table_content['periode']; ?></td>
-                    <td><?= $table_content['trx_date']; ?></td>
                     <td><?= number_format($table_content['trx_subtotal'], 0, '', '.'); ?></td>
                     <td><?= number_format($table_content['trx_discount'], 0, '', '.'); ?></td>
                     <td><?= number_format($table_content['trx_tax_ppn'], 0, '', '.'); ?></td>

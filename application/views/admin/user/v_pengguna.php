@@ -66,8 +66,8 @@
                     <th><?= $table_content['pengguna_nohp']; ?></th>
                     <td class="text-right">
                       <a href="#" class="btn btn-icon-toggle btn-raised" title="Edit row" data-toggle="modal" data-target="#modal_edit_pengguna<?= $table_content['pengguna_id']; ?>"><i class="fa fa-pencil"></i></a>
-                      <a href="<?= base_url("admin/pengguna/reset_password/${pengguna_id}"); ?>" class="btn btn-icon-toggle btn-raised" title="Reset Password"><i class="fa fa-refresh"></i></a>
-                      <a href="<?= base_url("admin/pengguna/hapus_pengguna/${pengguna_id}"); ?>" onclick="return confirm('Apakah anda yakin menghapus data <?= $table_content['pengguna_nama']; ?>?')" class="btn btn-icon-toggle text-danger btn-raised" title="Delete row"><i class="fa fa-trash-o"></i></a>
+                      <a href="<?= base_url("admin/pengguna/reset_password/${pengguna_id}/${outlet_id}"); ?>" class="btn btn-icon-toggle btn-raised" title="Reset Password"><i class="fa fa-refresh"></i></a>
+                      <a href="<?= base_url("admin/pengguna/hapus_pengguna/${pengguna_id}/${outlet_id}"); ?>" onclick="return confirm('Apakah anda yakin menghapus data <?= $table_content['pengguna_nama']; ?>?')" class="btn btn-icon-toggle text-danger btn-raised" title="Delete row"><i class="fa fa-trash-o"></i></a>
                     </td>
                   </tr>
                 <?php endforeach; ?>
