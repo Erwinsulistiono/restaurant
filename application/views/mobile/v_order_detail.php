@@ -35,89 +35,143 @@
                         <div class="card-body" style="padding-top:15%;">
                             <div class="row">
                                 <div class="col-xs-12">
-                                    <!-- BEGIN FIXED TIMELINE -->
+                                    <?php if ($order_pelanggan) {
+                                        $order_received = "circ-xl style-primary";
+                                        $icon_received = "fa fa-check";
+                                    } else {
+                                        $order_received = "";
+                                        $icon_received = "";
+                                    }
+                                    ?>
+                                    <?php
+                                    $order_cooked = "circ-xl style-primary";
+                                    $icon_cooked = "fa fa-check";
+                                    foreach ($order_pelanggan as $o) {
+                                        if ($o['order_kitchen_flg'] == 'N') {
+                                            $order_cooked = "";
+                                            $icon_cooked = "";
+                                        }
+                                    }
+                                    ?>
+                                    <?php
+                                    $order_delivered = "circ-xl style-primary";
+                                    $icon_delivered = "fa fa-check";
+                                    foreach ($order_pelanggan as $o) {
+                                        if ($o['order_waitress_flg'] == 'N') {
+                                            $order_delivered = "";
+                                            $icon_delivered = "";
+                                        }
+                                    }
+                                    ?>
+                                    <?php
+                                    $order_finished = "circ-xl style-primary";
+                                    $icon_finished = "fa fa-check";
+                                    foreach ($order_pelanggan as $o) {
+                                        if ($o['order_waitress_flg'] == 'N') {
+                                            $order_finished = "";
+                                            $icon_finished = "";
+                                        }
+                                    }
+                                    ?>
                                     <ul class="timeline collapse-lg timeline-hairline">
                                         <li id="order-received">
-                                            <div class="timeline-circ circ-xl style-primary" style="top:40px"><i class="fa fa-check"></i></div>
+                                            <div class="timeline-circ <?= $order_received ?>" style="top:20px"><i class="<?= $icon_received ?>"></i></div>
                                             <div class="timeline-entry" style="padding: 12px">
                                                 <div class="card style-default-bright">
                                                     <div class="card-body">
-                                                        <img class="img-responsive pull-left width-1" src="<?= base_url('assets/img/order_received.svg') ?>" alt="" />
-                                                        <span class="text-medium"><a class="text-primary" href="<?= base_url('assets/img/credit_card.svg') ?>">Received </a><span class="text-primary"></span>Order</span><br />
-                                                        <span class="opacity-50">
-                                                            Saturday, Oktober 18, 2014 - 17:00:00
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <?php if (!@$order_pelanggan) {
-                                            $active_class = "circ-xl style-primary";
-                                            $icon = "fa fa-check";
-                                        } else {
-                                            $active_class = "";
-                                            $icon = "";
-                                        }
-                                        ?>
-                                        <li id="order-payment">
-                                            <div class="timeline-circ"></div>
-                                            <div class="timeline-entry" style="padding: 9px">
-                                                <div class="card style-default-bright">
-                                                    <div class="card-body no-padding">
-                                                        <img class="img-responsive pull-left width-1" src="<?= base_url('assets/img/credit_card.svg') ?>" alt="" />
-                                                        <span class="text-medium"><span class="text-primary"> Payment </span>Proses</span><br />
-                                                        <span class="opacity-50">
-                                                        </span>
+                                                        <span class="text-large text-lg"><a class="text-primary" href="<?= base_url('assets/img/credit_card.svg') ?>">Received </a><span class="text-primary"></span>Order</span><br />
+                                                        <?php if ($icon_received == "") : ?>
+                                                            <img class="img-responsive pull-left width-1" src="<?= base_url('assets/img/order_received.svg') ?>" alt="" />
+                                                            <span class="opacity-50">
+                                                                <?php foreach ($order_pelanggan as $o) {
+                                                                    echo "$o[menu_nama] - $o[order_qty]";
+                                                                    echo "<br>";
+                                                                }
+                                                                ?>
+                                                            </span>
+                                                        <?php endif; ?>
                                                     </div>
                                                 </div>
                                             </div>
                                         </li>
                                         <li id="order-cooking">
-                                            <div class="timeline-circ"></div>
-                                            <div class="timeline-entry" style="padding: 9px">
-                                                <div class="card">
-                                                    <div class="card-body no-padding">
-                                                        <img class="img-circle img-responsive pull-left width-1" src="<?= base_url('assets/img/cooking.svg') ?>" alt="" />
-                                                        <span class="text-medium"><span class="text-primary">Cooking </span>Order</span><br />
-                                                        <span class="opacity-50">
-                                                        </span>
-                                                    </div>
-                                                    <div class="card-body no-padding">
-                                                        <?php if (@$order_pelanggan) {
-                                                        }
-                                                        ?>
+                                            <div class="timeline-circ <?= $order_cooked ?>" style="top:20px"><i class="<?= $icon_cooked ?>"></i></div>
+                                            <div class="timeline-entry">
+                                                <div class="card style-default-bright">
+                                                    <div class="card-body">
+                                                        <span class="text-large text-lg"><a class="text-primary" href="<?= base_url('assets/img/credit_card.svg') ?>">Cooking </a><span class="text-primary"></span>Order</span><br />
+                                                        <?php if ($icon_cooked == "") : ?>
+                                                            <img class="img-responsive pull-left width-1" src="<?= base_url('assets/img/cooking.svg') ?>" alt="" />
+                                                            <span class="opacity-50">
+                                                                <?php foreach ($order_pelanggan as $o) {
+                                                                    if ($o['order_kitchen_flg'] == 'N') {
+                                                                        echo "$o[menu_nama] - $o[order_qty]";
+                                                                        echo "<br>";
+                                                                    }
+                                                                }
+                                                                ?>
+                                                            </span>
+                                                        <?php endif; ?>
                                                     </div>
                                                 </div>
-                                                <!--end .card -->
                                             </div>
-                                            <!--end .timeline-entry -->
                                         </li>
-                                        <li class="timeline-inverted" id="order-done">
-                                            <div class="timeline-circ"></div>
-                                            <div class="timeline-entry" style="padding: 9px">
-                                                <div class="card">
-                                                    <div class="card-body no-padding">
-                                                        <img class="img-circle img-responsive pull-left width-1" src="<?= base_url('assets/img/preparing.svg') ?>" alt="" />
-                                                        <span class="text-medium"><span class="text-primary">Done </span>Order</span><br />
-                                                        <span class="opacity-50">
-                                                        </span>
+                                        <li id="order-done">
+                                            <div class="timeline-circ <?= $order_delivered ?>" style="top:20px"><i class="<?= $icon_delivered ?>"></i></div>
+                                            <div class="timeline-entry">
+                                                <div class="card style-default-bright">
+                                                    <div class="card-body">
+                                                        <span class="text-large text-lg"><a class="text-primary" href="<?= base_url('assets/img/credit_card.svg') ?>">Delivering </a><span class="text-primary"></span>Order</span><br />
+                                                        <?php if ($icon_delivered == "") : ?>
+                                                            <img class="img-responsive pull-left width-1" src="<?= base_url('assets/img/preparing.svg') ?>" alt="" />
+                                                            <span class="opacity-50">
+                                                                <?php foreach ($order_pelanggan as $o) {
+                                                                    if ($o['order_waitress_flg'] == 'N' && $o['order_kitchen_flg'] == 'Y') {
+                                                                        echo "$o[menu_nama] - $o[order_qty]";
+                                                                        echo "<br>";
+                                                                    }
+                                                                }
+                                                                ?>
+                                                            </span>
+                                                        <?php endif; ?>
                                                     </div>
-                                                    <!--end .card-body -->
-                                                    <div class="card-body no-padding">
-                                                        <?php if (@$order_pelanggan) {
-                                                        }
-                                                        ?>
-                                                    </div>
-                                                    <!--end .card-body -->
                                                 </div>
-                                                <!--end .card -->
                                             </div>
-                                            <!--end .timeline-entry -->
+                                        </li>
+                                        <li id="order-done">
+                                            <div class="timeline-circ <?= $order_finished ?>" style="top:20px"><i class="<?= $icon_finished ?>"></i></div>
+                                            <div class="timeline-entry">
+                                                <div class="card style-default-bright">
+                                                    <div class="card-body">
+                                                        <span class="text-large text-lg"><a class="text-primary" href="<?= base_url('assets/img/credit_card.svg') ?>">Finish </a><span class="text-primary"></span>Order</span><br />
+                                                        <!-- <php if ($icon_finished !== "") : ?> -->
+                                                        <img class="img-responsive pull-left width-1" src="<?= base_url('assets/img/preparing.svg') ?>" alt="" />
+                                                        <span class="opacity-50">
+                                                            <?php foreach ($order_pelanggan as $o) {
+                                                                if ($o['order_waitress_flg'] == 'Y' && $o['order_kitchen_flg'] == 'Y') {
+                                                                    echo "$o[menu_nama] - $o[order_qty]";
+                                                                    echo "<br>";
+                                                                }
+                                                            }
+                                                            ?>
+                                                        </span>
+                                                        <!-- <php endif; ?> -->
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </li>
                                     </ul>
-                                    <!-- END FIXED TIMELINE -->
                                 </div>
-
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card no-padding" style="bottom:-13px; position:absolute; width:-webkit-fill-available; width:100vw">
+                        <div class="row">
+                            <div class="col-xs-6 no-padding">
+                                <a href="#" class="btn btn-block btn-default btn-raised">Bayar</a>
+                            </div>
+                            <div class="col-xs-6 no-padding">
+                                <a href="#" class="btn btn-block btn-default-dark btn-raised">Add Voucher</a>
                             </div>
                         </div>
                     </div>
@@ -126,77 +180,6 @@
         </section>
     </div>
     <script type="text/javascript">
-        console.log('order detail');
-
-
-        //     // document.querySelector('#selectMethodOfTable').addEventListener('change', (e) => {
-        //     //     let methodType = e.target.value;
-        //     //     let div = ''
-        //     //     let divTelp = ''
-        //     //     // let meja = JSON.parse('<= json_encode($data); ?>');
-
-        //     //     if (methodType == 1) {
-        //     //         div +=
-        //     //             `<select name="meja_pelanggan" id="plg_meja" class="form-control dirty">
-        //     //             <option value="">&nbsp;</option>`;
-        //     //         meja.forEach(m => {
-        //     //             div += (m.meja_pelanggan == 0) ? `<option value="${m.meja_id}">${m.meja_nama}</option>` : '';
-        //     //         })
-        //     //         div += `</select>
-        //     //         <label for="selectInput">Pilih Meja : *</label>`;
-        //     //     }
-
-        //     //     if (methodType == 2) {
-        //     //         divTelp +=
-        //     //             `<input type="number" class="form-control dirty" id="plg_notelp" name="plg_notelp">
-        //     //             <label for="plg_notelp">No Telp : *</label>`;
-        //     //     }
-
-        //     //     if (methodType == 3) {
-        //     //         div +=
-        //     //             `<input type="text" class="form-control dirty" id="plg_platno" name="plg_platno" required>
-        //     //             <label >Nomor Plat Kendaraan : *</label>`;
-        //     //     }
-
-        //     //     if (methodType == 4) {
-        //     //         div +=
-        //     //             `<input type="text" class="form-control dirty" id="plg_alamat" name="plg_alamat" required>
-        //     //             <label >alamat pengiriman : *</label>`;
-        //     //     }
-
-        //     //     document.querySelector('#selectInput').innerHTML = div
-        //     //     document.querySelector('#plg_notelp').innerHTML = divTelp
-        //     // })
-
-        //     document.addEventListener("DOMContentLoaded", function() {
-        //         setTimeout(() => {
-        //             document.querySelector('#loading-screen').style.display = 'none';
-        //             document.querySelector('#base').style.display = 'block';
-        //         }, 3000)
-        //     });
-        // 
-    </script>
-
-    <script>
-        //     document.querySelector('#customer-form').addEventListener('submit', (e) => {
-        //         e.preventDefault();
-        //         const outlet = '<= ($outlet) ?>';
-        //         const data = () => {
-        //             let obj = {};
-        //             const formData = new FormData(e.target);
-        //             for (var key of formData.keys()) {
-        //                 obj[key] = formData.get(key);
-        //             }
-        //             return obj;
-        //         };
-        //         sessionStorage.setItem('order', JSON.stringify(data()));
-        //         sessionStorage.setItem('db', JSON.stringify(outlet));
-        //         window.location.assign(e.target.action);
-        //     })
-        // 
-    </script>
-
-    <script>
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 document.querySelector('#loading-screen').style.display = 'none';

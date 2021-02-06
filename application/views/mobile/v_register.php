@@ -127,6 +127,10 @@
         // let detailOrder = JSON.parse(sessionStorage.getItem('order'));
 
         document.querySelector('#selectMethodOfTable').addEventListener('change', (e) => {
+            printLayout(e);
+        })
+
+        let printLayout = (e) => {
             let methodType = e.target.value;
             let div = ''
             let meja = JSON.parse('<?= json_encode($data); ?>');
@@ -195,12 +199,13 @@
             }
 
             document.querySelector('#selectInput').innerHTML = div
-        })
+        }
 
         document.addEventListener("DOMContentLoaded", function() {
             setTimeout(() => {
                 document.querySelector('#loading-screen').style.display = 'none';
                 document.querySelector('#base').style.display = 'block';
+                printLayout();
             }, 3000)
         });
     </script>

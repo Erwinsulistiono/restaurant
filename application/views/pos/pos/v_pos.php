@@ -959,9 +959,8 @@ foreach ($payment as $k) :
     });
   }
   let reloadMobileOrder = () => {
-    console.log('start reload mobile')
     $.ajax({
-      url: '<?php echo base_url() . "pos/pos/getTransaksiMobile/";  ?>',
+      url: '<?php echo base_url('pos/pos/getTransaksiMobile/');  ?>',
       type: 'GET',
       dataType: 'json',
       success: function(data) {
@@ -1070,7 +1069,7 @@ foreach ($payment as $k) :
       grandtotal: clearFormating($("#grandTotal")),
       trx_tipe: $('#trx_tipe').val(),
       pay_first: true,
-      isMobile: isMobile,
+      isMobile: true,
     }
     $.ajax({
       url: '<?= base_url() . "pos/pos/proses_kitchen/$trx_prop[plg_id]/$trx_prop[trx_tipe_nama]"; ?>',
@@ -1087,10 +1086,7 @@ foreach ($payment as $k) :
 
 <script type="text/javascript">
   $(function() {
-
-    console.log('load mobile');
     reloadMobileOrder();
-
     setTimeout(() => {
       document.querySelector('#loading-screen').style.display = 'none';
       document.querySelector('#base').removeAttribute('style');
@@ -1226,6 +1222,7 @@ foreach ($payment as $k) :
     let notification = dataHeadFiltered.length;
     (notification != 0) &&
     $('#mobile-order-notification').html(notification);
+    console.log(dataHeadFiltered);
 
     dataHeadFiltered.forEach(dH => {
       let no = 1;

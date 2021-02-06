@@ -3,7 +3,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Pos extends MY_Controller
 {
-
 	public function __construct()
 	{
 		parent::__construct();
@@ -18,9 +17,9 @@ class Pos extends MY_Controller
 	{
 		$data = [
 			'kategori' => $this->M_crud->read('tbl_kategori'),
-			'kategori_makanan' => $this->M_crud->left_join('tbl_menu_kat', 'tbl_menu_' . $outlet, 'tbl_menu_kat.menu_id=tbl_menu_' . $outlet . '.menu_id'),
-			'data' => $this->M_crud->read('tbl_menu_' . $outlet),
-			'inventory' => $this->M_crud->read('tbl_stock_' . $outlet),
+			'kategori_makanan' => $this->M_crud->left_join('tbl_menu_kat', "tbl_menu_$outlet", "tbl_menu_kat.menu_id=tbl_menu_$outlet.menu_id"),
+			'data' => $this->M_crud->read("tbl_menu_$outlet"),
+			'inventory' => $this->M_crud->read("tbl_stock_$outlet"),
 			'ingredient' => $this->M_stock->getIngredientAll($outlet),
 		];
 		$this->load->view('mobile/v_pos', $data);

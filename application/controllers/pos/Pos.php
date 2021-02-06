@@ -235,14 +235,17 @@ class Pos extends MY_Controller
 			'trx_tax_ppn' => intval(preg_replace('/[^0-9]/', '', $this->input->post('totalpph'))),
 			'trx_tax_service' => intval(preg_replace('/[^0-9]/', '', $this->input->post('totalservice'))),
 			'trx_grand_total' => intval(preg_replace('/[^0-9]/', '', $this->input->post('grandtotal'))),
-			'trx_tipe' => $this->input->post('trx_tipe')
+			'trx_tipe' => $this->input->post('trx_tipe'),
 		);
-		if ($plg_nama['plg_order'] == 0) {
-			$this->M_crud->insert('tbl_trx_pos_' . $this->outlet, $dataTrx);
+		// echo json_encode($ismobile);
+		// die();
+
+		if ($plg_nama['plg_order'] == '0') {
+			$this->M_crud->insert("tbl_trx_pos_$this->outlet", $dataTrx);
 			$reff_id = $this->db->insert_id();
 		} else {
 			$reff_id = $plg_nama['plg_order'];
-			$this->M_crud->update('tbl_trx_pos_' . $this->outlet, $dataTrx, 'trx_id', $reff_id);
+			$this->M_crud->update("tbl_trx_pos_$this->outlet", $dataTrx, 'trx_id', $reff_id);
 		}
 
 		$this->M_crud->delete("tbl_order_$this->outlet", 'order_trx_reff', $reff_id);
@@ -269,7 +272,7 @@ class Pos extends MY_Controller
 		$insertBulk = $this->M_crud->insert_bulk("tbl_order_$this->outlet", $dataOrder);
 		$plg_order['plg_order'] = $reff_id;
 		$this->M_crud->update('tbl_pelanggan', $plg_order, 'plg_id', $plg_id);
-		if ($this->input->post('isMobile')) {
+		if (null !== $this->input->post('isMobile')) {
 			$this->M_crud->delete("cust_order_$this->outlet", 'order_userid', $plg_id);
 		}
 
@@ -464,9 +467,8 @@ class Pos extends MY_Controller
 	public function getTransaksiMobile()
 	{
 		$data = [
-			'mobile_app_order_head' => $this->M_crud->left_join("cust_order_$this->outlet", 'tbl_pelanggan', 'cust_order_' . $this->outlet . '.order_userid=tbl_pelanggan.plg_id'),
 			'mobile_app_order' => $this->M_crud->read("cust_order_$this->outlet"),
-			'mobile_app_order_header' => $this->M_pos->joinMobileOrderPelangganMeja($this->outlet),
+			'mobile_app_order_header' => $this->M_pos->get_customer_order_per_table($this->outlet),
 		];
 		echo json_encode($data);
 	}

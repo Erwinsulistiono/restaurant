@@ -56,36 +56,28 @@ class Order extends CI_Controller
         $data['plg_meja'] = $this->input->post('meja_pelanggan');
         $data['plg_nama'] = $this->input->post('plg_nama');
 
-        $plg_id = $this->getCustIdFromTableUser($data, $outlet);
-        if (!$plg_id) {
+        $trx_id = $this->get_existing_customer_id($data, $outlet);
+        if (!$trx_id) {
             return ($this->load->view('mobile/v_belum_order'));
         }
 
-        $data['order_pelanggan'] = $this->getDataOrderByCustId($outlet, $plg_id);
-        if (!$data['order_pelanggan']) {
-            return ($this->load->view('mobile/v_belum_order'));
-        }
-
-        $this->load->view('mobile/v_order_detail', $data);
+        $data['order_pelanggan'] = $this->get_data_order_by_trx_id($outlet, $trx_id);
+        $data['trx_pelanggan'] = $this->M_crud->select("tbl_trx_pos_$outlet", "trx_id", $trx_id);
+        return ($this->load->view('mobile/v_order_detail', $data));
     }
 
     public function is_user_session_valid()
     {
         $data = json_decode(file_get_contents('php://input'), true);
-        $userSessionExist = $this->M_mobile->checkPelangganSession($data['plg_id']);
-        echo json_encode(($userSessionExist) ? true : false);
+        $user_session_valid = $this->M_mobile->check_session_pelanggan($data['plg_id']);
+        echo json_encode(($user_session_valid) ? true : false);
     }
 
 
     //METHOD HELPER DARI EXTRACTION DAN REFACTORING
-    public function getDataOrderByCustId($outlet, $plg_id)
+    public function get_data_order_by_trx_id($outlet, $plg_id)
     {
-        $order = $this->M_mobile->cek_status_pending($outlet, $plg_id);
-        if ($order) {
-            return $order;
-        }
-
-        $order = $this->M_mobile->cek_status_approved($outlet, $plg_id);
+        $order = $this->M_mobile->get_pelanggan_order($outlet, $plg_id);
         if ($order) {
             return $order;
         }
@@ -93,23 +85,23 @@ class Order extends CI_Controller
         return false;
     }
 
-    public function getCustIdFromTableUser($data)
+    public function get_existing_customer_id($data)
     {
         if ($data['tipe_transaksi'] == '1') {
-            $plg_id = $this->M_mobile->getIdPelangganFromTableOrName($data['plg_nama'], $data['plg_meja']);
-            return (($plg_id) ? ($plg_id)['plg_id'] : false);
+            $plg_id = $this->M_mobile->get_customer_by_name($data['plg_nama'], $data['plg_meja']);
+            return (($plg_id) ? ($plg_id)['plg_order'] : false);
         }
         if ($data['tipe_transaksi'] == '2') {
             $plg_id = $this->M_crud->select('tbl_pelanggan', 'plg_notelp', $data['plg_notelp']);
-            return (($plg_id) ? ($plg_id)['plg_id'] : false);
+            return (($plg_id) ? ($plg_id)['plg_order'] : false);
         }
         if ($data['tipe_transaksi'] == '3') {
             $plg_id = $this->M_crud->select('tbl_pelanggan', 'plg_platno', $data['plg_platno']);
-            return (($plg_id) ? ($plg_id)['plg_id'] : false);
+            return (($plg_id) ? ($plg_id)['plg_order'] : false);
         }
         if ($data['tipe_transaksi'] == '4') {
             $plg_id = $this->M_crud->select('tbl_pelanggan', 'plg_notelp', $data['plg_notelp']);
-            return (($plg_id) ? ($plg_id)['plg_id'] : false);
+            return (($plg_id) ? ($plg_id)['plg_order'] : false);
         }
         return false;
     }

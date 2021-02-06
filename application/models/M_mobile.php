@@ -17,17 +17,19 @@ class M_mobile extends CI_Model
         return $query->result_array();
     }
 
-    function cek_status_approved($outlet_id, $plg_id)
+    function get_pelanggan_order($outlet_id, $trx_id)
     {
         $query = $this->db->select()
-            ->from("tbl_order_$outlet_id")
-            ->where('order_userid', $plg_id)
+            ->from("tbl_order_$outlet_id AS tbl1")
+            ->join("tbl_menu_$outlet_id AS tbl2", 'tbl1.order_menu=tbl2.menu_id', 'LEFT')
+            ->join("tbl_trx_pos_$outlet_id AS tbl3", 'tbl1.order_trx_reff=tbl3.trx_id', 'LEFT')
+            ->where('order_trx_reff', $trx_id)
             ->get();
 
         return $query->result_array();
     }
 
-    function getIdPelangganFromTableOrName($plg_nama, $plg_meja)
+    function get_customer_by_name($plg_nama, $plg_meja)
     {
         $query = $this->db->select()
             ->from('tbl_pelanggan')
@@ -38,7 +40,7 @@ class M_mobile extends CI_Model
         return $query->row_array();
     }
 
-    function checkPelangganSession($plg_id)
+    function check_session_pelanggan($plg_id)
     {
         $query = $this->db->select()
             ->from('tbl_pelanggan')

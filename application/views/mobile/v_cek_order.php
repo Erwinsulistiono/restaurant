@@ -27,7 +27,7 @@
                 <div class="card-head style-primary" style="position:fixed; top:0; left:0; right:0; z-index:10001">
                     <button onclick="window.history.back()" class="btn btn-primary"><span class="fa fa-chevron-left "></span> Back</button>
                 </div>
-                <div class="container-fluid no-padding" style="min-height:90vh; padding-top:9vh">
+                <div class="container-fluid no-padding" style="min-height:80vh; padding-top:9vh">
                     <div class="card contain-xs style-transparent no-padding no-margin">
                         <div class="card-body" style="padding-top:20%;">
                             <div class="row">
@@ -36,7 +36,7 @@
                                     <span class="text-lg text-bold text-primary">Masukan data order : </span>
                                     <br /><br />
                                     <?= $this->session->flashdata('msg'); ?>
-                                    <form class="form" id='customer-form' action='<?= base_url('mobile/order/order_detail/') . $outlet ?>' method="post">
+                                    <form class="form" id='customer-form' action='<?= base_url("mobile/order/order_detail/${outlet}"); ?>' method="post">
                                         <div class="form-group floating-label">
                                             <select id="selectMethodOfTable" name="tipe_transaksi" class="form-control dirty">
                                                 <option value="">&nbsp;</option>
@@ -50,7 +50,7 @@
                                         <div class="form-group floating-label dirty" id="plg_notelp"></div>
                                         <br />
                                         <div class="section-action">
-                                            <button class="btn btn-block btn-primary btn-raised" type="submit"><span class="fa fa-receipt"></span> Order</button>
+                                            <button class="btn btn-block btn-primary btn-raised" type="submit"><span class="fa fa-receipt"></span> Cek Order</button>
                                         </div>
                                     </form>
                                 </div>
@@ -78,7 +78,7 @@
                     `<select name="meja_pelanggan" id="plg_meja" class="form-control dirty">
                     <option value="">&nbsp;</option>`;
                 meja.forEach(m => {
-                    div += (m.meja_pelanggan == 0) ? `<option value="${m.meja_id}">${m.meja_nama}</option>` : '';
+                    div += `<option value="${m.meja_id}">${m.meja_nama}</option>`;
                 })
                 div += `</select>
                 <label for="selectInput">Pilih Meja : *</label>`;
