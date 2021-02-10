@@ -197,7 +197,7 @@ foreach ($data as $table_content) :
             <span class="fa fa-times"></span></button>
           <h3 class="modal-title" id="myModalLabel">Edit Pengguna</h3>
         </div>
-        <form class="form-horizontal" role="form" method="post" action="<?= base_url() . 'admin/pengguna/simpan_pengguna/' . $outlet_id ?>" enctype="multipart/form-data">
+        <form class="form-horizontal" role="form" method="post" action="<?= base_url("admin/pengguna/simpan_pengguna/$outlet_id"); ?>" enctype="multipart/form-data">
           <div class="modal-body">
             <div class="form-group">
               <label class="col-sm-3 control-label">Nama <sup style="color: red;">&#10038<sup></label>

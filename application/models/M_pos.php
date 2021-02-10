@@ -13,6 +13,7 @@ class M_pos extends CI_Model
 		return $query->result_array();
 	}
 
+
 	public function search_voucher($title)
 	{
 		$date = date('Y-m-d');
@@ -27,12 +28,14 @@ class M_pos extends CI_Model
 		return $query->result_array();
 	}
 
+
 	public function potongQtyVoucher($id)
 	{
 		$this->db->set('voucher_limit', 'voucher_limit-1', FALSE)
 			->where('voucher_id', $id)
 			->update('tbl_voucher');
 	}
+
 
 	public function select_order($trx_id, $outlet_id)
 	{
@@ -45,6 +48,7 @@ class M_pos extends CI_Model
 		return $query->result_array();
 	}
 
+
 	public function select_trx($outlet_id)
 	{
 		$query = $this->db->select()
@@ -55,7 +59,9 @@ class M_pos extends CI_Model
 
 		return $query->result_array();
 	}
-	public function getAllOrderFromMobilePos($id, $outlet_id)
+
+
+	public function get_mobile_customer_order($id, $outlet_id)
 	{
 		$query = $this->db->select()
 			->from("cust_order_$outlet_id AS tbl1")
@@ -66,17 +72,6 @@ class M_pos extends CI_Model
 		return $query->result_array();
 	}
 
-	public function get_qty_diff($id, $qty, $outlet_id)
-	{
-		$query = $this->db->select("stock_id, stock_nama, (stock_qty - ing_qty * satuan_val * $qty) AS stock_qty")
-			->from("tbl_stock_$outlet_id AS tbl1")
-			->join('tbl_ingredient AS tbl2', 'tbl1.stock_id=tbl2.ing_inv_id', 'INNER')
-			->join('tbl_satuan AS tbl3', 'tbl2.ing_satuan_id=tbl3.satuan_id', 'INNER')
-			->where('ing_menu_id', $id)
-			->get();
-
-		return $query->result_array();
-	}
 
 	public function get_saldo_cash_in($tgl, $user, $outlet_id)
 	{
@@ -89,6 +84,7 @@ class M_pos extends CI_Model
 
 		return $query->row_array();
 	}
+
 
 	public function get_latest_saldo_per_date($outlet_id)
 	{
@@ -106,33 +102,13 @@ class M_pos extends CI_Model
 		return $query;
 	}
 
+
 	public function reset_nomor_transaksi_harian($outlet_id)
 	{
 		$this->db->query("TRUNCATE tbl_trx_pos_$outlet_id");
 		$this->db->query("TRUNCATE tbl_order_$outlet_id");
 	}
 
-	public function getById($tgl, $user, $outlet_id)
-	{
-		$query = $this->db->select('kas_id')
-			->from('tbl_kas_harian')
-			->where('kas_tgl', $tgl)
-			->where('kas_nm_kasir', $user)
-			->where('kas_kd_outlet', $outlet_id)
-			->get();
-
-		return $query->row()->kas_id;
-	}
-
-	public function getAllOrderPrint($id, $outlet_id)
-	{
-		$query = $this->db->select()
-			->from("tbl_lap_order_$outlet_id")
-			->where('order_trx_reff', $id)
-			->get();
-
-		return $query->result_array();
-	}
 
 	public function getLastAutoIncrementId($outlet_id)
 	{
@@ -145,6 +121,7 @@ class M_pos extends CI_Model
 
 		return $query->row()->AUTO_INCREMENT;
 	}
+
 
 	public function getMobileTrx($outlet_id)
 	{
@@ -160,17 +137,6 @@ class M_pos extends CI_Model
 		return $query->result_array();
 	}
 
-	public function getIngredientAll($outlet_id)
-	{
-		$query = $this->db->select()
-			->from('tbl_ingredient AS tbl1')
-			->join("tbl_menu_$outlet_id AS tbl2", "tbl2.menu_id = tbl1.ing_menu_id", 'LEFT')
-			->join("tbl_stock_$outlet_id AS tbl3", "tbl3.stock_id = tbl1.ing_inv_id", 'LEFT')
-			->join('tbl_satuan AS tbl4', 'tbl4.satuan_id = tbl1.ing_satuan_id')
-			->get();
-
-		return $query->result_array();
-	}
 
 	public function get_customer_order_per_table($outlet_id)
 	{

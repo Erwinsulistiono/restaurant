@@ -51,9 +51,9 @@
       </section>
     </section>
 
-    <script src="<?= base_url() . 'assets/js/jquery-3.4.1.min.js' ?>"></script>
+    <script src="<?= base_url('assets/js/jquery-3.4.1.min.js'); ?>"></script>
     <script type="text/javascript">
-      let urlGetPesanan = '<?php echo base_url('pos/Pesanan/'); ?>'
+      let urlGetPesanan = '<?= base_url('pos/Pesanan/'); ?>'
       let trx;
       let order;
       let recipe;
@@ -64,7 +64,6 @@
           url: `${urlGetPesanan}`,
           dataType: 'json',
           success: function(data) {
-            console.log(data)
             $('#targetKitchen').html('');
             $('#targetWaitress').html('');
             $('#targetDone').html('');
@@ -270,7 +269,7 @@
 
         $.ajax({
           type: 'POST',
-          url: '<?php echo base_url("pos/pos/clear_order/"); ?>',
+          url: '<?= base_url('pos/pos/clear_order/'); ?>',
           data: {
             trx_id: trx_id,
           },

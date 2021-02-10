@@ -8,13 +8,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- END META -->
-    <link rel="shorcut icon" href="<?= base_url() . 'assets/img/logo.png' ?>">
+    <link rel="shorcut icon" href="<?= base_url('assets/img/logo.png'); ?>">
     <!-- BEGIN STYLESHEETS -->
-    <link type="text/css" rel="stylesheet" href="<?= base_url() . 'assets/css/bootstrap.css' ?>" />
-    <link type="text/css" rel="stylesheet" href="<?= base_url() . 'assets/css/materialadmin.css' ?>" />
-    <link type="text/css" rel="stylesheet" href="<?= base_url() . 'assets/font-awesome/css/font-awesome.css' ?>" />
-    <link type="text/css" rel="stylesheet" href="<?= base_url() . 'assets/css/style-material.css' ?>" />
-    <link type="text/css" rel="stylesheet" href="<?= base_url() . 'assets/css/style.css' ?>" />
+    <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/bootstrap.css'); ?>" />
+    <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/materialadmin.css'); ?>" />
+    <link type="text/css" rel="stylesheet" href="<?= base_url('assets/font-awesome/css/font-awesome.css'); ?>" />
+    <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/style-material.css'); ?>" />
+    <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/style.css'); ?>" />
 </head>
 
 <body class="full-content">
@@ -73,23 +73,19 @@
                                         }
                                     }
                                     ?>
-                                    <ul class="timeline collapse-lg timeline-hairline">
+                                    <ul class="timeline collapse-lg timeline-hairline" style="height: 85vh;">
                                         <li id="order-received">
                                             <div class="timeline-circ <?= $order_received ?>" style="top:20px"><i class="<?= $icon_received ?>"></i></div>
-                                            <div class="timeline-entry" style="padding: 12px">
+                                            <div class="timeline-entry">
                                                 <div class="card style-default-bright">
                                                     <div class="card-body">
                                                         <span class="text-large text-lg"><a class="text-primary" href="<?= base_url('assets/img/credit_card.svg') ?>">Received </a><span class="text-primary"></span>Order</span><br />
-                                                        <?php if ($icon_received == "") : ?>
-                                                            <img class="img-responsive pull-left width-1" src="<?= base_url('assets/img/order_received.svg') ?>" alt="" />
-                                                            <span class="opacity-50">
-                                                                <?php foreach ($order_pelanggan as $o) {
-                                                                    echo "$o[menu_nama] - $o[order_qty]";
-                                                                    echo "<br>";
-                                                                }
-                                                                ?>
-                                                            </span>
-                                                        <?php endif; ?>
+                                                        <span class="opacity-50">
+                                                            <?php
+                                                            $date = date_create($trx_pelanggan["trx_date"]);
+                                                            echo date_format($date, "H:i:s - d/m/Y");
+                                                            ?>
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -100,40 +96,36 @@
                                                 <div class="card style-default-bright">
                                                     <div class="card-body">
                                                         <span class="text-large text-lg"><a class="text-primary" href="<?= base_url('assets/img/credit_card.svg') ?>">Cooking </a><span class="text-primary"></span>Order</span><br />
-                                                        <?php if ($icon_cooked == "") : ?>
-                                                            <img class="img-responsive pull-left width-1" src="<?= base_url('assets/img/cooking.svg') ?>" alt="" />
-                                                            <span class="opacity-50">
-                                                                <?php foreach ($order_pelanggan as $o) {
-                                                                    if ($o['order_kitchen_flg'] == 'N') {
-                                                                        echo "$o[menu_nama] - $o[order_qty]";
-                                                                        echo "<br>";
-                                                                    }
-                                                                }
-                                                                ?>
-                                                            </span>
-                                                        <?php endif; ?>
+                                                        <span class="opacity-50">
+                                                            <?php foreach ($order_pelanggan as $o) :
+                                                                if ($o['order_kitchen_flg'] == 'N') : ?>
+                                                                    <?= "$o[menu_nama] - $o[order_qty]"; ?>
+                                                                    <br>
+                                                            <?php
+                                                                endif;
+                                                            endforeach;
+                                                            ?>
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </li>
-                                        <li id="order-done">
+                                        <li id="order-delivered">
                                             <div class="timeline-circ <?= $order_delivered ?>" style="top:20px"><i class="<?= $icon_delivered ?>"></i></div>
                                             <div class="timeline-entry">
                                                 <div class="card style-default-bright">
                                                     <div class="card-body">
                                                         <span class="text-large text-lg"><a class="text-primary" href="<?= base_url('assets/img/credit_card.svg') ?>">Delivering </a><span class="text-primary"></span>Order</span><br />
-                                                        <?php if ($icon_delivered == "") : ?>
-                                                            <img class="img-responsive pull-left width-1" src="<?= base_url('assets/img/preparing.svg') ?>" alt="" />
-                                                            <span class="opacity-50">
-                                                                <?php foreach ($order_pelanggan as $o) {
-                                                                    if ($o['order_waitress_flg'] == 'N' && $o['order_kitchen_flg'] == 'Y') {
-                                                                        echo "$o[menu_nama] - $o[order_qty]";
-                                                                        echo "<br>";
-                                                                    }
-                                                                }
-                                                                ?>
-                                                            </span>
-                                                        <?php endif; ?>
+                                                        <span class="opacity-50">
+                                                            <?php foreach ($order_pelanggan as $o) :
+                                                                if ($o['order_waitress_flg'] == 'N' && $o['order_kitchen_flg'] == 'Y') : ?>
+                                                                    <?= "$o[menu_nama] - $o[order_qty]"; ?>
+                                                                    <br>
+                                                            <?php
+                                                                endif;
+                                                            endforeach;
+                                                            ?>
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -144,18 +136,16 @@
                                                 <div class="card style-default-bright">
                                                     <div class="card-body">
                                                         <span class="text-large text-lg"><a class="text-primary" href="<?= base_url('assets/img/credit_card.svg') ?>">Finish </a><span class="text-primary"></span>Order</span><br />
-                                                        <!-- <php if ($icon_finished !== "") : ?> -->
-                                                        <img class="img-responsive pull-left width-1" src="<?= base_url('assets/img/preparing.svg') ?>" alt="" />
                                                         <span class="opacity-50">
-                                                            <?php foreach ($order_pelanggan as $o) {
-                                                                if ($o['order_waitress_flg'] == 'Y' && $o['order_kitchen_flg'] == 'Y') {
-                                                                    echo "$o[menu_nama] - $o[order_qty]";
-                                                                    echo "<br>";
-                                                                }
-                                                            }
+                                                            <?php foreach ($order_pelanggan as $o) :
+                                                                if ($o['order_waitress_flg'] == 'Y' && $o['order_kitchen_flg'] == 'Y') : ?>
+                                                                    <?= "$o[menu_nama] - $o[order_qty]"; ?>
+                                                                    <br>;
+                                                            <?php
+                                                                endif;
+                                                            endforeach;
                                                             ?>
                                                         </span>
-                                                        <!-- <php endif; ?> -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -167,11 +157,8 @@
                     </div>
                     <div class="card no-padding" style="bottom:-13px; position:absolute; width:-webkit-fill-available; width:100vw">
                         <div class="row">
-                            <div class="col-xs-6 no-padding">
-                                <a href="#" class="btn btn-block btn-default btn-raised">Bayar</a>
-                            </div>
-                            <div class="col-xs-6 no-padding">
-                                <a href="#" class="btn btn-block btn-default-dark btn-raised">Add Voucher</a>
+                            <div class="col-xs-12 no-padding">
+                                <a href="<?= base_url('mobile/pos/display_table_cart/') ?>" class="btn btn-block btn-primary btn-raised">Bayar</a>
                             </div>
                         </div>
                     </div>
@@ -179,6 +166,21 @@
             </div>
         </section>
     </div>
+    <script type="text/javascript">
+        let order = JSON.parse('<?= json_encode($order_pelanggan) ?>');
+        let cart = order.map(item => {
+            return {
+                id: item.menu_id,
+                name: item.menu_nama,
+                price: item.menu_harga_baru * item.order_qty,
+                count: item.order_qty,
+                notes: item.order_notes,
+            };
+        });
+
+        sessionStorage.setItem('shoppingCart', JSON.stringify(cart));
+    </script>
+
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {

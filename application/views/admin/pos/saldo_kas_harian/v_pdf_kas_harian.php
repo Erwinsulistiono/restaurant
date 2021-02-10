@@ -6,9 +6,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- END META -->
-  <link rel="shorcut icon" href="<?= base_url() . 'assets/img/logo.png' ?>">
+  <link rel="shorcut icon" href="<?= base_url('assets/img/logo.png'); ?>">
   <!-- BEGIN STYLESHEETS -->
-  <link type="text/css" rel="stylesheet" href="<?= base_url() . 'assets/css/print_laporan/style.css' ?>" />
+  <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/print_laporan/style.css'); ?>" />
 </head>
 
 <body translate="no">

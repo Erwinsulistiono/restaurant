@@ -6,7 +6,6 @@ class Saldo extends MY_Controller
 
   public function __construct()
   {
-
     parent::__construct();
     if ($this->session->userdata('masuk') != TRUE) {
       $url = base_url('login');

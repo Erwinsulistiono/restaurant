@@ -15,11 +15,13 @@ class Inventory extends MY_Controller
     $this->load->model('M_log');
   }
 
+
   public function index()
   {
     $data['outlet'] = $this->M_crud->read('tbl_outlet');
     $this->render('admin/katalog/v_inventory', $data);
   }
+
 
   public function outlet($outlet = null)
   {
@@ -65,6 +67,7 @@ class Inventory extends MY_Controller
     redirect('admin/inventory/outlet/' . $outlet_id);
   }
 
+
   public function hapus_inventory($outlet_id, $stock_id)
   {
     $data_old = $this->M_crud->select("tbl_stock_${outlet_id}", 'stock_id', $stock_id);
@@ -75,6 +78,7 @@ class Inventory extends MY_Controller
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Berhasil di hapus.</div>');
     redirect('admin/inventory/outlet/' . $outlet_id);
   }
+
 
   public function tambah_inventory($outlet_id)
   {
@@ -91,6 +95,7 @@ class Inventory extends MY_Controller
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Berhasil di hapus.</div>');
     redirect('admin/inventory/outlet/' . $outlet_id);
   }
+
 
   public function transfer_inventory($outlet_id)
   {

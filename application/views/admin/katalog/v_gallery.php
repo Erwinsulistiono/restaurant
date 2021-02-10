@@ -57,7 +57,7 @@
 						<span class="fa fa-times"></span></button>
 					<h3 class="modal-title" id="myModalLabel">Tambah Gallery</h3>
 				</div>
-				<form class="form-horizontal" role="form" method="post" action="<?= base_url() . 'admin/katalog/simpan_gallery' ?>" enctype="multipart/form-data">
+				<form class="form-horizontal" role="form" method="post" action="<?= base_url('admin/katalog/simpan_gallery'); ?>" enctype="multipart/form-data">
 					<div class="modal-body">
 						<div class="form-group">
 							<label class="col-sm-3 control-label">Judul <sup style="color: red;">&#10038<sup></label>
@@ -97,7 +97,7 @@
 							<span class="fa fa-times"></span></button>
 						<h3 class="modal-title" id="myModalLabel">Edit Gallery</h3>
 					</div>
-					<form class="form-horizontal" role="form" method="post" action="<?= base_url() . 'admin/katalog/simpan_gallery' ?>" enctype="multipart/form-data">
+					<form class="form-horizontal" role="form" method="post" action="<?= base_url('admin/katalog/simpan_gallery'); ?>" enctype="multipart/form-data">
 						<div class="modal-body">
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Judul <sup style="color: red;">&#10038<sup></label>

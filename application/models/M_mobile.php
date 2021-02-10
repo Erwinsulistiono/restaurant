@@ -7,16 +7,6 @@ class M_mobile extends CI_Model
         return $this->db->affected_rows() > 0;
     }
 
-    function cek_status_pending($outlet_id, $plg_id)
-    {
-        $query = $this->db->select()
-            ->from("cust_order_$outlet_id")
-            ->where('order_userid', $plg_id)
-            ->get();
-
-        return $query->result_array();
-    }
-
     function get_pelanggan_order($outlet_id, $trx_id)
     {
         $query = $this->db->select()

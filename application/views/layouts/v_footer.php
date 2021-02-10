@@ -1,7 +1,5 @@
 <!-- BEGIN JAVASCRIPT -->
 <script src="<?= base_url('assets/js/jquery-3.4.1.min.js'); ?>"></script>
-<!-- <script src="= base_url('assets/js/jquery/jquery-1.11.2.min.js'); ?>"></script> -->
-<!-- <script src="= base_url('assets/js/jquery/jquery-migrate-1.2.1.min.js'); ?>"></script> -->
 <script src="<?= base_url('assets/js/bootstrap/bootstrap.min.js'); ?>"></script>
 <script src="<?= base_url('assets/js/spin/spin.min.js'); ?>"></script>
 <script src="<?= base_url('assets/js/autosize/jquery.autosize.min.js'); ?>"></script>

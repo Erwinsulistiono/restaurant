@@ -14,7 +14,6 @@ class Settings extends MY_Controller
 		$this->load->model('M_pos');
 		$this->load->model('M_laporan');
 		$this->load->model('M_laporan_harian');
-		$this->load->model('M_laporan_pendapatan');
 		$this->user = $this->session->userdata('idadmin');
 		$this->outlet = $this->session->userdata('pengguna_outlet');
 	}
@@ -37,7 +36,6 @@ class Settings extends MY_Controller
 
 	public function simpan_close_kasir()
 	{
-		$tgl = date("Y-m-d H:i:s");
 		$kas_saldo_akhir = $this->input->post('kas_saldo_akhir');
 		$data = [
 			'kas_saldo_akhir' => preg_replace('/[^0-9]/', '', $kas_saldo_akhir),

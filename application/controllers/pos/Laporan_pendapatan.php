@@ -22,7 +22,7 @@ class Laporan_pendapatan extends MY_Controller
 		$this->render('pos/laporan_pendapatan/v_index', $data);
 	}
 
-	public function laporan($kasir_id = null, $outlet_id = null)
+	public function laporan()
 	{
 		$data_input = [
 			'tgl_awal' => $this->input->post('tgl_awal'),

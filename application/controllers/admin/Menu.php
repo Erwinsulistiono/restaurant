@@ -36,6 +36,7 @@ class Menu extends MY_Controller
     $this->render('admin/katalog/v_menu_outlet', $data);
   }
 
+
   /*----------------- MODUL MENU ---------------------*/
   public function index()
   {
@@ -100,6 +101,7 @@ class Menu extends MY_Controller
     $this->simpan_kategori($menu_id, $outlet_id);
     redirect('admin/menu/outlet/' . $outlet_id);
   }
+
 
   /*-------------------SIMPAN KITCHEN ----------------------------*/
   public function simpan_kitchen($outlet_id)

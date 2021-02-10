@@ -8,13 +8,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- END META -->
-  <link rel="shorcut icon" href="<?= base_url() . 'assets/img/logo.png' ?>">
+  <link rel="shorcut icon" href="<?= base_url('assets/img/logo.png'); ?>">
   <!-- BEGIN STYLESHEETS -->
-  <link type="text/css" rel="stylesheet" href="<?= base_url() . 'assets/css/style-material.css' ?>" />
-  <link type="text/css" rel="stylesheet" href="<?= base_url() . 'assets/css/bootstrap.css' ?>" />
-  <link type="text/css" rel="stylesheet" href="<?= base_url() . 'assets/css/materialadmin.css' ?>" />
-  <link type="text/css" rel="stylesheet" href="<?= base_url() . 'assets/font-awesome/css/font-awesome.css' ?>" />
-  <link type="text/css" rel="stylesheet" href="<?= base_url() . 'assets/css/material-design-iconic-font.min.css' ?>" />
+  <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/style-material.css'); ?>" />
+  <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/bootstrap.css'); ?>" />
+  <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/materialadmin.css'); ?>" />
+  <link type="text/css" rel="stylesheet" href="<?= base_url('assets/font-awesome/css/font-awesome.css'); ?>" />
+  <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/material-design-iconic-font.min.css'); ?>" />
   <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/style.css'); ?>">
 
 </head>
@@ -108,39 +108,6 @@
 </div>
 
 
-<!-- BEGIN OFFCANVAS DEMO LEFT -->
-<div class="offcanvas">
-  <div id="offcanvas-demo-left" class="offcanvas-pane width-6">
-    <div class="offcanvas-head">
-      <header>Left off-canvas</header>
-      <div class="offcanvas-tools">
-        <a class="btn btn-icon-toggle btn-default-light pull-right" data-dismiss="offcanvas">
-          <i class="md md-close"></i>
-        </a>
-      </div>
-    </div>
-
-    <div class="offcanvas-body">
-      <p>
-        An off-canvas can hold any content you want.
-      </p>
-      <p>
-        Close this off-canvas by clicking on the backdrop or press the close button in the upper right corner.
-      </p>
-      <p>&nbsp;</p>
-      <h4>Some details</h4>
-      <ul class="list-divided">
-        <li><strong>Width</strong><br /><span class="opacity-75">240px</span></li>
-        <li><strong>Height</strong><br /><span class="opacity-75">100%</span></li>
-        <li><strong>Body scroll</strong><br /><span class="opacity-75">disabled</span></li>
-        <li><strong>Background color</strong><br /><span class="opacity-75">Default</span></li>
-      </ul>
-    </div>
-  </div>
-</div>
-<!-- END OFFCANVAS DEMO LEFT -->
-
-
 <?php foreach ($data as $index => $table_content) :
   $menu_gambar = $table_content['menu_gambar'];
 ?>
@@ -158,7 +125,8 @@
               <div class="form-group card-body">
                 <h3 class="text-light pull-left"><strong><?= $table_content['menu_nama']; ?></strong></h3>
                 <h3 class="text-light pull-right">
-                  <strong><?= number_format($table_content['menu_harga_baru']); ?></strong></h3>
+                  <strong><?= number_format($table_content['menu_harga_baru']); ?></strong>
+                </h3>
               </div>
               <div class="form-group">
                 <label class="col-sm-3 control-label">Add Notes (Optional)</label>
@@ -192,7 +160,7 @@
   </div>
 <?php endforeach; ?>
 
-<script src="<?= base_url() . 'assets/js/jquery-3.4.1.min.js' ?>"></script>
+<script src="<?= base_url('assets/js/jquery-3.4.1.min.js'); ?>"></script>
 <script type="text/javascript">
   var data = JSON.parse('<?= json_encode($data) ?>')
   var ingredient = JSON.parse('<?= json_encode($ingredient) ?>')
@@ -455,13 +423,6 @@
 </div>
 <script src="<?= base_url('assets/js/jquery-3.4.1.min.js'); ?>"></script>
 <script src="<?= base_url('assets/js/bootstrap/bootstrap.min.js'); ?>"></script>
-<!-- <script src="?= base_url('assets/js/spin/spin.min.js'); ?>"></script> -->
-<!-- <script src="?= base_url('assets/js/autosize/jquery.autosize.min.js'); ?>"></script> -->
-<!-- <script src="?= base_url('assets/js/moment/moment.min.js'); ?>"></script> -->
-<!-- <script src="?= base_url('assets/js/nanoscroller/jquery.nanoscroller.min.js'); ?>"></script>
-<script src="?= base_url('assets/js/d3/d3.min.js'); ?>"></script>
-<script src="?= base_url('assets/js/d3/d3.v3.js'); ?>"></script>
-<script src="?= base_url('assets/js/rickshaw/rickshaw.min.js'); ?>"></script> -->
 <script src="<?= base_url('assets/js/source/App.js'); ?>"></script>
 <script src="<?= base_url('assets/js/source/AppNavigation.js'); ?>"></script>
 <script src="<?= base_url('assets/js/source/AppOffcanvas.js'); ?>"></script>
@@ -469,16 +430,6 @@
 <script src="<?= base_url('assets/js/source/AppForm.js'); ?>"></script>
 <script src="<?= base_url('assets/js/source/AppNavSearch.js'); ?>"></script>
 <script src="<?= base_url('assets/js/source/AppVendor.js') ?>"></script>
-<!-- <script src="?= base_url('assets/js/DataTables/jquery.dataTables.min.js'); ?>"></script>
-<script src="?= base_url('assets/js/DataTables/extensions/ColVis/js/dataTables.colVis.min.js'); ?>"></script>
-<script src="?= base_url('assets/js/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js'); ?>"></script>
-<script src="?= base_url('assets/js/core/DemoTableDynamic.js') ?>"></script>
-<script src="?= base_url('assets/js/bootstrap-datepicker.min.js'); ?>"></script>
-<script src="?= base_url('assets/js/jquery-ui.js'); ?>"></script>
-<script src="?= base_url('assets/js/jquery-3.4.1.min.js'); ?>"></script>
-<script src="?= base_url('assets/js/bootstrap.bundle.js'); ?>"></script>
-<script src="?= base_url('assets/js/bootstrap-select.js'); ?>"></script> -->
-
 </body>
 
 </html>

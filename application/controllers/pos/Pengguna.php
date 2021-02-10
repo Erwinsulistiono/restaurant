@@ -14,27 +14,20 @@ class Pengguna extends MY_Controller
 		$this->load->model('M_log');
 		$this->load->model('M_pengguna');
 		$this->load->library('upload');
-
+		$this->outlet = $this->session->userdata('pengguna_outlet');
 	}
 
 
 	/*----------------- MODUL PENGGUNA ---------------------*/
-	function pilih_pengguna()
+	function index()
 	{
-		$data['outlet'] = $this->M_crud->read('tbl_outlet');
-		$this->render('admin/user/v_pilih_pengguna', $data);
-	}
-
-	function pengguna($outlet = null)
-	{
-		is_null($outlet) ? $outlet_id = $this->input->post('select_outlet') : $outlet_id = $outlet;
 		$data = [
-			'outlet_id' => $outlet_id,
+			'outlet_id' => $this->outlet,
 			'level' => $this->M_crud->read('tbl_level_admin'),
 			'level_pos' => $this->M_crud->read('tbl_level_pos'),
-			'data' => $this->M_pengguna->get_pengguna($outlet_id),
+			'data' => $this->M_pengguna->get_pengguna($this->outlet),
 		];
-		$this->render('admin/user/v_pengguna', $data);
+		$this->render('pos/user/v_pengguna', $data);
 	}
 
 	function simpan_pengguna($outlet_id)
@@ -44,7 +37,7 @@ class Pengguna extends MY_Controller
 		$password_confirmation = $this->input->post('pengguna_password_confirmation');
 		if ($password !== $password_confirmation) {
 			$this->session->set_flashdata('msg', '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>password tidak match.</div>');
-			redirect('admin/pengguna/pengguna/' . $outlet_id);
+			redirect('pos/pengguna/pengguna/' . $outlet_id);
 		}
 		$nmfile = str_replace(' ', '_', $_FILES['filefoto']['name']);
 		$config['upload_path'] = './assets/images/'; //path folder
@@ -67,14 +60,13 @@ class Pengguna extends MY_Controller
 			} else {
 				$data['pengguna_photo'] = $nmfile;
 			}
-
 		}
-			if (empty($password)) {
-				$pass = $this->M_crud->select('tbl_pengguna', 'pengguna_id', $pengguna_id)['pengguna_password'];
-				$passcode = $pass;
-			} else {
-				$passcode = md5($password);
-			}
+		if (empty($password)) {
+			$pass = $this->M_crud->select('tbl_pengguna', 'pengguna_id', $pengguna_id)['pengguna_password'];
+			$passcode = $pass;
+		} else {
+			$passcode = md5($password);
+		}
 
 		$data = [
 			'pengguna_nama' => $this->input->post('pengguna_nama'),
@@ -96,7 +88,7 @@ class Pengguna extends MY_Controller
 
 			$this->M_log->simpan_log($reff_id, 'USER', null, $log_newval);
 			$this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>pengguna <b>' . $data['pengguna_nama'] . '</b> Berhasil disimpan ke database.</div>');
-			redirect('admin/pengguna/pengguna/' . $outlet_id);
+			redirect('pos/pengguna/pengguna/' . $outlet_id);
 		}
 		$data_old = $this->M_crud->select('tbl_pengguna', 'pengguna_id', $pengguna_id);
 		$log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
@@ -104,7 +96,7 @@ class Pengguna extends MY_Controller
 		$this->M_log->simpan_log($pengguna_id, 'USER', $log_oldval, $log_newval);
 		$this->M_crud->update('tbl_pengguna', $data, 'pengguna_id', $pengguna_id);
 		$this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>pengguna <b>' . $data['pengguna_nama'] . '</b> Berhasil disimpan ke database.</div>');
-		redirect('admin/pengguna/pengguna/' . $outlet_id);
+		redirect('pos/pengguna/pengguna/' . $outlet_id);
 	}
 
 	function hapus_pengguna($pengguna_id, $outlet_id)
@@ -115,7 +107,7 @@ class Pengguna extends MY_Controller
 		$this->M_log->simpan_log($pengguna_id, 'USER', $log_oldval);
 		$this->M_crud->delete('tbl_pengguna', 'pengguna_id', $pengguna_id);
 		$this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Pengguna Berhasil dihapus dari database.</div>');
-		redirect('admin/pengguna/pengguna/' . $outlet_id);
+		redirect('pos/pengguna/pengguna/' . $outlet_id);
 	}
 
 	function reset_password($pengguna_id, $outlet_id)
@@ -131,6 +123,6 @@ class Pengguna extends MY_Controller
 		$this->M_log->simpan_log($pengguna_id, 'PENGGUNA RESET PASS', $log_oldval, $log_newval);
 		$this->M_crud->update('tbl_pengguna', $data, 'pengguna_id', $pengguna_id);
 		$this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Username : <b>' . $pengguna['pengguna_username'] . '</b> <br/> Password baru : <b>' . $pass . '</b></div>');
-		redirect('admin/pengguna/pengguna/' . $outlet_id);
+		redirect('pos/pengguna/pengguna/' . $outlet_id);
 	}
 }

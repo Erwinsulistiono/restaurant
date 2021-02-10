@@ -6,9 +6,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- END META -->
-  <link rel="shorcut icon" href="<?= base_url() . 'assets/img/logo.png' ?>">
+  <link rel="shorcut icon" href="<?= base_url('assets/img/logo.png'); ?>">
   <!-- BEGIN STYLESHEETS -->
-  <link type="text/css" rel="stylesheet" href="<?= base_url() . 'assets/css/print/style.css' ?>" />
+  <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/print/style.css'); ?>" />
 </head>
 
 <?php $logo = $pt['pt_logo'] ?>
@@ -236,7 +236,7 @@
       <div id="legalcopy">
         <center>
           <p class="legal"><strong>Thank you for coming</strong>
-            <p class="legal"><strong>See you!!!</strong>
+          <p class="legal"><strong>See you!!!</strong>
         </center>
       </div>
 
@@ -249,6 +249,6 @@
   setTimeout(function() {
     alert("OK");
     alert('sudah print')
-    window.location.href = '<?= base_url() ?>pos/pos';
+    window.location.href = '<?= base_url('pos/pos') ?>';
   }, 4000);
 </script>

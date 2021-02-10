@@ -1,12 +1,6 @@
 <?php
 class M_log extends CI_Model
 {
-	public function datainsert($data2)
-	{
-		$this->db->insert('tbl_log', $data2);
-	}
-
-
 	public function simpan_log($reff_id, $menu, $log_oldval = null, $log_newval = null)
 	{
 		$log_type = 'UNDFND';

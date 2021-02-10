@@ -22,11 +22,10 @@ class Order extends CI_Controller
             $data['trx_id'] = 2;
         }
 
-
         $data['data'] = $this->M_crud->left_join("tbl_meja_$outlet", 'tbl_area', "tbl_meja_$outlet.meja_lokasi=tbl_area.area_id");
         $data['outlet'] = $this->M_crud->select('tbl_outlet', 'out_id', $outlet);
         $data['method_of_order'] = $this->M_crud->read('tbl_tipe_transaksi');
-        $this->load->view('mobile/v_register', $data);
+        $this->load->view('mobile/v_daftar', $data);
     }
 
     public function view_order($outlet, $dataPost = null, $plg_id = null)
@@ -46,24 +45,25 @@ class Order extends CI_Controller
 
     public function order_detail($outlet = null, $plg_id = null)
     {
-        ($plg_id) && $data['pending_payment'] = $this->M_mobile->cek_status_pending($outlet, $plg_id);
         if ($plg_id) {
-            return ($this->load->view('mobile/v_order_detail', $data));
+            $trx_id = $this->M_crud->select('tbl_pelanggan', 'plg_id', $plg_id)['plg_order'];
+        } else {
+            $data['tipe_transaksi'] = $this->input->post('tipe_transaksi');
+            $data['plg_notelp'] = $this->input->post('plg_notelp');
+            $data['plg_platno'] = $this->input->post('plg_platno');
+            $data['plg_meja'] = $this->input->post('meja_pelanggan');
+            $data['plg_nama'] = $this->input->post('plg_nama');
+            $trx_id = $this->get_existing_customer_id($data, $outlet);
         }
-        $data['tipe_transaksi'] = $this->input->post('tipe_transaksi');
-        $data['plg_notelp'] = $this->input->post('plg_notelp');
-        $data['plg_platno'] = $this->input->post('plg_platno');
-        $data['plg_meja'] = $this->input->post('meja_pelanggan');
-        $data['plg_nama'] = $this->input->post('plg_nama');
 
-        $trx_id = $this->get_existing_customer_id($data, $outlet);
         if (!$trx_id) {
             return ($this->load->view('mobile/v_belum_order'));
         }
 
         $data['order_pelanggan'] = $this->get_data_order_by_trx_id($outlet, $trx_id);
         $data['trx_pelanggan'] = $this->M_crud->select("tbl_trx_pos_$outlet", "trx_id", $trx_id);
-        return ($this->load->view('mobile/v_order_detail', $data));
+
+        return ($this->load->view('mobile/v_sudah_order', $data));
     }
 
     public function is_user_session_valid()
@@ -87,22 +87,27 @@ class Order extends CI_Controller
 
     public function get_existing_customer_id($data)
     {
-        if ($data['tipe_transaksi'] == '1') {
-            $plg_id = $this->M_mobile->get_customer_by_name($data['plg_nama'], $data['plg_meja']);
-            return (($plg_id) ? ($plg_id)['plg_order'] : false);
+        switch ($data['tipe_transaksi']) {
+            case '1':
+                $plg = $this->M_mobile->get_customer_by_name($data['plg_nama'], $data['plg_meja']);
+                ($plg) ? $plg_id = ($plg)['plg_order'] : $plg_id = false;
+                break;
+            case '2':
+                $plg = $this->M_crud->select('tbl_pelanggan', 'plg_notelp', $data['plg_notelp']);
+                ($plg) ? $plg_id = ($plg)['plg_order'] : $plg_id = false;
+                break;
+            case '3':
+                $plg = $this->M_crud->select('tbl_pelanggan', 'plg_platno', $data['plg_platno']);
+                ($plg) ? $plg_id = ($plg)['plg_order'] : $plg_id = false;
+                break;
+            case '4':
+                $plg = $this->M_crud->select('tbl_pelanggan', 'plg_notelp', $data['plg_notelp']);
+                ($plg) ? $plg_id = ($plg)['plg_order'] : $plg_id = false;
+                break;
+            default:
+                $plg_id = false;
         }
-        if ($data['tipe_transaksi'] == '2') {
-            $plg_id = $this->M_crud->select('tbl_pelanggan', 'plg_notelp', $data['plg_notelp']);
-            return (($plg_id) ? ($plg_id)['plg_order'] : false);
-        }
-        if ($data['tipe_transaksi'] == '3') {
-            $plg_id = $this->M_crud->select('tbl_pelanggan', 'plg_platno', $data['plg_platno']);
-            return (($plg_id) ? ($plg_id)['plg_order'] : false);
-        }
-        if ($data['tipe_transaksi'] == '4') {
-            $plg_id = $this->M_crud->select('tbl_pelanggan', 'plg_notelp', $data['plg_notelp']);
-            return (($plg_id) ? ($plg_id)['plg_order'] : false);
-        }
-        return false;
+
+        return $plg_id;
     }
 }

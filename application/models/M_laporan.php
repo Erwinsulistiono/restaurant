@@ -21,27 +21,6 @@ class M_laporan extends CI_Model
 		return $query->result_array();
 	}
 
-	public function get_laporan_kasir($data)
-	{
-		$tgl_awal = $data['tgl_awal'];
-		$tgl_akhir = $data['tgl_akhir'];
-		$outlet = $data['outlet'];
-		$user = $data['trx_userid'];
-		($tgl_awal) ? $tgl_awal = $tgl_awal : $tgl_awal = date('Y-m-d');
-		($tgl_akhir) ? $tgl_akhir = $tgl_akhir : $tgl_akhir = date('Y-m-d');
-		$out_nama = $this->get_nama_outlet($outlet);
-
-		$query = $this->db->select("*, '$out_nama' AS out_nama")
-			->from("tbl_lap_trx_$outlet AS tbl1")
-			->join('tbl_tipe_transaksi AS tbl2', "tbl1.trx_tipe=tbl2.tipe_transaksi_id", "LEFT")
-			->where("DATE(trx_date) >=", $tgl_awal)
-			->where("DATE(trx_date) <=", $tgl_akhir)
-			->where("trx_userid", $user)
-			->order_by("trx_date", 'DESC')
-			->get();
-
-		return $query->result_array();
-	}
 
 	public function get_laporan_transaksi($data)
 	{

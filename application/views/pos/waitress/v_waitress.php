@@ -83,10 +83,10 @@
     <?php endforeach; ?>
 
 
-    <script src="<?= base_url() . 'assets/js/jquery-3.4.1.min.js' ?>"></script>
+    <script src="<?= base_url('assets/js/jquery-3.4.1.min.js'); ?>"></script>
     <script type="text/javascript">
       const formReturnOrder = document.querySelector('#form-return-order');
-      let urlGetPesanan = '<?php echo base_url('pos/Pesanan/'); ?>';
+      let urlGetPesanan = '<?= base_url('pos/Pesanan/'); ?>';
       let getTrxWaitress = () => {
         $.ajax({
           type: 'GET',
@@ -250,7 +250,7 @@
           console.log(data)
           $.ajax({
             type: 'POST',
-            url: '<?php echo base_url('pos/waitress/end_proses_waitress'); ?>',
+            url: '<?= base_url('pos/waitress/end_proses_waitress'); ?>',
             data: data,
             dataType: 'json',
             success: function(data) {
@@ -263,7 +263,7 @@
       let updateFlgOrderAfterCancelation = (orderId, trxId) => {
         event.preventDefault()
         let form = $(`.header-${trxId}`)
-        let url = '<?= base_url('pos/waitress/') ?>'
+        let url = '<?= base_url('pos/waitress/'); ?>'
         $.ajax({
           type: 'POST',
           url: `${url}return_order_after_cancelation`,

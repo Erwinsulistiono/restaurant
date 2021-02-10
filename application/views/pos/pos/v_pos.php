@@ -6,7 +6,7 @@
   </div>
   <div id="content">
     <!-- <pre>
-      <php var_dump($trx_prop) ?>
+      <php var_dump($trx) ?>
     </pre> -->
     <section>
       <div class="section-header">
@@ -141,7 +141,7 @@
                     <?php $trx_prop['trx_tipe_nama'] !== "" && isset($trx) ? $disabledBayar = '' : $disabledBayar = 'disabled'; ?>
 
                     <button type="submit" style="text-align:left;" type="submit" class="btn btn-primary btn-raised" <?= $disabled; ?>>Proses</button>
-                    <a class="btn btn-primary btn-raised" href="<?php echo base_url('pos/pos/printBill/') . $trx_prop['plg_id']; ?>" id="printBill" <?= $disabledBayar; ?> target="_blank">Print Bill</a>
+                    <a class="btn btn-primary btn-raised" href="<?= base_url("pos/pos/printBill/$plg_id"); ?>" id="printBill" <?= $disabledBayar; ?> target="_blank">Print Bill</a>
 
                     <div class="pull-right">
                       <div class="input-group-btn btn-raised">
@@ -528,7 +528,7 @@
           <button type="button" class="close text-danger btn-raised" data-dismiss="modal" aria-hidden="true">
             <span class="fa fa-times"></span></button>
         </div>
-        <form class="form-horizontal" action="<?= base_url() . 'pos/pos/' ?>" method="post">
+        <form class="form-horizontal" action="<?= base_url('pos/pos/'); ?>" method="post">
           <div class="modal-body">
             <div class="form-group">
               <label class="col-sm-3 control-label">Nama Pelanggan</label>
@@ -646,7 +646,7 @@ foreach ($payment as $k) :
         </div>
 
         <?php (isset($trx['trx_id'])) ? $url_id = $trx['trx_id'] : $url_id = $last_inv_number; ?>
-        <form id="form_paid" action="<?= base_url('pos/pos/check_out/') . $url_id; ?>" method="post">
+        <form id="form_paid" action="<?= base_url("pos/pos/check_out/$url_id"); ?>" method="post">
           <div class="card-body">
             <div class="form-group">
               <div class="row">
@@ -707,9 +707,23 @@ foreach ($payment as $k) :
                   <label for="nomorKartu" class="col-xs-4 control-label">No.HP/Kartu</label>
                   <div class="col-xs-7">
                     <!-- nomor handphone dari mobile -->
-                    <?php (isset($trx[0]['order_nomor_kartu'])) ? ($no_kartu = ($trx[0]['order_nomor_kartu'])) : ($no_kartu = '') ?>
+                    <?php $no_kartu = ''; ?>
+                    <?php
+                    if (isset($trx[0]['order_nomor_kartu'])) {
+                      ($no_kartu = ($trx[0]['order_nomor_kartu']));
+                    }
+                    ?>
+                    <?php
+                    if ($no_kartu == '') {
+                      (isset($trx['trx_cardno'])) ? ($no_kartu = ($trx['trx_cardno'])) : ($no_kartu = '');
+                    }
+                    ?>
                     <!-- nomor handphone dari inputan kasir -->
-                    <?php (isset($trx_prop['plg_telp']) && isset($trx_prop['plg_telp']) != '') ? ($no_kartu = $trx_prop['plg_telp']) : ($no_kartu = '') ?>
+                    <?php
+                    if ($no_kartu == '') {
+                      (isset($trx_prop['plg_telp']) && isset($trx_prop['plg_telp']) != '') ? ($no_kartu = $trx_prop['plg_telp']) : ($no_kartu = '');
+                    }
+                    ?>
                     <input type="<?= $type ?>" class="form-control trx_cardno_source_<?= $k_id ?>" value=<?= $no_kartu  ?>>
                     <input type="hidden" name="trx_cardno" class="form-control trx_cardno" id="nomorKartu">
                   </div>
@@ -717,7 +731,17 @@ foreach ($payment as $k) :
                 <div class="col-xs-6">
                   <label for="nomorReff" class="col-xs-4 control-label">Reff ID</label>
                   <div class="col-xs-7">
-                    <?php (isset($trx[0]['order_nomor_reff'])) ? ($noreff = ($trx[0]['order_nomor_reff'])) : ($noreff = '') ?>
+                    <?php
+                    $noreff = '';
+                    ?>
+                    <?php if (isset($trx[0]['order_nomor_reff'])) {
+                      $noreff = ($trx[0]['order_nomor_reff']);
+                    }
+                    ?>
+                    <?php if ($noreff == '' && isset($trx['trx_payreff'])) {
+                      $noreff = ($trx['trx_payreff']);
+                    }
+                    ?>
                     <input type="<?= $type ?>" class="form-control trx_payreff_source_<?= $k_id ?>" value=<?= $noreff  ?>>
                     <input type="hidden" name="trx_payreff" class="form-control trx_payreff" id="nomorReff">
                   </div>
@@ -778,7 +802,7 @@ foreach ($payment as $k) :
 <?php endforeach; ?>
 
 
-<script src="<?= base_url() . 'assets/js/jquery-3.4.1.min.js' ?>"></script>
+<script src="<?= base_url('assets/js/jquery-3.4.1.min.js'); ?>"></script>
 <script type="text/javascript">
   /* GLOBAL VAR */
   let clearFormating = (value) => Number(value.val().replace(/[($)\s\._\-]+/g, ''));
@@ -884,7 +908,7 @@ foreach ($payment as $k) :
     $("#voucher_id").val('');
     let kodeDiskon = $('#voucher_input').val();
     $.ajax({
-      url: '<?= base_url(); ?>pos/pos/voucherTermsAndCondition',
+      url: '<?= base_url('pos/pos/voucherTermsAndCondition'); ?>',
       method: "POST",
       data: {
         kodeDiskon: kodeDiskon,
@@ -906,7 +930,7 @@ foreach ($payment as $k) :
   let useDiscountVoucher = () => {
     let id = $("#voucher_id").val();
     $.ajax({
-      url: '<?= base_url(); ?>pos/pos/voucherApplied',
+      url: '<?= base_url('pos/pos/voucherApplied'); ?>',
       method: "POST",
       data: {
         id: id,
@@ -929,7 +953,7 @@ foreach ($payment as $k) :
 <script type="text/javascript">
   let addItemsToCart = (items) => {
     $.ajax({
-      url: "<?= base_url(); ?>pos/pos/check_stock",
+      url: "<?= base_url('pos/pos/check_stock'); ?>",
       method: "POST",
       data: items,
       dataType: 'json',
@@ -945,7 +969,7 @@ foreach ($payment as $k) :
   }
   let hapusCart = (row_id) => {
     $.ajax({
-      url: "<?= base_url(); ?>pos/pos/hapus_cart",
+      url: "<?= base_url('pos/pos/hapus_cart'); ?>",
       method: "POST",
       data: {
         row_id: row_id,
@@ -960,7 +984,7 @@ foreach ($payment as $k) :
   }
   let reloadMobileOrder = () => {
     $.ajax({
-      url: '<?php echo base_url('pos/pos/getTransaksiMobile/');  ?>',
+      url: '<?= base_url('pos/pos/getTransaksiMobile/');  ?>',
       type: 'GET',
       dataType: 'json',
       success: function(data) {
@@ -1046,7 +1070,7 @@ foreach ($payment as $k) :
     assignFormatingValueToElement($(".discountValModal"), grandTotal);
   }
   let assignValToPrintBillUrl = (discount) => {
-    let url = "<?php echo base_url('pos/pos/printBill/') . $trx_prop['plg_id'] . '/'; ?>";
+    let url = "<?= base_url('pos/pos/printBill/') . $trx_prop['plg_id'] . '/'; ?>";
     let targetUrl = url + discount;
     $("#printBill").attr("href", targetUrl);
   }
@@ -1072,7 +1096,7 @@ foreach ($payment as $k) :
       isMobile: true,
     }
     $.ajax({
-      url: '<?= base_url() . "pos/pos/proses_kitchen/$trx_prop[plg_id]/$trx_prop[trx_tipe_nama]"; ?>',
+      url: '<?= base_url("pos/pos/proses_kitchen/$trx_prop[plg_id]/$trx_prop[trx_tipe_nama]"); ?>',
       method: 'POST',
       data: data,
       dataType: "json",
@@ -1166,7 +1190,7 @@ foreach ($payment as $k) :
   let getStatusPemesananPelanggan = () => {
     $.ajax({
       type: 'GET',
-      url: '<?php echo base_url() . "pos/kitchen/getDataTrx" ?>',
+      url: '<?= base_url("pos/kitchen/getDataTrx"); ?>',
       dataType: 'json',
       success: function(data) {
         let card = '';
@@ -1204,8 +1228,7 @@ foreach ($payment as $k) :
 <!-- MODAL TRANSAKSI MASUK DARI MOBILE -->
 <script type="text/javascript">
   let printMobileOrder = (data) => {
-    console.log('print mobile')
-    let url = '<?php echo base_url(); ?>pos/pos/';
+    let url = '<?= base_url('pos/pos/'); ?>';
     let card = '';
     let dataHead = data['mobile_app_order_header'];
     let dataDescrip = data['mobile_app_order'];

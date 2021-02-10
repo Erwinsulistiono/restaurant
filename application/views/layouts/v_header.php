@@ -16,9 +16,9 @@
             </span>
           </a>
           <ul class="dropdown-menu animation-dock">
-            <li><a href="<?= base_url() . 'login/logout' ?>"><i class="fa fa-fw fa-power-off text-danger"></i>
+            <li><a href="<?= base_url('login/logout'); ?>"><i class="fa fa-fw fa-power-off text-danger"></i>
                 Logout</a></li>
-            <li><a href="<?= base_url() . 'admin/profile' ?>"><i class="fa fa-pencil"></i> My Profile</a></li>
+            <li><a href="<?= base_url('admin/profile'); ?>"><i class="fa fa-pencil"></i> My Profile</a></li>
           </ul>
         </li>
       </ul>

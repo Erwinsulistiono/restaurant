@@ -21,7 +21,7 @@ class Pos extends MY_Controller
 	{
 		$this->cart->destroy();
 		$is_order_mobile = ($this->input->post('order_mobile') ? $this->input->post('order_mobile') : '');
-		$dataPelanggan = [
+		$data_pelanggan = [
 			'plg_id' => $this->input->post('plg_id'),
 			'plg_nama' => $this->input->post('plg_nama'),
 			'plg_alamat' => $this->input->post('plg_alamat'),
@@ -30,22 +30,22 @@ class Pos extends MY_Controller
 			'plg_meja' => $this->input->post('plg_meja') ? $this->input->post('plg_meja') : '',
 		];
 
-		if ($dataPelanggan['plg_nama'] || $dataPelanggan['plg_id']) {
-			$this->prosesPelanggan($dataPelanggan, $is_order_mobile);
+		if ($data_pelanggan['plg_nama'] || $data_pelanggan['plg_id']) {
+			$this->proses_pelanggan($data_pelanggan, $is_order_mobile);
 		} else {
 			$this->display_pos();
 		}
 	}
 
 
-	public function prosesPelanggan($dataPelanggan, $is_order_mobile)
+	public function proses_pelanggan($data_pelanggan, $is_order_mobile)
 	{
-		$tbl_pelanggan = $this->check_pelanggan_baru($dataPelanggan);
+		$tbl_pelanggan = $this->check_pelanggan_baru($data_pelanggan);
 		if ($is_order_mobile) {
 			//ambil order item dari tabel mobile order
-			$orderItemMobile = $this->M_pos->getAllOrderFromMobilePos($tbl_pelanggan['plg_id'], $this->outlet);
-			foreach ($orderItemMobile as $items) {
-				$dataOrder[] = [
+			$mobile_order = $this->M_pos->get_mobile_customer_order($tbl_pelanggan['plg_id'], $this->outlet);
+			foreach ($mobile_order as $items) {
+				$data_order[] = [
 					'id' => $items['menu_id'],
 					'name' => $items['menu_nama'],
 					'price' => $items['order_harga'],
@@ -54,13 +54,13 @@ class Pos extends MY_Controller
 				];
 			}
 
-			(isset($dataOrder)) && $this->cart->insert($dataOrder);
-			$activeTransaksi = $orderItemMobile;
-			$activeTransaksi['is_mobile'] = 'true';
+			(isset($data_order)) && $this->cart->insert($data_order);
+			$data_trx = $mobile_order;
+			$data_trx['is_mobile'] = 'true';
 		} else {
 			$orderItem = $this->M_pos->select_order($tbl_pelanggan['plg_order'], $this->outlet);
 			foreach ($orderItem as $items) {
-				$dataOrder[] = [
+				$data_order[] = [
 					'id' => $items['menu_id'],
 					'name' => $items['menu_nama'],
 					'price' => $items['order_harga'],
@@ -75,9 +75,9 @@ class Pos extends MY_Controller
 				];
 			}
 
-			(isset($dataOrder)) && $this->cart->insert($dataOrder);
-			$activeTransaksi = $this->M_crud->select('tbl_trx_pos_' . $this->outlet, 'trx_id', $tbl_pelanggan['plg_order']);
-			$activeTransaksi['is_mobile'] = 'false';
+			(isset($data_order)) && $this->cart->insert($data_order);
+			$data_trx = $this->M_crud->select('tbl_trx_pos_' . $this->outlet, 'trx_id', $tbl_pelanggan['plg_order']);
+			$data_trx['is_mobile'] = 'false';
 		}
 
 		//if customer dine in
@@ -85,15 +85,15 @@ class Pos extends MY_Controller
 			$meja = $this->input->post('meja_id');
 			$this->M_crud->update('tbl_meja_' . $this->outlet, array('meja_pelanggan' => $tbl_pelanggan['plg_id']), 'meja_id', $meja);
 			$table = $this->M_crud->select('tbl_meja_' . $this->outlet, 'meja_id', $meja);
-			$attributTransaksi = [
+			$attr_trx = [
 				'trx_tipe_nama' => $table['meja_nama'],
 				'plg_id' => $tbl_pelanggan['plg_id'],
 				'trx_tipe' => 'Dine in',
 				'trx_tipe_id' => 1
 			];
-		} else {
+		} else { //if not dine in
 			$tbl_pelanggan['plg_alamat'] &&
-				$attributTransaksi = [
+				$attr_trx = [
 					'trx_tipe_nama' => $tbl_pelanggan['plg_nama'],
 					'plg_id' => $tbl_pelanggan['plg_id'],
 					'trx_tipe' => 'Delivery',
@@ -101,14 +101,14 @@ class Pos extends MY_Controller
 					'plg_telp' => $tbl_pelanggan['plg_notelp'],
 				];
 			$tbl_pelanggan['plg_platno'] &&
-				$attributTransaksi = [
+				$attr_trx = [
 					'trx_tipe_nama' => $tbl_pelanggan['plg_platno'],
 					'plg_id' => $tbl_pelanggan['plg_id'],
 					'trx_tipe' => 'Car', 'trx_tipe_id' => 3,
 					'plg_telp' => $tbl_pelanggan['plg_notelp'],
 				];
 			(!$tbl_pelanggan['plg_platno'] && !$tbl_pelanggan['plg_alamat']) &&
-				$attributTransaksi = [
+				$attr_trx = [
 					'trx_tipe_nama' => $tbl_pelanggan['plg_nama'],
 					'plg_id' => $tbl_pelanggan['plg_id'],
 					'trx_tipe' => 'Take Away',
@@ -117,7 +117,7 @@ class Pos extends MY_Controller
 				];
 		}
 
-		$this->display_pos($attributTransaksi, $activeTransaksi);
+		$this->display_pos($attr_trx, $data_trx);
 	}
 
 
@@ -145,17 +145,17 @@ class Pos extends MY_Controller
 			'trx_prop' => $tipe_trx,
 			'cart' => $this->cart->contents(),
 			'kategori' => $this->M_crud->read('tbl_kategori'),
-			'kategori_makanan' => $this->M_crud->left_join('tbl_menu_kat', 'tbl_menu_' . $this->outlet, 'tbl_menu_kat.menu_id=tbl_menu_' . $this->outlet . '.menu_id'),
-			'data' => $this->M_crud->read('tbl_menu_' . $this->outlet),
+			'kategori_makanan' => $this->M_crud->left_join('tbl_menu_kat', "tbl_menu_$this->outlet", "tbl_menu_kat.menu_id=tbl_menu_$this->outlet.menu_id"),
+			'data' => $this->M_crud->read("tbl_menu_$this->outlet"),
 			'alltable' => $this->M_pos->get_all_table($this->outlet),
 			'payment' => $this->M_crud->read('tbl_payment'),
 			'customer' => $this->M_crud->read('tbl_pelanggan'),
 			'taxresto' => $this->M_crud->select('tbl_tax', 'tax_id', '2')['tax_persen'],
 			'taxservice' => $this->M_crud->select('tbl_tax', 'tax_id', '1')['tax_persen'],
-			'mobile_app_cust_order' => $this->M_crud->read('cust_order_' . $this->outlet),
+			'mobile_app_cust_order' => $this->M_crud->read("cust_order_$this->outlet"),
 			'trx' => $trx,
-			'all_trx' => $this->M_crud->read('tbl_trx_pos_' . $this->outlet),
-			'all_order' => $this->M_crud->left_join('tbl_order_' . $this->outlet, 'tbl_trx_pos_' . $this->outlet, 'tbl_order_' . $this->outlet . '.order_trx_reff=tbl_trx_pos_' . $this->outlet . '.trx_id'),
+			'all_trx' => $this->M_crud->read("tbl_trx_pos_$this->outlet"),
+			'all_order' => $this->M_crud->left_join("tbl_order_$this->outlet", "tbl_trx_pos_$this->outlet", "tbl_order_$this->outlet.order_trx_reff=tbl_trx_pos_$this->outlet.trx_id"),
 			'last_inv_number' => $this->M_pos->getLastAutoIncrementId($this->outlet),
 		];
 		$this->render('pos/pos/v_pos', $data);
@@ -209,7 +209,7 @@ class Pos extends MY_Controller
 	}
 
 
-	public function show_cart($discount = null)
+	public function show_cart()
 	{
 		$data = [
 			'cart' => $this->cart->contents(),
@@ -237,8 +237,6 @@ class Pos extends MY_Controller
 			'trx_grand_total' => intval(preg_replace('/[^0-9]/', '', $this->input->post('grandtotal'))),
 			'trx_tipe' => $this->input->post('trx_tipe'),
 		);
-		// echo json_encode($ismobile);
-		// die();
 
 		if ($plg_nama['plg_order'] == '0') {
 			$this->M_crud->insert("tbl_trx_pos_$this->outlet", $dataTrx);
@@ -250,7 +248,7 @@ class Pos extends MY_Controller
 
 		$this->M_crud->delete("tbl_order_$this->outlet", 'order_trx_reff', $reff_id);
 		foreach ($this->cart->contents() as $items) {
-			$dataOrder[] = array(
+			$data_order[] = array(
 				'order_trx_reff' => $reff_id,
 				'order_menu' => $items['id'],
 				'order_qty' => $items['qty'],
@@ -269,7 +267,7 @@ class Pos extends MY_Controller
 				$this->M_crud->update('tbl_stock_' . $this->outlet, $data_stock, 'stock_id', $potong_stock['stock_id']);
 			}
 		}
-		$insertBulk = $this->M_crud->insert_bulk("tbl_order_$this->outlet", $dataOrder);
+		$insertBulk = $this->M_crud->insert_bulk("tbl_order_$this->outlet", $data_order);
 		$plg_order['plg_order'] = $reff_id;
 		$this->M_crud->update('tbl_pelanggan', $plg_order, 'plg_id', $plg_id);
 		if (null !== $this->input->post('isMobile')) {
@@ -289,8 +287,8 @@ class Pos extends MY_Controller
 		$plg_id = $this->M_crud->select('tbl_pelanggan', 'plg_order', $trx_id)['plg_id'];
 		$id_voucher = $this->input->post('voucher_id');
 		$discount_nominal = $this->input->post('discount_nominal');
-		(($id_voucher) && $this->voucherPotongHargaTransaksi($id_voucher, $trx_id));
-		(($discount_nominal && !$id_voucher) && $this->potongHargaTransaksi($discount_nominal, $trx_id));
+		(($id_voucher) && $this->diskon_transaksi_by_voucher($id_voucher, $trx_id));
+		(($discount_nominal && !$id_voucher) && $this->diskon_transaksi_by_input($discount_nominal, $trx_id));
 		$data_trx = $this->M_crud->select("tbl_trx_pos_$this->outlet", 'trx_id', $trx_id);
 
 		$data_trx['trx_notes'] = $this->input->post('trx_notes');
@@ -338,10 +336,15 @@ class Pos extends MY_Controller
 			$this->M_crud->insert("tbl_lap_order_$this->outlet", $items);
 		}
 
-		if (!$this->M_crud->select("tbl_order_$this->outlet", 'order_trx_reff', $trx_id)) {
+		if (is_null($this->M_crud->select("tbl_order_$this->outlet", 'order_trx_reff', $trx_id))) {
+			$clear_table['meja_pelanggan'] = 0;
+			$clear_pelanggan = [
+				'plg_order' => 0,
+				'plg_login_flg' => 'N',
+			];
 			$this->M_crud->delete("tbl_trx_pos_$this->outlet", 'trx_id', $trx_id);
-			$this->M_crud->update("tbl_meja_$this->outlet", array('meja_pelanggan' => 0), 'meja_pelanggan', $plg_id);
-			$this->M_crud->update('tbl_pelanggan', ['plg_order' => 0, 'plg_login_flg' => 'N'], 'plg_id', $plg_id);
+			$this->M_crud->update("tbl_meja_$this->outlet", $clear_table, 'meja_pelanggan', $plg_id);
+			$this->M_crud->update('tbl_pelanggan', $clear_pelanggan, 'plg_id', $plg_id);
 			if ($this->M_crud->select("cust_order_$this->outlet", 'order_userid', $plg_id)) {
 				$this->M_crud->delete("cust_order_$this->outlet", 'order_userid', $plg_id);
 			}
@@ -379,18 +382,19 @@ class Pos extends MY_Controller
 	}
 
 
-	public function potongHargaTransaksi($discount_nominal, $trx_id)
+	public function diskon_transaksi_by_input($discount_nominal, $trx_id)
 	{
 		$data_trx = $this->M_crud->select("tbl_trx_pos_$this->outlet", 'trx_id', $trx_id);
 		$data = [
 			'trx_discount' => $discount_nominal,
 			'trx_grand_total' => ($data_trx['trx_grand_total']) - $discount_nominal,
 		];
+		$this->M_crud->update("tbl_trx_pos_$this->outlet", $data, 'trx_id', $trx_id);
 		return;
 	}
 
 
-	public function voucherPotongHargaTransaksi($id_voucher, $trx_id)
+	public function diskon_transaksi_by_voucher($id_voucher, $trx_id)
 	{
 		$this->M_pos->potongQtyVoucher($id_voucher);
 		$voucher = $this->M_crud->select('tbl_voucher', 'voucher_id', $id_voucher);
@@ -443,20 +447,19 @@ class Pos extends MY_Controller
 	public function printBill($plg_id, $discount = null)
 	{
 		$tbl_pelanggan = $this->M_crud->select('tbl_pelanggan', 'plg_id', $plg_id);
-		$orderItem = $this->M_pos->getAllOrderFromMobilePos($tbl_pelanggan['plg_id'], $this->outlet);
 
 		$tbl_pelanggan['plg_alamat'] &&
-			$attributTransaksi = array('trx_tipe_nama' => $tbl_pelanggan['plg_nama'], 'plg_id' => $tbl_pelanggan['plg_id'], 'trx_tipe' => 'Delivery', 'trx_tipe_id' => 4);
+			$attr_trx = array('trx_tipe_nama' => $tbl_pelanggan['plg_nama'], 'plg_id' => $tbl_pelanggan['plg_id'], 'trx_tipe' => 'Delivery', 'trx_tipe_id' => 4);
 		$tbl_pelanggan['plg_platno'] &&
-			$attributTransaksi = array('trx_tipe_nama' => $tbl_pelanggan['plg_platno'], 'plg_id' => $tbl_pelanggan['plg_id'], 'trx_tipe' => 'Car', 'trx_tipe_id' => 3);
+			$attr_trx = array('trx_tipe_nama' => $tbl_pelanggan['plg_platno'], 'plg_id' => $tbl_pelanggan['plg_id'], 'trx_tipe' => 'Car', 'trx_tipe_id' => 3);
 		!($tbl_pelanggan['plg_platno'] && $tbl_pelanggan['plg_platno']) &&
-			$attributTransaksi = array('trx_tipe_nama' => $tbl_pelanggan['plg_nama'], 'plg_id' => $tbl_pelanggan['plg_id'], 'trx_tipe' => 'Take Away', 'trx_tipe_id' => 2);
-		$attributTransaksi['discount'] = $discount;
-		$attributTransaksi['totalPph'] = $this->M_crud->select('tbl_tax', 'tax_id', '2')['tax_persen'];
-		$attributTransaksi['totalService'] = $this->M_crud->select('tbl_tax', 'tax_id', '1')['tax_persen'];
+			$attr_trx = array('trx_tipe_nama' => $tbl_pelanggan['plg_nama'], 'plg_id' => $tbl_pelanggan['plg_id'], 'trx_tipe' => 'Take Away', 'trx_tipe_id' => 2);
+		$attr_trx['discount'] = $discount;
+		$attr_trx['totalPph'] = $this->M_crud->select('tbl_tax', 'tax_id', '2')['tax_persen'];
+		$attr_trx['totalService'] = $this->M_crud->select('tbl_tax', 'tax_id', '1')['tax_persen'];
 
 		$data = [
-			'trx_prop' => $attributTransaksi,
+			'trx_prop' => $attr_trx,
 			'order' => $this->cart->contents(),
 			'outlet' => $this->M_crud->select('tbl_outlet', 'out_id', $this->outlet),
 			'pt' => $this->M_crud->select('tbl_pt', 'pt_id', 1),

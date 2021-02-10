@@ -80,10 +80,10 @@
     </form>
 
 
-    <script src="<?= base_url() . 'assets/js/jquery-3.4.1.min.js' ?>"></script>
+    <script src="<?= base_url('assets/js/jquery-3.4.1.min.js'); ?>"></script>
     <script type="text/javascript">
       let kitchen_id = '<?= $kitchen['kitchen_id']; ?>'
-      let urlGetPesanan = '<?php echo base_url('pos/Pesanan/'); ?>'
+      let urlGetPesanan = '<?= base_url('pos/Pesanan/'); ?>'
       let order = ''
       let recipe = ''
       let trx = ''

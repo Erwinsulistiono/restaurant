@@ -12,14 +12,4 @@ class M_login extends CI_Model
 
         return $query->row_array();
     }
-
-    public function getMethodOfOrder($getMethod)
-    {
-        $query = $this->db->select()
-            ->from('tbl_tipe_transaksi')
-            ->where("FIND_IN_SET($getMethod ,tipe_pembayaran")
-            ->get();
-
-        return $query;
-    }
 }

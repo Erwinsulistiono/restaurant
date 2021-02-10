@@ -52,7 +52,6 @@ class Pengguna extends MY_Controller
 		$config['file_name'] = $nmfile;
 		if ($nmfile) {
 			$this->upload->initialize($config);
-			$gbr = $this->upload->data();
 			$this->load->library('upload', $config);
 
 			if ($this->upload->do_upload('filefoto')) {

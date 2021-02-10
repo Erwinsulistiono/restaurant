@@ -12,7 +12,7 @@
               <br />
               <span class="text-lg text-bold text-primary">Input Saldo Akhir</span>
               <br />
-              <form class='form floating-label' action='<?= base_url(); ?>pos/settings/simpan_close_kasir' accept-charset='utf-8' method='post'>
+              <form class='form floating-label' action='<?= base_url('pos/settings/simpan_close_kasir'); ?>' accept-charset='utf-8' method='post'>
                 <div class="col-xs-12 form-group">
                   <?php $cek_saldo ? $disabled = '' : $disabled = 'disabled'; ?>
                   <?php $cek_saldo ? $kas_amount = $cek_saldo['kas_saldo_awal'] : $kas_amount = ''; ?>

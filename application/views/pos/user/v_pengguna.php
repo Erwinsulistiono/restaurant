@@ -45,7 +45,7 @@
                     <td><?= $table_content['pengguna_email']; ?></td>
                     <th><?= $table_content['pengguna_nohp']; ?></th>
                     <td class="text-right">
-                      <a href="#" class="btn btn-icon-toggle btn-raised" title="Edit row" data-toggle="modal" data-target="#modal_edit_pengguna<?= $table_content['pengguna_id']; ?>"><i class="fa fa-pencil"></i></a>
+                      <a href="#" class="btn btn-icon-toggle btn-raised" title="Edit row" data-toggle="modal" data-target="#modal_edit_pengguna<?= $pengguna_id; ?>"><i class="fa fa-pencil"></i></a>
                       <a href="<?= base_url("pos/pengguna/reset_password/${pengguna_id}"); ?>" class="btn btn-icon-toggle btn-raised" title="Reset Password"><i class="fa fa-refresh"></i></a>
                       <a href="<?= base_url("pos/pengguna/hapus_pengguna/${pengguna_id}"); ?>" onclick="return confirm('Apakah anda yakin?')" class="btn btn-icon-toggle text-danger btn-raised" title="Delete row"><i class="fa fa-trash-o"></i></a>
                     </td>
@@ -70,7 +70,7 @@
           <span class="fa fa-times"></span></button>
         <h3 class="modal-title" id="myModalLabel">Tambah Pengguna</h3>
       </div>
-      <form class="form-horizontal" role="form" method="post" action="<?= base_url() . 'admin/pengguna/simpan_pengguna' ?>" enctype="multipart/form-data">
+      <form class="form-horizontal" role="form" method="post" action="<?= base_url('pos/pengguna/simpan_pengguna'); ?>" enctype="multipart/form-data">
         <div class="modal-body">
           <div class="form-group">
             <label class="col-sm-3 control-label">Nama</label>
@@ -159,8 +159,10 @@
 <!-- ============ MODAL EDIT PENGGUNA =============== -->
 <?php
 foreach ($data as $table_content) :
+  $pengguna_id = $table_content['pengguna_id'];
+  $pengguna_nama = $table_content['pengguna_nama'];
 ?>
-  <div class="modal fade" id="modal_edit_pengguna<?= $table_content['pengguna_id']; ?>" tabindex="-1" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
+  <div class="modal fade" id="modal_edit_pengguna<?= $pengguna_id; ?>" tabindex="-1" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -168,13 +170,13 @@ foreach ($data as $table_content) :
             <span class="fa fa-times"></span></button>
           <h3 class="modal-title" id="myModalLabel">Edit Pengguna</h3>
         </div>
-        <form class="form-horizontal" role="form" method="post" action="<?= base_url() . 'admin/pengguna/simpan_pengguna' ?>" enctype="multipart/form-data">
+        <form class="form-horizontal" role="form" method="post" action="<?= base_url('pos/pengguna/simpan_pengguna'); ?>" enctype="multipart/form-data">
           <div class="modal-body">
             <div class="form-group">
               <label class="col-sm-3 control-label">Nama</label>
               <div class="col-sm-8">
-                <input type="hidden" name="pengguna_id" value="<?= $table_content['pengguna_id']; ?>">
-                <input type="text" name="pengguna_nama" value="<?= $table_content['pengguna_nama']; ?>" class="form-control" required>
+                <input type="hidden" name="pengguna_id" value="<?= $pengguna_id; ?>">
+                <input type="text" name="pengguna_nama" value="<?= $pengguna_nama; ?>" class="form-control" required>
               </div>
             </div>
             <div class="form-group">

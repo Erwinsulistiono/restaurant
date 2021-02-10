@@ -19,8 +19,7 @@
 
       <!-- BEGIN TABLE HOVER -->
       <section class="card style-default-bright" style="margin-top:0px;">
-        <p><a href="#" class="btn btn-primary btn-raised" data-toggle="modal" data-target="#modal_add_area"><span
-              class="fa fa-plus"></span> Area</a></p>
+        <p><a href="#" class="btn btn-primary btn-raised" data-toggle="modal" data-target="#modal_add_area"><span class="fa fa-plus"></span> Area</a></p>
         <div class="section-body">
           <div class="row">
 
@@ -34,42 +33,32 @@
                 </tr>
               </thead>
               <tbody>
-                <?php $no = 0;
+                <?php
+                $area_id = $table_content['area_id'];
+                $no = 0;
                 foreach ($data as $table_content) :
                   $no++;
                 ?>
-                <tr>
-                  <td><?= $no; ?></td>
-                  <td><?= $table_content['area_nama']; ?></td>
-                  <td><?= $table_content['area_level']; ?></td>
-                  <td class="text-right">
-                    <a href="#" class="btn btn-icon-toggle btn-raised" title="Edit row" data-toggle="modal"
-                      data-target="#modal_edit_area<?= $table_content['area_id']; ?>"><i class="fa fa-pencil"></i></a>
-                    <a href="<?= base_url(); ?>admin/restaurant/hapus_area/<?= $table_content['area_id']; ?>"
-                      onclick="return confirm('Apakah anda yakin?')" class="btn btn-icon-toggle btn-raised"
-                      title="Delete row">
-                      <i class="fa fa-trash-o text-danger"></i></a>
-                  </td>
-                </tr>
+                  <tr>
+                    <td><?= $no; ?></td>
+                    <td><?= $table_content['area_nama']; ?></td>
+                    <td><?= $table_content['area_level']; ?></td>
+                    <td class="text-right">
+                      <a href="#" class="btn btn-icon-toggle btn-raised" title="Edit row" data-toggle="modal" data-target="#modal_edit_area<?= $area_id; ?>"><i class="fa fa-pencil"></i></a>
+                      <a href="<?= base_url("admin/restaurant/hapus_area/$area_id"); ?>" onclick="return confirm('Apakah anda yakin?')" class="btn btn-icon-toggle btn-raised" title="Delete row">
+                        <i class="fa fa-trash-o text-danger"></i></a>
+                    </td>
+                  </tr>
                 <?php endforeach; ?>
               </tbody>
             </table>
 
           </div>
         </div>
-        <!--end .section-body -->
-
       </section>
     </section>
-    <!-- END TABLE HOVER -->
-
   </div>
-  <!--end #content-->
-  <!-- END CONTENT -->
-
 </div>
-<!--end #base-->
-<!-- END BASE -->
 
 <!-- ============ MODAL ADD TAX =============== -->
 
@@ -81,8 +70,7 @@
           <span class="fa fa-times"></span></button>
         <h3 class="modal-title" id="myModalLabel">Tambah Area</h3>
       </div>
-      <form class="form-horizontal" role="form" method="post" action="<?= base_url('admin/restaurant/simpan_area'); ?>"
-        enctype="multipart/form-data">
+      <form class="form-horizontal" role="form" method="post" action="<?= base_url('admin/restaurant/simpan_area'); ?>" enctype="multipart/form-data">
         <div class="modal-body">
           <div class="form-group">
             <label class="col-sm-3 control-label">Nama Area</label>
@@ -112,42 +100,40 @@
 
 <!-- ============ MODAL EDIT TAX =============== -->
 <?php foreach ($data as $table_content) : ?>
-<div class="modal fade" id="modal_edit_area<?= $table_content['area_id']; ?>" tabindex="-1" role="dialog"
-  aria-labelledby="largeModal" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close text-danger btn-raised" data-dismiss="modal" aria-hidden="true">
-          <span class="fa fa-times"></span></button>
-        <h3 class="modal-title" id="myModalLabel">Edit Tax</h3>
+  <div class="modal fade" id="modal_edit_area<?= $table_content['area_id']; ?>" tabindex="-1" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close text-danger btn-raised" data-dismiss="modal" aria-hidden="true">
+            <span class="fa fa-times"></span></button>
+          <h3 class="modal-title" id="myModalLabel">Edit Tax</h3>
+        </div>
+        <form class="form-horizontal" role="form" method="post" action="<?= base_url('admin/restaurant/simpan_area'); ?>" enctype="multipart/form-data">
+          <input type="hidden" name="area_id" value="<?= $table_content['area_id']; ?>">
+          <div class="modal-body">
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Nama Area</label>
+              <div class="col-sm-8">
+                <input name="area_nama" value="<?= $table_content['area_nama']; ?>" class="form-control" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Lantai</label>
+              <div class="col-sm-8">
+                <input name="area_level" value="<?= $table_content['area_level']; ?>" class="form-control" required>
+              </div>
+            </div>
+
+
+
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary btn-flat btn-raised" data-dismiss="modal" aria-hidden="true">Tutup</button>
+            <button class="btn btn-primary btn-raised" type="submit">Simpan</button>
+          </div>
+        </form>
       </div>
-      <form class="form-horizontal" role="form" method="post" action="<?= base_url('admin/restaurant/simpan_area'); ?>"
-        enctype="multipart/form-data">
-        <input type="hidden" name="area_id" value="<?= $table_content['area_id']; ?>">
-        <div class="modal-body">
-          <div class="form-group">
-            <label class="col-sm-3 control-label">Nama Area</label>
-            <div class="col-sm-8">
-              <input name="area_nama" value="<?= $table_content['area_nama']; ?>" class="form-control" required>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-3 control-label">Lantai</label>
-            <div class="col-sm-8">
-              <input name="area_level" value="<?= $table_content['area_level']; ?>" class="form-control" required>
-            </div>
-          </div>
-
-
-
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-primary btn-flat btn-raised" data-dismiss="modal" aria-hidden="true">Tutup</button>
-          <button class="btn btn-primary btn-raised" type="submit">Simpan</button>
-        </div>
-      </form>
     </div>
   </div>
-</div>
 
 <?php endforeach; ?>

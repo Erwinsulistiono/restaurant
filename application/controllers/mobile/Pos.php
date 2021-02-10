@@ -34,26 +34,44 @@ class Pos extends MY_Controller
 			'taxresto' => $this->M_crud->select('tbl_tax', 'tax_id', '2')['tax_persen'],
 			'taxservice' => $this->M_crud->select('tbl_tax', 'tax_id', '1')['tax_persen'],
 		];
-		$this->load->view('mobile/v_order', $data);
+		$this->load->view('mobile/v_cart', $data);
 	}
 
 
 	public function confirm_order()
 	{
-		$dataPost = json_decode(file_get_contents('php://input'), true);
-		$dataPelanggan = $this->prosesPelanggan($dataPost);
-		$this->prosesPesanan($dataPost, $dataPelanggan['plg_id']);
+		$data_post = json_decode(file_get_contents('php://input'), true);
+		$data_pelanggan = $this->proses_pelanggan($data_post);
+		$this->prosesPesanan($data_post, $data_pelanggan['plg_id']);
 
 		$this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Terimakasih Sudah Memesan di resto kami.</div>');
-		$dataPelanggan['hashed'] = md5($dataPelanggan['plg_id'] . '-' . $dataPost['db']);
-		echo json_encode($dataPelanggan);
+		$data_pelanggan['hashed'] = md5($data_pelanggan['plg_id'] . '-' . $data_post['db']);
+		echo json_encode($data_pelanggan);
+	}
+
+	public function paid_order()
+	{
+		$data_post = json_decode(file_get_contents('php://input'), true);
+		$outlet_id = $data_post['db'];
+		$trx_id = $this->M_crud->select('tbl_pelanggan', 'plg_id', $data_post['customerId'])['plg_order'];
+
+		$data = [
+			'trx_payment' => $data_post['payment_nama'],
+			'trx_nomor' => 'INV' . str_pad(($trx_id), 3, "0", STR_PAD_LEFT),
+			'trx_cardno' => $data_post['nomor_kartu'],
+			'trx_payreff' => $data_post['nomor_reff'],
+		];
+
+		$this->M_crud->update("tbl_trx_pos_$outlet_id", $data, 'trx_id', $trx_id);
+		echo json_encode('true');
+		// echo json_encode($is_updated);
 	}
 
 
-	function prosesPesanan($dataPost, $plg_id)
+	function prosesPesanan($data_post, $plg_id)
 	{
-		$tipeTransaksi = $dataPost['tipe_transaksi'];
-		foreach ($dataPost['cart'] as $cart) {
+		$tipeTransaksi = $data_post['tipe_transaksi'];
+		foreach ($data_post['cart'] as $cart) {
 			$data[] = array(
 				'order_menu' => $cart['id'],
 				'order_qty' => $cart['count'],
@@ -63,25 +81,25 @@ class Pos extends MY_Controller
 				'order_date' => date('Y-m-d H:i:s'),
 				'order_userid' => $plg_id,
 				'order_trx_tipe' => $tipeTransaksi,
-				'order_cust_table' => $dataPost['cust_meja'],
-				'order_cust_address' => $dataPost['cust_alamat'],
-				'order_cust_notes' => $dataPost['cust_notes'],
-				'order_cust_platno' => $dataPost['cust_platno'],
-				'order_cust_phone' => $dataPost['cust_telp'],
-				'order_payment_id' => $dataPost['payment_id'],
-				'order_payment_nama' => $dataPost['payment_nama'],
-				'order_nomor_kartu' => $dataPost['nomor_kartu'],
-				'order_nomor_reff' => $dataPost['nomor_reff'],
-				'order_voucher_id' => $dataPost['voucher_id'],
+				'order_cust_table' => $data_post['cust_meja'],
+				'order_cust_address' => $data_post['cust_alamat'],
+				'order_cust_notes' => $data_post['cust_notes'],
+				'order_cust_platno' => $data_post['cust_platno'],
+				'order_cust_phone' => $data_post['cust_telp'],
+				'order_payment_id' => $data_post['payment_id'],
+				'order_payment_nama' => $data_post['payment_nama'],
+				'order_nomor_kartu' => $data_post['nomor_kartu'],
+				'order_nomor_reff' => $data_post['nomor_reff'],
+				'order_voucher_id' => $data_post['voucher_id'],
 			);
 		}
-		$insertBatch = $this->M_mobile->insert_bulk_order($data, $dataPost['db']);
+		$this->M_mobile->insert_bulk_order($data, $data_post['db']);
 	}
 
 
-	function prosesPelanggan($data)
+	function proses_pelanggan($data)
 	{
-		$dataPelanggan = [
+		$data_pelanggan = [
 			'plg_nama' => strip_tags(str_replace("'", "", $data['cust_nama'])),
 			'plg_notelp' => $data['cust_telp'],
 			'plg_whatsapp' => $data['cust_telp'],
@@ -92,21 +110,13 @@ class Pos extends MY_Controller
 			'plg_meja' => $data['cust_meja'],
 		];
 		if ($data['customerId'] == 0) {
-			$this->M_crud->insert('tbl_pelanggan', $dataPelanggan);
-			$dataPelanggan['plg_id'] = $this->db->insert_id();
-			return $dataPelanggan;
+			$this->M_crud->insert('tbl_pelanggan', $data_pelanggan);
+			$data_pelanggan['plg_id'] = $this->db->insert_id();
+			return $data_pelanggan;
 		}
-		$this->M_crud->update('tbl_pelanggan', $dataPelanggan, 'plg_id', $data['customerId']);
-		$dataPelanggan['plg_id'] = $data['customerId'];
-		return $dataPelanggan;
-	}
-
-
-	public function voucher()
-	{
-		$id = $this->input->post('id');
-		$data = $this->M_crud->select('tbl_voucher', 'voucher_id', $id);
-		echo json_encode($data);
+		$this->M_crud->update('tbl_pelanggan', $data_pelanggan, 'plg_id', $data['customerId']);
+		$data_pelanggan['plg_id'] = $data['customerId'];
+		return $data_pelanggan;
 	}
 
 

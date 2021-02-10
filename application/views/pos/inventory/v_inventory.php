@@ -49,7 +49,9 @@
   </div>
 </div>
 
-<?php foreach ($data as $table_content) : ?>
+<?php foreach ($data as $table_content) :
+  $pengguna_outlet = $this->session->userdata('pengguna_outlet');
+?>
   <div class="modal fade" id="modal_edit_stok<?= $table_content['stock_id']; ?>" tabindex="-1" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -58,7 +60,7 @@
             <span class="fa fa-times"></span></button>
           <h3 class="modal-title" id="myModalLabel">Edit Stock</h3>
         </div>
-        <form class="form-horizontal" role="form" method="post" action="<?= base_url('admin/inventory/simpan_inventory/') . $this->session->userdata('pengguna_outlet'); ?>" enctype="multipart/form-data">
+        <form class="form-horizontal" role="form" method="post" action="<?= base_url("admin/inventory/simpan_inventory/$pengguna_outlet"); ?>" enctype="multipart/form-data">
           <div class="modal-body">
             <div class="form-group">
               <label class="col-sm-3 control-label">Kode Barang</label>

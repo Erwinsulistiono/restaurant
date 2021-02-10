@@ -54,7 +54,6 @@ class Waitress extends MY_Controller
 
 	public function return_order_after_cancelation()
 	{
-		$orderId = $this->input->post('orderId');
 		$trxId = $this->input->post('trxId');
 		$this->M_waitress->clear_order_after_cancelation($this->outlet, $trxId);
 

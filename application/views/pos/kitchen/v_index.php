@@ -9,13 +9,14 @@
 
           <div class="row">
             <?php foreach ($kitchen as $k) : ?>
+              <?php $kitchen_id = $k['kitchen_id']; ?>
               <?php $random = rand(0, 3); ?>
               <?php ($random == 0) && ($color = "alert-info"); ?>
               <?php ($random == 1) && ($color = "alert-warning"); ?>
               <?php ($random == 2) && ($color = "alert-danger"); ?>
               <?php ($random == 3) && ($color = "alert-success"); ?>
               <!-- BEGIN ALERT - REVENUE -->
-              <a href="<?= base_url('pos/kitchen/view_kitchen/') . $k['kitchen_id'] ?>">
+              <a href="<?= base_url("pos/kitchen/view_kitchen/$kitchen_id"); ?>">
                 <div class="col-md-3 col-sm-6">
                   <div class="card">
                     <div class="card-body no-padding">

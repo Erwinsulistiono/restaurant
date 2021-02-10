@@ -16,9 +16,12 @@
               <div class="hbox-column col-md-4  style-default-light">
                 <div class="row">
 
+                  <?php
+                  $photo = $users['pengguna_photo'];
+                  ?>
                   <div class="col-xs-12">
                     <div class="text-center">
-                      <img class="img-circle size-3" src="<?= base_url("assets/images/${users['pengguna_photo']}"); ?>" alt="user" />
+                      <img class="img-circle size-3" src="<?= base_url("assets/images/$photo"); ?>" alt="user" />
                       <div>
                         <br>
                         <h1 class="text-light no-margin"><?= $this->session->userdata("user_nama") ?></h1>

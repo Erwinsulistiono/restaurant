@@ -390,11 +390,11 @@ foreach ($data as $table_content) :
   });
 
   let no;
-  let outletId = '<?php echo $outlet_id ?>';
+  let outletId = '<?= $outlet_id ?>';
   let inventory = [];
   let checkRecipeDuplicate;
-  let ingredient = JSON.parse('<?php echo $ingredient ?>');
-  let satuan = JSON.parse('<?php echo $satuan ?>');
+  let ingredient = JSON.parse('<?= $ingredient ?>');
+  let satuan = JSON.parse('<?= $satuan ?>');
   let ing_inv_id;
   let ing_qty;
   let ing_satuan_id;
@@ -474,7 +474,7 @@ foreach ($data as $table_content) :
   }
 
   function printIng(data) {
-    inventory = JSON.parse('<?php echo $inventory ?>');
+    inventory = JSON.parse('<?= $inventory ?>');
     ing_inv_id = [];
     ing_qty = [];
     ing_satuan_id = [];
@@ -535,7 +535,7 @@ foreach ($data as $table_content) :
   }
 
   let removeIdAndAssignToSelect = (deletedId) => {
-    const allInventory = JSON.parse('<?php echo $inventory ?>');
+    const allInventory = JSON.parse('<?= $inventory ?>');
     const addInventory = allInventory.filter(a => a.stock_id == deletedId);
     checkRecipeDuplicate.pop(deletedId);
     inventory = allInventory.filter(inv => !checkRecipeDuplicate.includes(inv.stock_id));

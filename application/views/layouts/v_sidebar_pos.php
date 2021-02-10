@@ -6,7 +6,7 @@
       </a>
     </div>
     <div class="expanded">
-      <a href="<?= base_url() . 'login' ?>">
+      <a href="<?= base_url('login'); ?>">
         <span class="text-lg text-bold text-primary">F1&nbsp;RESTAURANT</span>
       </a>
     </div>
@@ -15,7 +15,7 @@
     <ul id="main-menu" class="gui-controls">
       <?php if ($data['pos'] == 'Y') : ?>
         <li class="gui-folder">
-          <a href="<?= base_url() . 'pos/saldo' ?>">
+          <a href="<?= base_url('pos/saldo'); ?>">
             <div class="gui-icon"><i class="fa fa-desktop"></i></div>
             <span class="title">POS</span>
           </a>
@@ -24,7 +24,7 @@
 
       <?php if ($data['inventory'] == 'Y') : ?>
         <li class="gui-folder">
-          <a href="<?= base_url() . 'pos/inventory' ?>">
+          <a href="<?= base_url('pos/inventory'); ?>">
             <div class="gui-icon"><i class="fa fa-cubes"></i></div>
             <span class="title">Inventory</span>
           </a>
@@ -33,7 +33,7 @@
 
       <?php if ($data['transaction'] == 'Y') : ?>
         <li class="gui-folder">
-          <a href="<?= base_url() . 'pos/transaksi' ?>">
+          <a href="<?= base_url('pos/transaksi'); ?>">
             <div class="gui-icon"><i class="fa fa-book"></i></div>
             <span class="title">Transaction</span>
           </a>
@@ -42,7 +42,7 @@
 
       <?php if ($data['kitchen'] == 'Y') : ?>
         <li class="gui-folder">
-          <a href="<?= base_url() . 'pos/kitchen' ?>">
+          <a href="<?= base_url('pos/kitchen'); ?>">
             <div class="gui-icon"><i class="fa fa-cutlery"></i></div>
             <span class="title">Kitchen</span>
           </a>
@@ -51,7 +51,7 @@
 
       <?php if ($data['waitress'] == 'Y') : ?>
         <li class="gui-folder">
-          <a href="<?= base_url() . 'pos/waitress' ?>">
+          <a href="<?= base_url('pos/waitress'); ?>">
             <div class="gui-icon"><i class="fa fa-user"></i></div>
             <span class="title">Waitress</span>
           </a>
@@ -78,14 +78,14 @@
             <span class="title">Settings</span>
           </a>
           <ul>
-            <li><a href="<?= base_url(); ?>pos/settings/close_kasir"><span class="title">Closing Kasir</span></a></li>
+            <li><a href="<?= base_url('pos/settings/close_kasir'); ?>"><span class="title">Closing Kasir</span></a></li>
           </ul>
         </li>
       <?php endif; ?>
 
       <?php if ($data['user'] == 'Y') : ?>
         <li class="gui-folder">
-          <a href="<?= base_url() . 'pos/pengguna' ?>">
+          <a href="<?= base_url('pos/pengguna'); ?>">
             <div class="gui-icon"><i class="fa fa-user"></i></div>
             <span class="title">User</span>
           </a>
@@ -94,7 +94,7 @@
 
 
       <li class="gui-folder">
-        <a href="<?= base_url() . 'pos/about' ?>">
+        <a href="<?= base_url('pos/about'); ?>">
           <div class="gui-icon"><i class="fa fa-info-circle"></i></div>
           <span class="title">Info</span>
         </a>
