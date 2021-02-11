@@ -25,7 +25,8 @@
 					<a href="<?= base_url("admin/pos/pdf/$pengguna_kasir/$tgl_awal/$tgl_akhir/$outlets"); ?>" target="_blank" class="btn btn-default-light text-danger btn-raised"><span class="fa fa-file-pdf-o text-danger"></span>
 						PDF</a>
 					<a href="<?= base_url("admin/pos/excel/$pengguna_kasir/$tgl_awal/$tgl_akhir/$outlets"); ?>" class="btn btn-default-light text-success btn-raised"><span class="fa fa-file-excel-o text-success"></span>
-						EXCEL</a></p>
+						EXCEL</a>
+				</p>
 				<div class="section-body">
 					<div class="row">
 

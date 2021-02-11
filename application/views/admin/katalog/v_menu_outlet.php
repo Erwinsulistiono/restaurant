@@ -61,6 +61,7 @@
                       endforeach;
                       ?>
                     </td>
+
                     <?php if ($outlet_id !== 'master') : ?>
                       <td>
                         <?php foreach ($kitchen as $row) :
@@ -69,25 +70,22 @@
                           endif;
                         endforeach;
                         ?>
-
                       </td>
                     <?php else : ?>
                       <td style="display: none;"></td>
                     <?php endif; ?>
+
                     <td class="text-right">
-                      <?php (($outlet_id == 'master') && print('<a href="#" class="btn btn-icon-toggle btn-raised" title="Edit row" data-toggle="modal"
-                      data-target="#UpdateModal' . $menu_id . '"><i class="fa fa-pencil"></i></a>
-                    <a href="#" data-row="' . $menu_id . '" class="addIng btn btn-icon-toggle btn-raised"
-                      title="Edit recipe" data-toggle="modal" data-target="#RecipeModal' . $menu_id . '"><i
-                        class="fa fa-file text-primary-dark"></i></a>
-                    <a href="#" data-row="' . $menu_id . '" class="addIng btn btn-icon-toggle btn-raised"
-                      title="Tambah Menu Ke Outlet" data-toggle="modal" data-target="#MenuTransferModal' . $menu_id . '"><i
-                        class="fa fa-exchange text-primary-dark"></i></a>')); ?>
-                      <?php if ($outlet_id !== 'master') : ?>
+                      <?php if ($outlet_id == 'master') : ?>
+                        <a href="#" class="btn btn-icon-toggle btn-raised" title="Edit Menu" data-toggle="modal" data-target="#UpdateModal<?= $menu_id ?>"><i class="fa fa-pencil"></i></a>
+                        <a href="#" data-row="<?= $menu_id ?>" class="addIng btn btn-icon-toggle btn-raised" title="Edit recipe" data-toggle="modal" data-target="#RecipeModal<?= $menu_id ?>"><i class="fa fa-file text-primary-dark"></i></a>
+                        <a href="#" data-row="<?= $menu_id ?>" class="addIng btn btn-icon-toggle btn-raised" title="Tambah Menu Ke Outlet" data-toggle="modal" data-target="#MenuTransferModal<?= $menu_id ?>"><i class="fa fa-exchange text-primary-dark"></i></a>
+                      <?php else : ?>
                         <a href="#" class="btn btn-icon-toggle text-primary-dark btn-raised" title="Edit Kitchen" data-toggle="modal" data-target="#editKitchen<?= $menu_id; ?>"><i class="fa fa-cutlery"></i></a>
                       <?php endif; ?>
                       <a href="<?= base_url("admin/menu/hapus_menu/${outlet_id}/${menu_id}"); ?>" onclick="return confirm('Apakah anda yakin?')" class="btn btn-icon-toggle text-danger btn-raised" title="Delete row"><i class="fa fa-trash-o"></i></a>
                     </td>
+
                   </tr>
                 <?php endforeach; ?>
 
@@ -271,9 +269,10 @@ foreach ($data as $table_content) :
 
 <?php
 foreach ($data as $table_content) :
+  $menu_id = $table_content['menu_id'];
 ?>
-  <form class="form-horizontal" action="<?= base_url('admin/menu/transfer_menu/') . $table_content['menu_id']; ?>" method="post">
-    <div class="modal fade" id="MenuTransferModal<?= $table_content['menu_id']; ?>" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
+  <form class="form-horizontal" action="<?= base_url("admin/menu/transfer_menu/$menu_id"); ?>" method="post">
+    <div class="modal fade" id="MenuTransferModal<?= $menu_id; ?>" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -311,11 +310,11 @@ foreach ($data as $table_content) :
 ?>
   <!-- Modal Add/Update Resep-->
   <form class="form-horizontal formIngredient" action="<?= base_url("admin/menu/simpan_recipe/${outlet_id}/${menu_id}"); ?>" method="post">
-    <div class="modal fade" id="RecipeModal<?= $table_content['menu_id']; ?>" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
+    <div class="modal fade" id="RecipeModal<?= $menu_id; ?>" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" id="close-recipe<?= $table_content['menu_id'] ?>" class="close btn-raised text-danger" data-dismiss="modal" aria-hidden="true">
+            <button type="button" id="close-recipe<?= $menu_id ?>" class="close btn-raised text-danger" data-dismiss="modal" aria-hidden="true">
               <span class="fa fa-close"></span></button>
             <h3 class="modal-title" id="myModalLabel">Edit Recipe <?= $table_content['menu_nama']; ?></h3>
           </div>
@@ -328,7 +327,7 @@ foreach ($data as $table_content) :
           </div>
 
           <div class="modal-footer">
-            <a class="submitRecipe btn btn-raised btn-primary" data-dismiss="modal" data-menuid="<?= $table_content['menu_id']; ?>" aria-hidden="true" data-form="<?= $table_content['menu_id']; ?>">Simpan</a>
+            <a class="submitRecipe btn btn-raised btn-primary" data-dismiss="modal" data-menuid="<?= $menu_id; ?>" aria-hidden="true" data-form="<?= $menu_id; ?>">Simpan</a>
           </div>
         </div>
       </div>
@@ -340,8 +339,9 @@ foreach ($data as $table_content) :
 
 <?php
 foreach ($data as $table_content) :
+  $menu_id = $table_content['menu_id'];
 ?>
-  <div class="modal fade" id="editKitchen<?= $table_content['menu_id']; ?>" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
+  <div class="modal fade" id="editKitchen<?= $menu_id; ?>" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -351,7 +351,7 @@ foreach ($data as $table_content) :
         </div>
 
         <form class="form-horizontal" action="<?= base_url("admin/menu/simpan_kitchen/$outlet_id"); ?>" method="post" enctype="multipart/form-data">
-          <input type="hidden" name="menu_id" class="form-control" value="<?= $table_content['menu_id']; ?>">
+          <input type="hidden" name="menu_id" class="form-control" value="<?= $menu_id; ?>">
           <div class="form-group">
             <label for="select13" class="col-sm-3 control-label">Kitchen</label>
             <div class="col-sm-8">
@@ -438,37 +438,36 @@ foreach ($data as $table_content) :
     let repeatInput = '';
     let divs = $("div.repeater").html();
 
-    repeatInput += `<div class="row additional">
-      <div class="col-xs-7">
-      <div class="form-group">
-      <label class="col-xs-3" style="opacity:0.5; font-size:1.7rem;">ingredient</label>
-      <div class="col-xs-8">
-      <select name="ing_inv_id[]" data-ing="${no}" class="ingId-${no} ing
-      form-control" onchange="printAvailSatuan( value ,${no})">
-      <option value="">&nbsp;</option>
-      </select>
-      </div>
-      </div>
-      </div>
-      <div class="col-xs-4">
-      <div class="form-group">
-      <label class="col-xs-2" style="opacity:0.5; font-size:1.7rem;">Qty</label>
-      <div class="col-xs-4">
-      <input type="number" name="ing_qty[]" class="ing_qty form-control text-right" value="">
-      </div>
-      <div class="col-xs-6">
-      <select name="ing_satuan_id[]" class="satuan-${no} sat-change form-control">
-      <option value="">
-      </option>
-      </select>
-      </div>
-      </div>
-      </div>
-      <div class="col-xs-1">
-      <a class="remove_field btn btn-icon-toggle text-danger" title="Delete row" data-delete="${no}">
-      <i class="fa fa-trash-o"></i></a>
-      </div>
+    repeatInput +=
+      `<div class="row additional">
+        <div class="col-xs-7">
+          <div class="form-group">
+            <label class="col-xs-3" style="opacity:0.5; font-size:1.7rem;">ingredient</label>
+            <div class="col-xs-8">
+              <select name="ing_inv_id[]" data-ing="${no}" class="ingId-${no} ing form-control" onchange="printAvailSatuan( value ,${no})">
+                <option value="">&nbsp;</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <div class="form-group">
+            <label class="col-xs-2" style="opacity:0.5; font-size:1.7rem;">Qty</label>
+            <div class="col-xs-4">
+              <input type="number" name="ing_qty[]" class="ing_qty form-control text-right" value="">
+            </div>
+            <div class="col-xs-6">
+              <select name="ing_satuan_id[]" class="satuan-${no} sat-change form-control">
+                <option value=""> </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-1">
+          <a class="remove_field btn btn-icon-toggle text-danger" title="Delete row" data-delete="${no}"><i class="fa fa-trash-o"></i></a>
+        </div>
       </div>`;
+
     $('.repeater').append(repeatInput);
     populateOptionIngredient();
   }
@@ -486,13 +485,13 @@ foreach ($data as $table_content) :
 
     for (let j in data) {
       no++;
-      repeatInput += `<div class="row additional">
-        <div class="col-xs-7">
-        <div class="form-group">
-        <label class="col-xs-3" style="opacity:0.5; font-size:1.7rem;">ingredient</label>
-        <div class="col-xs-8">
-        <select name="ing_inv_id[]" data-ing="${no}" class="ingId-${no} ing
-        form-control" disabled>`;
+      repeatInput +=
+        `<div class="row additional">
+          <div class="col-xs-7">
+            <div class="form-group">
+              <label class="col-xs-3" style="opacity:0.5; font-size:1.7rem;">ingredient</label>
+              <div class="col-xs-8">
+                <select name="ing_inv_id[]" data-ing="${no}" class="ingId-${no} ing form-control" disabled>`;
 
       for (let i in inventory) {
         if (data[j].ing_inv_id == inventory[i].stock_id) {
@@ -502,27 +501,27 @@ foreach ($data as $table_content) :
         };
       };
 
-      repeatInput += `</select>
-        </div>
-        </div>
-        </div>
-        <div class="col-xs-4">
-        <div class="form-group">
-        <label class="col-xs-2" style="opacity:0.5; font-size:1.7rem;">Qty</label>
-        <div class="col-xs-4">
-        <input type="number" name="ing_qty[]" class="form-control text-right" value="${Number(data[j].ing_qty)}" disabled>
-        </div>
-        <div class="col-xs-6">
-        <select name="ing_satuan_id[]" class="satuan-${no} sat-change form-control" disabled>
-        <option value="${data[j].satuan_id}" selected>${data[j].satuan_kode}</option>
-        </select>
-        </div>
-        </div>
-        </div>
-        <div class="col-xs-1">
-        <a class="remove_field btn btn-icon-toggle text-danger" title="Delete row" data-delete="${no}">
-        <i class="fa fa-trash-o"></i></a>
-        </div>
+      repeatInput +=
+        `</select>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-4">
+            <div class="form-group">
+              <label class="col-xs-2" style="opacity:0.5; font-size:1.7rem;">Qty</label>
+              <div class="col-xs-4">
+                <input type="number" name="ing_qty[]" class="form-control text-right" value="${Number(data[j].ing_qty)}" disabled>
+              </div>
+              <div class="col-xs-6">
+                <select name="ing_satuan_id[]" class="satuan-${no} sat-change form-control" disabled>
+                  <option value="${data[j].satuan_id}" selected>${data[j].satuan_kode}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-1">
+            <a class="remove_field btn btn-icon-toggle text-danger" title="Delete row" data-delete="${no}"><i class="fa fa-trash-o"></i></a>
+          </div>
         </div>`;
 
       ing_satuan_id.push(data[j].satuan_id);
@@ -577,9 +576,7 @@ foreach ($data as $table_content) :
       post_qty: ing_qty,
       post_satuan_id: ing_satuan_id,
     };
-    // let split_url = $(this).attr("action").split('/');
     let menu_id = $(this).data('menuid');
-    // let menu_id = split_url[split_url.length - 1];
     !isDuplicate(checkRecipeDuplicate) && alert("Duplicate Ingredient");
     isDuplicate(checkRecipeDuplicate) &&
       $.ajax({
@@ -596,7 +593,6 @@ foreach ($data as $table_content) :
           })
         }
       })
-    // $(`#close-recipe${menu_id}`).click();
     return false;
   })
 

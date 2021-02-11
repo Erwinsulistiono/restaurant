@@ -43,7 +43,7 @@
                     <td><?= $table_content['payment_norek']; ?></td>
                     <td><?= $table_content['payment_bank']; ?></td>
                     <td class="text-right">
-                      <a href="#" class="btn btn-icon-toggle btn-raised" title="Edit row" data-toggle="modal" data-target="#modal_edit_payment<?= $table_content['payment_id']; ?>"><i class="fa fa-pencil"></i></a>
+                      <a href="#" class="btn btn-icon-toggle btn-raised" title="Edit row" data-toggle="modal" data-target="#modal_edit_payment<?= $payment_id; ?>"><i class="fa fa-pencil"></i></a>
                       <a href="<?= base_url("admin/pos/hapus_payment/$payment_id"); ?>" onclick="return confirm('Apakah anda yakin?')" class="btn btn-icon-toggle text-danger btn-raised" title="Delete row"><i class="fa fa-trash-o"></i></a>
                     </td>
                   </tr>

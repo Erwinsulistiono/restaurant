@@ -270,7 +270,7 @@ class Pos extends MY_Controller
 		$insertBulk = $this->M_crud->insert_bulk("tbl_order_$this->outlet", $data_order);
 		$plg_order['plg_order'] = $reff_id;
 		$this->M_crud->update('tbl_pelanggan', $plg_order, 'plg_id', $plg_id);
-		if (null !== $this->input->post('isMobile')) {
+		if ($this->M_crud->select("cust_order_$this->outlet", 'order_userid', $plg_id)) {
 			$this->M_crud->delete("cust_order_$this->outlet", 'order_userid', $plg_id);
 		}
 

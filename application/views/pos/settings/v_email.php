@@ -45,11 +45,11 @@
     /**
    * Remove extra space added to tables and cells in Outlook.
    */
-    table,
+    /* table,
     td {
       mso-table-rspace: 0pt;
       mso-table-lspace: 0pt;
-    }
+    } */
 
     /**
    * Better fluid images in Internet Explorer.

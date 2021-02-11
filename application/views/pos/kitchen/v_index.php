@@ -29,16 +29,12 @@
                         </div>
                       </div>
                     </div>
-                    <!--end .card-body -->
                   </div>
-                  <!--end .card -->
                 </div>
               </a>
-              <!--end .col -->
               <!-- END ALERT - REVENUE -->
             <?php endforeach; ?>
             <!-- BEGIN ALERT - VISITS -->
-
 
           </div>
         </div>

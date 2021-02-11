@@ -45,7 +45,7 @@
                     <td><?= $table_content['area_nama']; ?></td>
                     <td><?= $table_content['area_level']; ?></td>
                     <td class="text-right">
-                      <a href="#" class="btn btn-icon-toggle btn-raised" title="Edit row" data-toggle="modal" data-target="#modal_edit_meja<?= $table_content['meja_id']; ?>"><i class="fa fa-pencil"></i></a>
+                      <a href="#" class="btn btn-icon-toggle btn-raised" title="Edit row" data-toggle="modal" data-target="#modal_edit_meja<?= $meja_id; ?>"><i class="fa fa-pencil"></i></a>
                       <a href="<?= base_url("admin/restaurant/hapus_meja/${outlet_id}/$meja_id"); ?>" onclick="return confirm('Apakah anda yakin?')" class="btn btn-icon-toggle btn-raised" title="Delete row">
                         <i class="fa fa-trash-o text-danger"></i></a>
                     </td>

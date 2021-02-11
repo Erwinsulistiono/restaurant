@@ -158,7 +158,7 @@
                     <div class="card no-padding" style="bottom:-13px; position:absolute; width:-webkit-fill-available; width:100vw">
                         <div class="row">
                             <div class="col-xs-12 no-padding">
-                                <a href="<?= base_url('mobile/pos/display_table_cart/') ?>" class="btn btn-block btn-primary btn-raised">Bayar</a>
+                                <a href="<?= base_url('mobile/pos/display_table_cart/'); ?>" class="btn btn-block btn-primary btn-raised">Bayar</a>
                             </div>
                         </div>
                     </div>

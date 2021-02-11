@@ -54,7 +54,7 @@
                     <td><?= date_format(date_create($table_content['out_closing_hours']), 'H:i'); ?></td>
                     <td><?= $table_content['out_nm_pic']; ?></td>
                     <td class="text-right">
-                      <a href="#" class="btn btn-icon-toggle btn-raised" title="Edit row" data-toggle="modal" data-target="#modal_edit_outlet<?= $table_content['out_id']; ?>"><i class="fa fa-pencil"></i></a>
+                      <a href="#" class="btn btn-icon-toggle btn-raised" title="Edit row" data-toggle="modal" data-target="#modal_edit_outlet<?= $outlet_id; ?>"><i class="fa fa-pencil"></i></a>
                       <a href="<?= base_url("admin/parameter/hapus_outlet/$outlet_id"); ?>" onclick="return confirm('Apakah anda yakin?')" class="btn btn-icon-toggle text-danger btn-raised" title="Delete row"><i class="fa fa-trash-o"></i></a>
                     </td>
                   </tr>

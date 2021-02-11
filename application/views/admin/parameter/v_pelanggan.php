@@ -62,29 +62,17 @@
                         <i class="fa fa-trash-o text-danger"></i></a>
                     </td>
                   </tr>
-
                 <?php endforeach; ?>
-
               </tbody>
             </table>
-
           </div>
         </div>
-        <!--end .section-body -->
-
-
       </section>
     </section>
     <!-- END TABLE HOVER -->
-
-
-
   </div>
-  <!--end #content-->
   <!-- END CONTENT -->
-
 </div>
-<!--end #base-->
 <!-- END BASE -->
 
 

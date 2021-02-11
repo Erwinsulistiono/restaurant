@@ -2,13 +2,8 @@
 <div id="base">
 
   <!-- BEGIN OFFCANVAS LEFT -->
-  <div class="offcanvas">
+  <div class="offcanvas"></div>
 
-  </div>
-  <!--end .offcanvas-->
-  <!-- END OFFCANVAS LEFT -->
-
-  <!-- BEGIN CONTENT-->
   <div id="content">
     <section>
       <div class="section-header">
@@ -52,15 +47,12 @@
             </table>
           </div>
         </div>
-        <!--end .section-body -->
       </section>
     </section>
     <!-- END TABLE HOVER -->
   </div>
-  <!--end #content-->
   <!-- END CONTENT -->
 </div>
-<!--end #base-->
 <!-- END BASE -->
 
 <!-- ============ MODAL ADD OUTLET =============== -->

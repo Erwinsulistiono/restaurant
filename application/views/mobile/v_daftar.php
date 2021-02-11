@@ -8,7 +8,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- END META -->
-    <link rel="shorcut icon" href="<?= base_url() . 'assets/img/logo.png' ?>">
+    <link rel="shorcut icon" href="<?= base_url('assets/img/logo.png'); ?>">
     <!-- BEGIN STYLESHEETS -->
     <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/bootstrap.css'); ?>" />
     <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/materialadmin.css'); ?>" />
@@ -38,11 +38,12 @@
                                     <br /><br />
                                     <?= $this->session->flashdata('msg'); ?>
                                     <?php $disabled = '' ?>
+                                    <?php $out_id = $outlet['out_id']; ?>
                                     <?php if (!(date("H:i:s") > $outlet['out_opening_hours'] && date("H:i:s") < $outlet['out_closing_hours'])) : ?>
                                         <?php $disabled = 'style="display: none;"' ?>
                                         <img src="<?= base_url('assets/img/closed.svg') ?>" style="width:100vw;height:100%;position:absolute;left: 0;top: -4vh;background-color: #ffffff;z-index: 1001;" alt="" />
                                     <?php endif; ?>
-                                    <form class="form" id='customer-form' action='<?= base_url('mobile/pos/display_pos/') . $outlet['out_id'] ?>'>
+                                    <form class="form" id='customer-form' action='<?= base_url("mobile/pos/display_pos/$out_id"); ?>'>
                                         <div class="form-group floating-label">
                                             <input type="text" class="form-control dirty" id="plg_nama" name="plg_nama" required>
                                             <label for="username">Nama : *</label>
@@ -78,9 +79,7 @@
                                                         <option value="">&nbsp;</option>
                                                         <?php foreach ($data as $row) : ?>
                                                             <?php ($row['meja_id'] == $meja_id) ? $selectTable = 'selected' : $selectTable = '' ?>
-                                                            <!-- <php if ($row['meja_pelanggan'] == 0) : ?> -->
                                                             <option value="<?= $row['meja_id'] ?>" <?= $selectTable ?>><?= $row['meja_nama'] ?></option>
-                                                            <!-- <php endif; ?> -->
                                                         <?php endforeach; ?>
                                                     </select>
                                                     <label for="selectInput">Pilih Meja : *</label>
@@ -124,7 +123,6 @@
     <script type="text/javascript">
         let dataPelanggan = JSON.parse(sessionStorage.getItem('dataPelanggan'));
         document.querySelector('#notesPelanggan').style.display = (dataPelanggan ? 'none' : '');
-        // let detailOrder = JSON.parse(sessionStorage.getItem('order'));
 
         document.querySelector('#selectMethodOfTable').addEventListener('change', (e) => {
             printLayout(e);
@@ -132,7 +130,7 @@
 
         let printLayout = (e) => {
             let methodType = e.target.value;
-            let div = ''
+            let div = '';
             let meja = JSON.parse('<?= json_encode($data); ?>');
 
             if (methodType == 1) {

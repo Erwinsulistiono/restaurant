@@ -1,11 +1,6 @@
   <!-- BEGIN BASE-->
   <div id="base">
-    <!-- BEGIN OFFCANVAS LEFT -->
-    <div class="offcanvas">
-    </div>
-    <!--end .offcanvas-->
-    <!-- END OFFCANVAS LEFT -->
-    <!-- BEGIN CONTENT-->
+    <div class="offcanvas"></div>
     <div id="content">
       <section>
         <div class="section-header">
@@ -37,7 +32,7 @@
                   $no = 0;
                   foreach ($data as $table_content) :
                     $voucher_id = $table_content['voucher_id'];
-                    $no++ ?>
+                    $no++; ?>
                     <tr>
                       <td><?= $no; ?></td>
                       <td><?= $table_content['voucher_kode']; ?></td>
@@ -49,7 +44,7 @@
                       <td><?= number_format($table_content['voucher_limit']); ?></td>
                       <td><?= $table_content['voucher_tandc']; ?></td>
                       <td class="text-right">
-                        <a href="#" class="btn btn-icon-toggle btn-raised" title="Edit row" data-toggle="modal" data-target="#modal_edit_voucher<?= $table_content['voucher_id']; ?>"><i class="fa fa-pencil"></i></a>
+                        <a href="#" class="btn btn-icon-toggle btn-raised" title="Edit row" data-toggle="modal" data-target="#modal_edit_voucher<?= $voucher_id; ?>"><i class="fa fa-pencil"></i></a>
                         <a href="<?= base_url("admin/katalog/hapus_voucher/${voucher_id}"); ?>" onclick="return confirm('Apakah anda yakin menghapus voucher <?= $table_content['voucher_nama'] ?>?')" class="btn btn-icon-toggle text-danger btn-raised" title="Delete row"><i class="fa fa-trash-o"></i></a>
                       </td>
                     </tr>
@@ -58,16 +53,10 @@
               </table>
             </div>
           </div>
-          <!--end .section-body -->
         </section>
       </section>
-      <!-- END TABLE HOVER -->
     </div>
-    <!--end #content-->
-    <!-- END CONTENT -->
   </div>
-  <!--end #base-->
-  <!-- END BASE -->
 
   <!-- ============ MODAL ADD VOUCHER =============== -->
   <div class="modal fade" id="modal_add_voucher" tabindex="-1" role="dialog" aria-labelledby="largeModal" aria-hidden="true">

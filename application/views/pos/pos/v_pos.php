@@ -1,13 +1,9 @@
-<img id="loading-screen" src="<?= base_url('assets/img/loading.svg') ?>" class="img-responsive" alt="" style="display: block; position: fixed; top: 40%; left: 45%; z-index: 1001;" />
+<img id="loading-screen" src="<?= base_url('assets/img/loading.svg'); ?>" class="img-responsive" alt="" style="display: block; position: fixed; top: 40%; left: 45%; z-index: 1001;" />
 <!-- BEGIN BASE-->
 <div id="base" style="display:none;">
-  <div class="offcanvas">
-
-  </div>
+  <div class="offcanvas"></div>
   <div id="content">
-    <!-- <pre>
-      <php var_dump($trx) ?>
-    </pre> -->
+
     <section>
       <div class="section-header">
         <h2><span class="fa fa-cutlery"></span> Point of Sale</h2>
@@ -41,15 +37,14 @@
                 <div class="pull-right">
                   <h4><?= strtoupper($trx_prop['trx_tipe']) . ' - ' .  (isset($trx_prop['trx_tipe_nama']) ? strtoupper($trx_prop['trx_tipe_nama']) . '' : ''); ?></h4>
                 </div>
-                <?php if (isset($trx_prop['plg_id']) && isset($trx_prop['trx_tipe_nama'])) {
+                <?php if (isset($trx_prop['plg_id']) && isset($trx_prop['trx_tipe_nama'])) :
                   $plg_id = $trx_prop['plg_id'];
                   $nama_tipe_trx = $trx_prop['trx_tipe_nama'];
-                }
+                endif;
                 ?>
                 <form role="form" id="order_form" method="post" action="<?= base_url("pos/pos/proses_kitchen/$plg_id/$nama_tipe_trx"); ?>">
 
                   <table class="table no-margin no-padding table-responsive">
-
                     <div class="caption">
                       <thead>
                         <tr>
@@ -86,8 +81,7 @@
                       </tfoot>
                       <tr>
                         <th style="text-align:left;" colspan="3">Sub Total</th>
-                        <th style="text-align:center;" colspan="2"><input class="form-control" id="subTotal" name="subtotal" value="<?= number_format($valueSubTotal, 0, '', '.'); ?>" readonly>
-                        </th>
+                        <th style="text-align:center;" colspan="2"><input class="form-control" id="subTotal" name="subtotal" value="<?= number_format($valueSubTotal, 0, '', '.'); ?>" readonly></th>
                       </tr>
                       <div class="form-group">
                         <tr>
@@ -158,8 +152,8 @@
                             Bayar <i class="fa fa-caret-up"></i>
                           </button>
                         <?php endif; ?>
-                        <ul class="dropdown-menu pull-right" role="menu">
 
+                        <ul class="dropdown-menu pull-right" role="menu">
                           <?php if (isset($trx[0]['order_payment_id'])) : ?>
                             <?php foreach ($payment as $k) :
                               $k_id = $k['payment_id'];
@@ -323,7 +317,6 @@
         <div class="table-responsive">
 
           <?php if ($t['tipe_transaksi_id'] == 1) : ?>
-
             <?php foreach ($alltable as $row) : ?>
 
               <?php $style = "style-default"; ?>
@@ -988,8 +981,6 @@ foreach ($payment as $k) :
       type: 'GET',
       dataType: 'json',
       success: function(data) {
-        console.log('berhasil fetch')
-        console.log(data)
         if (data['mobile_app_order'].length > 0) {
           printMobileOrder(data);
         } else {
@@ -1084,7 +1075,6 @@ foreach ($payment as $k) :
 <!-- MODAL PROSES PEMESANAN KE DAPUR SAAT METODE PAY FIRST -->
 <script type="text/javascript">
   let submitOrderToKitchen = () => {
-    console.log('submit to kitchen');
     let data = {
       discount: clearFormating($("#discount")),
       subtotal: clearFormating($("#subTotal")),
@@ -1092,8 +1082,8 @@ foreach ($payment as $k) :
       totalservice: clearFormating($("#totalService")),
       grandtotal: clearFormating($("#grandTotal")),
       trx_tipe: $('#trx_tipe').val(),
-      pay_first: true,
-      isMobile: true,
+      pay_first: 'true',
+      isMobile: 'true',
     }
     $.ajax({
       url: '<?= base_url("pos/pos/proses_kitchen/$trx_prop[plg_id]/$trx_prop[trx_tipe_nama]"); ?>',
@@ -1101,7 +1091,6 @@ foreach ($payment as $k) :
       data: data,
       dataType: "json",
       success: async function(data) {
-        console.log('success', data);
         await paidAndPrintReceipt();
       }
     });
@@ -1163,16 +1152,17 @@ foreach ($payment as $k) :
       }
 
       grandTotal += c.subtotal;
-      output += `<tr>
-        <td> ${c.name} - ${c.options.notes} </td>
-        <td> ${c.price} </td>
-        <td> ${c.qty} </td>
-        <td> ${c.subtotal} </td>
-        <td class="text-right">
-        <a href="#" class="hapus_cart text-danger btn btn-icon-toggle btn-raised"
-        id="${c.rowid}" title="hapus pesanan" ${buttonHapusDisabled}>
-        <i class="fa fa-trash"></i></a>
-        </td>
+      output +=
+        `<tr>
+          <td> ${c.name} - ${c.options.notes} </td>
+          <td> ${c.price} </td>
+          <td> ${c.qty} </td>
+          <td> ${c.subtotal} </td>
+          <td class="text-right">
+            <a href="#" class="hapus_cart text-danger btn btn-icon-toggle btn-raised"
+            id="${c.rowid}" title="hapus pesanan" ${buttonHapusDisabled}>
+            <i class="fa fa-trash"></i></a>
+          </td>
         <tr>`;
     })
     totalTaxResto = (grandTotal * dividedByOneHundred(data['taxresto']));
@@ -1197,21 +1187,29 @@ foreach ($payment as $k) :
         let table = data['table'];
         let order = data['order'];
         table.forEach(t => {
-          card += `<div class="col-md-3">
-            <div class="card">
-            <div class="card-head style-gray">
-            <h3  class="text-center text-light"> ${t.trx_table} </h3></div>
-            <div class="card-body">`;
+          card +=
+            `<div class="col-md-3">
+              <div class="card">
+                <div class="card-head style-gray">
+                  <h3  class="text-center text-light"> ${t.trx_table} </h3>
+                </div>
+                <div class="card-body">`;
           order.forEach(o => {
             if ((t.trx_id) === (o.order_trx_reff) &&
               (t.order_date) === (o.order_date)) {
-              card += `<div class="clearfix">
-                <div class="pull-left"> ${o.order_menu} ( ${o.order_qty} )</div></div>`;
+              card +=
+                `<div class="clearfix">
+              <div class="pull-left"> ${o.order_menu} ( ${o.order_qty} )
+            </div>
+          </div>`;
               card += ((o.order_notes)) ? `<div class="clearfix"><div class="pull-left"> - ${o.order_notes} </div></div>` : '';
             }
           })
-          card += `<br/><div class="timeShow text-center"> ${t.order_date} </div><br/>
-            </div></div></div>`;
+          card += `<br/>
+          <div class="timeShow text-center"> ${t.order_date} </div><br/>
+        </div>
+      </div>
+    </div>`;
 
           (t.order_kitchen_flg == 'N') && $('#status_kitchen').html(card);
           ((t.order_kitchen_flg == 'Y') && (t.order_waitress_flg == 'N')) &&
@@ -1251,168 +1249,167 @@ foreach ($payment as $k) :
       let no = 1;
       let date = new Date(dH.order_date);
       if (dH.order_trx_tipe === '1') {
-        card += `<form role="form" method="post" action="${url}">
-          <div class="col-md-3 col-sm-4 col-xs-6">
-          <div class="card">`;
-        (dH.order_payment_id) && (card += `<div class="card-head style-success">`);
-        (!dH.order_payment_id) && (card += `<div class="card-head style-gray">`);
-        card += `<h3 class="text-center text-light">Dine In - ${dH.plg_nama} </h3>
-          </div>
-          <div class="card-body no-padding card-type-pricing">
-          <ul class="list-unstyled">
-          <li>
-          <div class="clearfix">
-          <div class="pull-left">Tgl :</div>
-          <div class="pull-right"> ${date.getDate()} / ${(date.getMonth()+1)} / ${date.getFullYear()} </div>
-          </div>
-          </li>
-          <li>
-          <div class="clearfix">
-          <div class="pull-left">Nama Meja :</div>
-          <div class="pull-right"> ${dH.meja_nama} </div>
-          </div>
-          </li>
-          <li>
-          <div class="clearfix">
-          <div class="pull-left">Area :</div>
-          <div class="pull-right"> ${dH.area_nama} </div>
-          </div>
-          </li>
-          <li>
-          <div class="clearfix">
-          <div class="pull-left">Lantai :</div>
-          <div class="pull-right"> ${dH.area_level} </div>
-          </div>
-          </li>`;
+        card +=
+          `<form role="form" method="post" action="${url}">
+            <div class="col-md-3 col-sm-4 col-xs-6">
+              <div class="card">`;
+        card += (dH.order_payment_id) ? (`<div class="card-head style-success">`) : (`<div class="card-head style-gray">`);
+        card += `
+                  <h3 class="text-center text-light">Dine In - ${dH.plg_nama} </h3>
+                </div>
+                <div class="card-body no-padding card-type-pricing">
+                  <ul class="list-unstyled">
+                    <li>
+                      <div class="clearfix">
+                        <div class="pull-left">Tgl :</div>
+                        <div class="pull-right"> ${date.getDate()} / ${(date.getMonth()+1)} / ${date.getFullYear()} </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="clearfix">
+                        <div class="pull-left">Nama Meja :</div>
+                        <div class="pull-right"> ${dH.meja_nama} </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="clearfix">
+                        <div class="pull-left">Area :</div>
+                        <div class="pull-right"> ${dH.area_nama} </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="clearfix">
+                        <div class="pull-left">Lantai :</div>
+                        <div class="pull-right"> ${dH.area_level} </div>
+                      </div>
+                    </li>`;
         if (dH.order_payment_id) {
-          card += `<li>
-            <div class="clearfix">
-            <div class="pull-left">Pembayaran : </div>
-            <div class="pull-right"> ${dH.order_payment_nama} </div>
-            </div>
-            </li>`;
+          card += `
+                    <li>
+                      <div class="clearfix">
+                        <div class="pull-left">Pembayaran : </div>
+                        <div class="pull-right"> ${dH.order_payment_nama} </div>
+                      </div>
+                    </li>`;
         }
         if (dH.order_voucher_id) {
-          card += `<li>
-            <div class="clearfix">
-            <div class="pull-left">Voucher : </div>
-            <div class="pull-right"> ${dH.voucher_kode} </div>
-            </div>
-            </li>`;
+          card += `
+                    <li>
+                      <div class="clearfix">
+                        <div class="pull-left">Voucher : </div>
+                        <div class="pull-right"> ${dH.voucher_kode} </div>
+                      </div>
+                    </li>`;
         }
-        card += `</ul>
-          </div>
-          <div class="card-body no-padding card-type-pricing">
-          <input type="hidden" name="meja_id" value="${dH.meja_id}">
-          <input type="hidden" name="order_mobile" value="true">
-          <input type="hidden" name="plg_id" value="${dH.order_userid}">
-          <div class="card-body text-center">
-          <button class="btn btn-primary btn-raised" type="submit">Detail</button>
-          <a href="${url}batalkan_pemesanan_mobile/${dH.order_userid}"
-          onclick="return confirm(Apakah anda yakin?)" class="btn btn-flat text-danger btn-raised">Decline</a>
-          </div>
-          </div>
-          </div>
-          </div>
+        card += `
+                  </ul>
+                </div>
+                <div class="card-body no-padding card-type-pricing">
+                  <input type="hidden" name="meja_id" value="${dH.meja_id}">
+                  <input type="hidden" name="order_mobile" value="true">
+                  <input type="hidden" name="plg_id" value="${dH.order_userid}">
+                  <div class="card-body text-center">
+                    <button class="btn btn-primary btn-raised" type="submit">Detail</button>
+                    <a href="${url}batalkan_pemesanan_mobile/${dH.order_userid}"
+                      onclick="return confirm(Apakah anda yakin?)" class="btn btn-flat text-danger btn-raised">Decline</a>
+                  </div>
+                </div>
+              </div>
+            </div>
           </form>`;
       } else {
-        card += `<form role="form" method="post" action="${url}">
-          <div class="col-md-3">
-          <div class="card">`;
-        (dH.order_payment_id) && (card += `<div class="card-head style-success">`);
-        (!dH.order_payment_id) && (card += `<div class="card-head style-gray">`);
-        card += `<h3 class="text-center text-light">`;
+        card += `
+          <form role="form" method="post" action="${url}">
+            <div class="col-md-3">
+              <div class="card">`;
+
+        card += (dH.order_payment_id) ? (`<div class="card-head style-success">`) : (`<div class="card-head style-gray">`);
+
+        card += `
+                  <h3 class="text-center text-light">`;
         ((dH.plg_alamat) && (card += `Delivery - ${dH.plg_nama}`));
         ((dH.plg_platno) && (card += `Car - ${dH.plg_nama}`));
         ((!dH.plg_alamat && !dH.plg_platno) && (card += `Take Away- ${dH.plg_nama}`));
 
-        card += `</h3>
-          </div>
-          <div class="card-body no-padding card-type-pricing">
-          <ul class="list-unstyled">
-          <li>
-          <div class="clearfix">
-          <div class="pull-left">Tgl :</div>
-          <div class="pull-right"> ${date.getDate()} / ${(date.getMonth()+1)} / ${date.getFullYear()} </div>
-          </div>
-          </li>`
+        card += `
+                  </h3>
+                </div>
+                <div class="card-body no-padding card-type-pricing">
+                  <ul class="list-unstyled">
+                    <li>
+                      <div class="clearfix">
+                        <div class="pull-left">Tgl :</div>
+                        <div class="pull-right"> ${date.getDate()} / ${(date.getMonth()+1)} / ${date.getFullYear()} </div>
+                      </div>
+                    </li>`
 
         if (dH.plg_alamat) {
-          card += `<li>
-          <div class="clearfix">
-          <div class="pull-left">Alamat :</div>
-          <div class="pull-right"> ${dH.plg_alamat} </div>
-          </div>
-          </li>`
+          card += `
+                    <li>
+                      <div class="clearfix">
+                        <div class="pull-left">Alamat :</div>
+                        <div class="pull-right"> ${dH.plg_alamat} </div>
+                      </div>
+                    </li>`
         } else if (dH.plg_platno) {
-          card += `<li>
-          <div class="clearfix">
-          <div class="pull-left">Plat Mobil :</div>
-          <div class="pull-right"> ${dH.order_cust_platno} </div>
-          </div>
-          </li>
-          <li>
-          <div class="clearfix">
-          <div class="pull-left">Cust Notes :</div>
-          <div class="pull-right"> ${dH.order_cust_notes} </div>
-          </div>
-          </li>`
+          card += `
+                    <li>
+                      <div class="clearfix">
+                        <div class="pull-left">Plat Mobil :</div>
+                        <div class="pull-right"> ${dH.order_cust_platno} </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="clearfix">
+                        <div class="pull-left">Cust Notes :</div>
+                        <div class="pull-right"> ${dH.order_cust_notes} </div>
+                      </div>
+                    </li>`
         }
 
-        card += `<li>
-          <div class="clearfix">
-          <div class="pull-left">No Telp :</div>
-          <div class="pull-right"> ${(dH.plg_notelp) ? dH.plg_notelp : '-'} </div>
-          </div>
-        </li>`
+        card += `
+                    <li>
+                      <div class="clearfix">
+                        <div class="pull-left">No Telp :</div>
+                        <div class="pull-right"> ${(dH.plg_notelp) ? dH.plg_notelp : '-'} </div>
+                      </div>
+                    </li>`
 
         if (dH.order_payment_id) {
-          card += `<li>
-            <div class="clearfix">
-            <div class="pull-left">Pembayaran : </div>
-            <div class="pull-right"> ${dH.order_payment_nama} </div>
-            </div>
-            </li>`;
-        }
-        if (dH.order_nomor_kartu) {
-          // card += `<li>
-          //   <div class="clearfix">
-          //   <div class="pull-left">No Kartu : </div>
-          //   <div class="pull-right"> ${dH.order_nomor_kartu} </div>
-          //   </div>
-          //   </li>`;
-        }
-        if (dH.order_nomor_reff) {
-          // card += `<li>
-          //   <div class="clearfix">
-          //   <div class="pull-left">No Reff : </div>
-          //   <div class="pull-right"> ${dH.order_nomor_reff} </div>
-          //   </div>
-          //   </li>`;
+          card += `
+                    <li>
+                      <div class="clearfix">
+                        <div class="pull-left">Pembayaran : </div>
+                        <div class="pull-right"> ${dH.order_payment_nama} </div>
+                      </div>
+                    </li>`;
         }
         if (dH.order_voucher_id) {
-          card += `<li>
-            <div class="clearfix">
-            <div class="pull-left">Voucher : </div>
-            <div class="pull-right"> ${dH.voucher_kode} </div>
-            </div>
-            </li>`;
+          card += `
+                    <li>
+                      <div class="clearfix">
+                        <div class="pull-left">Voucher : </div>
+                        <div class="pull-right"> ${dH.voucher_kode} </div>
+                      </div>
+                    </li>`;
         }
-        card += `</ul>
-          </div>
-          <div class="card-body no-padding card-type-pricing">
-          <input type="hidden" name="order_mobile" value="true">
-          <input type="hidden" name="plg_id" value="${dH.order_userid}">`;
+        card += `
+                  </ul>
+                </div>
+                <div class="card-body no-padding card-type-pricing">
+                  <input type="hidden" name="order_mobile" value="true">
+                  <input type="hidden" name="plg_id" value="${dH.order_userid}">`;
         ((dH.data_alamat) && (card += `<input type="hidden" name="plg_alamat" value="${dH.order_alamat}">`));
         ((dH.data_platno) && (card += `<input type="hidden" name="plg_platno" value="${dH.order_platno}">`));
-        card += `<div class="card-body text-center">
-          <button class="btn btn-primary btn-raised" type="submit">Detail</button>
-          <a href="${url}batalkan_pemesanan_mobile/${dH.order_userid}"
-          onclick="return confirm(Apakah anda yakin?)" class="btn btn-flat btn-raised text-danger">Decline</a>
-          </div>
-          </div>
-          </div>
-          </div>
+        card += `
+                  <div class="card-body text-center">
+                    <button class="btn btn-primary btn-raised" type="submit">Detail</button>
+                    <a href="${url}batalkan_pemesanan_mobile/${dH.order_userid}"
+                      onclick="return confirm(Apakah anda yakin?)" class="btn btn-flat btn-raised text-danger">Decline</a>
+                  </div>
+                </div>
+              </div>
+            </div>
           </form>`;
       }
     })

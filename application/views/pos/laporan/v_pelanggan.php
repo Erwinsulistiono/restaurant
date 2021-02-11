@@ -23,9 +23,7 @@
           EXCEL</a>
       </p>
       <?= $this->session->flashdata('msg'); ?>
-      <pre>
-        <?php var_dump($rinci) ?>
-      </pre>
+
       <!-- BEGIN TABLE HOVER -->
       <section class="card style-default-bright" style="margin-top:0px;">
         <div class="section-body">

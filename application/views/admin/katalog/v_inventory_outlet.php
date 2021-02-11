@@ -12,7 +12,8 @@
         <p><a href="<?= base_url('admin/inventory'); ?>" class="btn btn-primary btn-raised"><span class="fa fa-arrow-left"></span>
             Kembali</a>
           <span style="visibility:<?= $visibility ?>;">
-            <a href="#" class="btn btn-primary btn-raised" data-toggle="modal" data-target="#modal_buat_stock"><span class="fa fa-plus"></span> Barang</a></span></p>
+            <a href="#" class="btn btn-primary btn-raised" data-toggle="modal" data-target="#modal_buat_stock"><span class="fa fa-plus"></span> Barang</a></span>
+        </p>
 
         <div class="section-body">
           <div class="row">

@@ -3,7 +3,7 @@
   <div id="content">
     <section>
       <div class="section-header  ">
-        <!-- <h2><span class="fa fa-cutlery"></span> Kitchen</h2> -->
+
         <div class="row">
           <div class="col-xs-6">
             <p><a href="#" class="popup-btn btn btn-primary btn-raised"><span class="fa fa-arrow-left"></span>
@@ -53,7 +53,7 @@
 
     <script src="<?= base_url('assets/js/jquery-3.4.1.min.js'); ?>"></script>
     <script type="text/javascript">
-      let urlGetPesanan = '<?= base_url('pos/Pesanan/'); ?>'
+      let urlGetPesanan = '<?= base_url('pos/Pesanan/'); ?>';
       let trx;
       let order;
       let recipe;
@@ -73,9 +73,7 @@
             tipe = data.tipe;
             console.log(tipe);
             var no = 1;
-
-            let filteredTrx = trx.filter((v, i, a) => a.findIndex(t => (t.trx_id === v.trx_id)) === i)
-            console.log(filteredTrx);
+            let filteredTrx = trx.filter((v, i, a) => a.findIndex(t => (t.trx_id === v.trx_id)) === i);
 
             filteredTrx.forEach(t => {
               let cardKitchen = '';
@@ -100,12 +98,12 @@
               if (isOrderCanceled == 'N') {
                 cardHead +=
                   `<form role="form" class="form-${no} header-${t.trx_id}" method="post">
-                  <div class="col-xs-12">
-                  <div class="card">
-                  <div class="card-head style-gray">
-                  <h3 class="text-center text-light">${t.trx_table} - ${tipe_order}</h3>
-                  </div>
-                  <div class="card-body">`;
+                    <div class="col-xs-12">
+                      <div class="card">
+                        <div class="card-head style-gray">
+                          <h3 class="text-center text-light">${t.trx_table} - ${tipe_order}</h3>
+                        </div>
+                      <div class="card-body">`;
 
                 cardKitchen += cardHead;
                 cardWaitress += cardHead;

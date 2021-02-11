@@ -63,9 +63,6 @@
     </div>
     <script type="text/javascript">
         let dataPelanggan = JSON.parse(sessionStorage.getItem('dataPelanggan'));
-        console.log('cek order');
-        console.log('<?= $authPelanggan ?>');
-        console.log('<?= $dataPost ?>');
 
         document.querySelector('#selectMethodOfTable').addEventListener('change', (e) => {
             let methodType = e.target.value;
@@ -76,12 +73,14 @@
             if (methodType == 1) {
                 div +=
                     `<select name="meja_pelanggan" id="plg_meja" class="form-control dirty">
-                    <option value="">&nbsp;</option>`;
+                        <option value="">&nbsp;</option>`;
                 meja.forEach(m => {
-                    div += `<option value="${m.meja_id}">${m.meja_nama}</option>`;
+                    div +=
+                        `<option value="${m.meja_id}">${m.meja_nama}</option>`;
                 })
-                div += `</select>
-                <label for="selectInput">Pilih Meja : *</label>`;
+                div +=
+                    `</select>
+                    <label for="selectInput">Pilih Meja : *</label>`;
                 divTelp +=
                     `<input type="text" class="form-control dirty" id="plg_nama" name="plg_nama">
                     <label for="plg_nama">Nama : *</label>`;

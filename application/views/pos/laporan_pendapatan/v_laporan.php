@@ -9,9 +9,7 @@
         <h2><span class="	fa fa-map-marker"></span> Data Transaksi</h2>
       </div>
       <?= $this->session->flashdata('msg'); ?>
-      <!-- <pre>
-        <?php var_dump($data) ?>
-      </pre> -->
+
       <section class="card style-default-bright" style="margin-top:0px;">
         <div class="section-body">
           <div class="row">

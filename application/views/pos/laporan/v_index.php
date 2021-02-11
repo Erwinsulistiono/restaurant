@@ -2,10 +2,7 @@
 <div id="base">
 
   <!-- BEGIN OFFCANVAS LEFT -->
-  <div class="offcanvas">
-
-  </div>
-  <!--end .offcanvas-->
+  <div class="offcanvas"></div>
   <!-- END OFFCANVAS LEFT -->
 
   <!-- BEGIN CONTENT-->
@@ -56,7 +53,7 @@
                         <option value="">&nbsp;</option>
                         <option value="all">All</option>
                         <?php foreach ($trx_tipe as $trx) : ?>
-                          <option value="<?= $trx['tipe_transaksi_id'] ?>"><?= $trx['tipe_transaksi_nama'] ?></option>
+                          <option value="<?= $trx['tipe_transaksi_id']; ?>"><?= $trx['tipe_transaksi_nama']; ?></option>
                         <?php endforeach ?>
                       </select>
                     </div>
@@ -64,34 +61,24 @@
                 </div>
                 <div class="row">
                   <div class="form-group">
-                    <div class="col-xs-6 text-left">
-                    </div>
-                    <!--end .col -->
+                    <div class="col-xs-6 text-left"></div>
                     <div class="col-xs-6 text-right">
                       <button class="btn btn-primary btn-raised" type="submit"> Pilih</button>
                     </div>
-                    <!--end .col -->
                   </div>
                 </div>
-                <!--end .row -->
               </form>
             </div>
-            <!--end .col -->
 
           </div>
-          <!--end .row -->
         </div>
-        <!--end .card-body -->
       </div>
-      <!--end .card -->
     </section>
     <!-- END LOGIN SECTION -->
     <!-- END TABLE HOVER -->
 
   </div>
-  <!--end #content-->
   <!-- END CONTENT -->
 
 </div>
-<!--end #base-->
 <!-- END BASE -->

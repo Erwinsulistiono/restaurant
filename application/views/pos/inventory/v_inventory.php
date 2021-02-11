@@ -36,7 +36,7 @@
                     <td> <?= $table_content['stock_kode']; ?> </td>
                     <td> <?= $table_content['stock_nama']; ?> </td>
                     <td> <?= $table_content['stock_kat']; ?> </td>
-                    <td id="qty-<?= $table_content['stock_id'] ?>"> <?= floatval($stock_qty) . " (${stock_satuan})"; ?> </td>
+                    <td id="qty-<?= $stock_id ?>"> <?= floatval($stock_qty) . " (${stock_satuan})"; ?> </td>
                     <td class="text-right"> <a href="<?= base_url("pos/inventory/reset_stock/${stock_id}") ?>" class="btn btn-icon btn-primary btn-flat" onclick="resetStock(this)" data-satuan="<?= $stock_satuan ?>" data-id="<?= $stock_id ?>" disabled><i class="fa fa-repeat" aria-hidden="true"></i></a> </td>
                   </tr>
                 <?php endforeach; ?>
@@ -51,8 +51,9 @@
 
 <?php foreach ($data as $table_content) :
   $pengguna_outlet = $this->session->userdata('pengguna_outlet');
+  $stock_id = $table_content['stock_id'];
 ?>
-  <div class="modal fade" id="modal_edit_stok<?= $table_content['stock_id']; ?>" tabindex="-1" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
+  <div class="modal fade" id="modal_edit_stok<?= $stock_id; ?>" tabindex="-1" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -65,7 +66,7 @@
             <div class="form-group">
               <label class="col-sm-3 control-label">Kode Barang</label>
               <div class="col-sm-8">
-                <input type="hidden" name="stock_id" class="form-control" value="<?= $table_content['stock_id'] ?>">
+                <input type="hidden" name="stock_id" class="form-control" value="<?= $stock_id; ?>">
                 <input name="stock_kode" class="form-control" value="<?= $table_content['stock_kode'] ?>" readonly>
               </div>
             </div>

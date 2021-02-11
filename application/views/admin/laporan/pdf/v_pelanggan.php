@@ -16,9 +16,6 @@
 
     <div id="mid">
       <div class="info">
-        <p>
-          <!--  -->
-        </p>
       </div>
     </div>
     <!--End Invoice Mid-->

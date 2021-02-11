@@ -2,10 +2,7 @@
 <div id="base">
 
   <!-- BEGIN OFFCANVAS LEFT -->
-  <div class="offcanvas">
-
-  </div>
-  <!--end .offcanvas-->
+  <div class="offcanvas"></div>
   <!-- END OFFCANVAS LEFT -->
 
   <!-- BEGIN CONTENT-->
@@ -15,7 +12,6 @@
         <h2><span class=" fa fa-map-marker"></span> Tax</h2>
       </div>
       <?= $this->session->flashdata('msg'); ?>
-
 
       <!-- BEGIN TABLE HOVER -->
       <section class="card style-default-bright" style="margin-top:0px;">
@@ -51,21 +47,14 @@
                 <?php endforeach; ?>
               </tbody>
             </table>
-
           </div>
         </div>
-        <!--end .section-body -->
-
       </section>
     </section>
     <!-- END TABLE HOVER -->
-
   </div>
-  <!--end #content-->
   <!-- END CONTENT -->
-
 </div>
-<!--end #base-->
 <!-- END BASE -->
 
 <!-- ============ MODAL ADD TAX =============== -->

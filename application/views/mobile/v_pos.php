@@ -216,9 +216,6 @@
     // Total cart
     obj.totalCart = function() {
       let totalCart = cart.reduce((totItem, item) => totItem += item.price * item.count, 0)
-      // for (var item in cart) {
-      //   totalCart += cart[item].price * cart[item].count;
-      // }
       return Number(totalCart.toFixed(2));
     }
 

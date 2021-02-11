@@ -44,8 +44,8 @@
                   <tr>
                     <form name="form" method="post" action="<?= base_url("admin/parameter/reset_wewenang/${level_id}/${level_desc}"); ?>">
                       <td><?= $no; ?></td>
-                      <td><?= $table_content['level_desc']; ?>
-                        <input type="hidden" name="level_desc" value="<?= $table_content['level_desc']; ?>">
+                      <td><?= $level_desc; ?>
+                        <input type="hidden" name="level_desc" value="<?= $level_desc; ?>">
                       </td>
                       <td>
                         <input type="hidden" name="wewenang[]" value="0">

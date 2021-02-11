@@ -2,10 +2,7 @@
 <div id="base">
 
   <!-- BEGIN OFFCANVAS LEFT -->
-  <div class="offcanvas">
-
-  </div>
-  <!--end .offcanvas-->
+  <div class="offcanvas"></div>
   <!-- END OFFCANVAS LEFT -->
 
   <!-- BEGIN CONTENT-->
@@ -15,7 +12,6 @@
         <h2><span class=" fa fa-map-marker"></span> Kitchen</h2>
       </div>
       <?= $this->session->flashdata('msg'); ?>
-
 
       <!-- BEGIN TABLE HOVER -->
       <section class="card style-default-bright" style="margin-top:0px;">
@@ -47,7 +43,7 @@
                     <td><?= $table_content['kitchen_updatedat']; ?></td>
                     <td><?= $table_content['kitchen_updatedby']; ?></td>
                     <td class="text-right">
-                      <a href="#" class="btn btn-icon-toggle btn-raised" title="Edit row" data-toggle="modal" data-target="#modal_edit_kitchen<?= $table_content['kitchen_id']; ?>"><i class="fa fa-pencil"></i></a>
+                      <a href="#" class="btn btn-icon-toggle btn-raised" title="Edit row" data-toggle="modal" data-target="#modal_edit_kitchen<?= $kitchen_id; ?>"><i class="fa fa-pencil"></i></a>
                       <a href="<?= base_url("admin/pos/hapus_kitchen/${outlet_id}/${kitchen_id}"); ?>" onclick="return confirm('Apakah anda yakin menghapus : <?= $table_content['kitchen_nama']; ?>?')" class="btn btn-icon-toggle btn-raised" title="Delete row">
                         <i class="fa fa-trash-o text-danger"></i></a>
                     </td>
@@ -58,18 +54,12 @@
 
           </div>
         </div>
-        <!--end .section-body -->
-
       </section>
     </section>
     <!-- END TABLE HOVER -->
-
   </div>
-  <!--end #content-->
   <!-- END CONTENT -->
-
 </div>
-<!--end #base-->
 <!-- END BASE -->
 
 <!-- ============ MODAL ADD MEJA =============== -->

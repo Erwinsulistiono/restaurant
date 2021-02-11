@@ -283,17 +283,18 @@
       let subTotal = 0;
       carts.forEach(cart => {
         subTotal += Number(cart.price)
-        el += `<tr>
-        <td> ${cart.name} - ${cart.notes} </td>
-        <td> ${Number(cart.price)} </td>
-        <td> ${Number(cart.count)} </td>
-        <td> ${Number(cart.count * cart.price)} </td>
-        <td class="text-right">
-        <a href="#" class="text-danger btn btn-icon-toggle btn-raised delete-item"
-        data-id="${cart.id}" title="hapus pesanan" data-notes="${cart.notes}" data-name="${cart.name}">
-        <i class="fa fa-trash"></i></a>
-        </td>
-        <tr>`;
+        el +=
+          `<tr>
+            <td> ${cart.name} - ${cart.notes} </td>
+            <td> ${Number(cart.price)} </td>
+            <td> ${Number(cart.count)} </td>
+            <td> ${Number(cart.count * cart.price)} </td>
+            <td class="text-right">
+              <a href="#" class="text-danger btn btn-icon-toggle btn-raised delete-item"
+                data-id="${cart.id}" title="hapus pesanan" data-notes="${cart.notes}" data-name="${cart.name}">
+                <i class="fa fa-trash"></i></a>
+            </td>
+          <tr>`;
       })
 
       totalTaxResto = (subTotal * dividedByOneHundred(taxResto));
@@ -358,9 +359,10 @@
         let icon
 
         if (grandTotal < tandc) {
-          msg.innerHTML = `<div class="alert alert-warning animate">
+          msg.innerHTML =
+            `<div class="alert alert-warning animate">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
-            Syarat min total pembelian belum cukup</div>`;
+              Syarat min total pembelian belum cukup</div>`;
           state = 'has-warning';
           icon = 'fa-times';
         } else {
@@ -426,9 +428,9 @@
     let customerId
 
     function confirmOrder() {
-      const url = '<?= base_url('mobile/pos/confirm_order'); ?>'
-      const customer = JSON.parse(sessionStorage.getItem('order'))
-      const db = JSON.parse(sessionStorage.getItem('db'))
+      const url = '<?= base_url('mobile/pos/confirm_order'); ?>';
+      const customer = JSON.parse(sessionStorage.getItem('order'));
+      const db = JSON.parse(sessionStorage.getItem('db'));
       let nomor_kartu = document.querySelector(`#nomorKartu${payment_id}`) ? document.querySelector(`#nomorKartu${payment_id}`).value : '';
       let nomor_reff = document.querySelector(`#nomorReff${payment_id}`) ? document.querySelector(`#nomorReff${payment_id}`).value : '';
       const data = {

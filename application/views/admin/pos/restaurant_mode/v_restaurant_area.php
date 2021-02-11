@@ -124,8 +124,6 @@
               </div>
             </div>
 
-
-
           </div>
           <div class="modal-footer">
             <button class="btn btn-primary btn-flat btn-raised" data-dismiss="modal" aria-hidden="true">Tutup</button>
