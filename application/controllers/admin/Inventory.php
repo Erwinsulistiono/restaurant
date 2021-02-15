@@ -103,27 +103,20 @@ class Inventory extends MY_Controller
     $outlet_id_tujuan = $this->input->post('outlet_id');
     $add_stock = $this->input->post('stock_qty');
     $source_data = $this->M_crud->select("tbl_stock_${outlet_id}", 'stock_id', $stock_id);
-    $target_data = $this->M_crud->select("tbl_stock_${outlet_id_tujuan}", 'stock_reffid', $stock_id);
     $qty_old['stock_qty'] = $source_data['stock_qty'] - $add_stock;
     $this->M_crud->update("tbl_stock_${outlet_id}", $qty_old, 'stock_id', $stock_id);
 
-    if (!$target_data) {
-      $log_oldval = 0;
-      $source_data['stock_reffid'] = $source_data['stock_id'];
-      unset($items['stock_id']);
-      $source_data['stock_qty'] = $add_stock;
-      $this->M_crud->insert("tbl_stock_${outlet_id_tujuan}", $source_data);
-      $reff_id = $this->db->insert_id();
-    } else {
-      $log_oldval = strtr(json_encode($target_data), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
-      $qty_new['stock_qty'] = $target_data['stock_qty'] + $add_stock;
-      $reff_id = $target_data['stock_id'];
-      $this->M_crud->update("tbl_stock_${outlet_id_tujuan}", $qty_new, 'stock_reffid', $stock_id);
-    }
-    $log_newval = strtr(json_encode($this->M_crud->select("tbl_stock_$outlet_id_tujuan", 'stock_reffid', $stock_id)), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
+    $log_oldval = 0;
+    $source_data['stock_reffid'] = $source_data['stock_id'];
+    unset($source_data['stock_id']);
+    $source_data['stock_qty'] = $add_stock;
+    $this->M_crud->insert("tmp_stock_${outlet_id_tujuan}", $source_data);
+    $reff_id = $this->db->insert_id();
+
+    $log_newval = strtr(json_encode($this->M_crud->select("tmp_stock_$outlet_id_tujuan", 'stock_reffid', $stock_id)), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
 
     $this->M_log->simpan_log($reff_id, 'INVENTORY TRANSFER STOCK', $log_oldval, $log_newval);
-    $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Berhasil di transfer.</div>');
+    $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Berhasil ditransfer menunggu approval outlet.</div>');
     redirect("admin/inventory/outlet/$outlet_id");
   }
 }

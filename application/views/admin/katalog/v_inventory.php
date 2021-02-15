@@ -12,7 +12,7 @@
               <br />
               <form class='form floating-label' action='<?= base_url('admin/inventory/outlet') ?>' accept-charset='utf-8' method='post'>
                 <div class="form-group">
-                  <h2><select name="pilih_outlet" class="form-control" onchange="changeData();">
+                  <h2><select name="outlet_id" class="form-control" onchange="changeData();">
                       <option value="">&nbsp;</option>
                       <option value="master">Master Inventory</option>
                       <?php foreach ($outlet as $row) : ?>
