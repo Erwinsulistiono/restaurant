@@ -37,7 +37,7 @@ class Pengguna extends MY_Controller
 		$password_confirmation = $this->input->post('pengguna_password_confirmation');
 		if ($password !== $password_confirmation) {
 			$this->session->set_flashdata('msg', '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>password tidak match.</div>');
-			redirect('pos/pengguna/pengguna/' . $outlet_id);
+			redirect("pos/pengguna/pengguna/$outlet_id");
 		}
 		$nmfile = str_replace(' ', '_', $_FILES['filefoto']['name']);
 		$config['upload_path'] = './assets/images/'; //path folder
@@ -88,7 +88,7 @@ class Pengguna extends MY_Controller
 
 			$this->M_log->simpan_log($reff_id, 'USER', null, $log_newval);
 			$this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>pengguna <b>' . $data['pengguna_nama'] . '</b> Berhasil disimpan ke database.</div>');
-			redirect('pos/pengguna/pengguna/' . $outlet_id);
+			redirect("pos/pengguna/pengguna/$outlet_id");
 		}
 		$data_old = $this->M_crud->select('tbl_pengguna', 'pengguna_id', $pengguna_id);
 		$log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
@@ -96,7 +96,7 @@ class Pengguna extends MY_Controller
 		$this->M_log->simpan_log($pengguna_id, 'USER', $log_oldval, $log_newval);
 		$this->M_crud->update('tbl_pengguna', $data, 'pengguna_id', $pengguna_id);
 		$this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>pengguna <b>' . $data['pengguna_nama'] . '</b> Berhasil disimpan ke database.</div>');
-		redirect('pos/pengguna/pengguna/' . $outlet_id);
+		redirect("pos/pengguna/pengguna/$outlet_id");
 	}
 
 	function hapus_pengguna($pengguna_id, $outlet_id)
@@ -107,7 +107,7 @@ class Pengguna extends MY_Controller
 		$this->M_log->simpan_log($pengguna_id, 'USER', $log_oldval);
 		$this->M_crud->delete('tbl_pengguna', 'pengguna_id', $pengguna_id);
 		$this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Pengguna Berhasil dihapus dari database.</div>');
-		redirect('pos/pengguna/pengguna/' . $outlet_id);
+		redirect("pos/pengguna/pengguna/$outlet_id");
 	}
 
 	function reset_password($pengguna_id, $outlet_id)
@@ -123,6 +123,6 @@ class Pengguna extends MY_Controller
 		$this->M_log->simpan_log($pengguna_id, 'PENGGUNA RESET PASS', $log_oldval, $log_newval);
 		$this->M_crud->update('tbl_pengguna', $data, 'pengguna_id', $pengguna_id);
 		$this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Username : <b>' . $pengguna['pengguna_username'] . '</b> <br/> Password baru : <b>' . $pass . '</b></div>');
-		redirect('pos/pengguna/pengguna/' . $outlet_id);
+		redirect("pos/pengguna/pengguna/$outlet_id");
 	}
 }

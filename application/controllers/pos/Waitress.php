@@ -19,12 +19,12 @@ class Waitress extends MY_Controller
 
 	public function index()
 	{
-		$tbl_order = 'tbl_order_' . $this->outlet;
-		$tbl_trx = 'tbl_trx_' . $this->outlet;
-		$tbl_menu = 'tbl_menu_' . $this->outlet;
+		$tbl_order = "tbl_order_$this->outlet";
+		$tbl_trx = "tbl_trx_$this->outlet";
+		$tbl_menu = "tbl_menu_$this->outlet";
 		$data = [
 			'order' => $this->M_crud->left_join($tbl_order, $tbl_menu, "$tbl_order.order_menu=$tbl_menu.menu_id"),
-			'menu' => $this->M_crud->read('tbl_menu_' . $this->outlet),
+			'menu' => $this->M_crud->read("tbl_menu_$this->outlet"),
 		];
 		$this->render('pos/waitress/v_waitress', $data);
 	}
@@ -44,19 +44,19 @@ class Waitress extends MY_Controller
 
 		if (isset($potong_stock) && isset($return_qty)) {
 			$stock_inv['stock_qty'] = $this->M_stock->get_qty_diff($potong_stock, $return_qty, $this->outlet)[0]['stock_qty'];
-			$this->M_crud->update('tbl_stock_' . $this->outlet, $stock_inv, 'stock_id', $potong_stock);
+			$this->M_crud->update("tbl_stock_$this->outlet", $stock_inv, 'stock_id', $potong_stock);
 		}
 
 		$update_flg['order_kitchen_flg'] = 'N';
-		$this->M_crud->update('tbl_order_' . $this->outlet, $update_flg, 'order_id', $return_order);
+		$this->M_crud->update("tbl_order_$this->outlet", $update_flg, 'order_id', $return_order);
 		$this->index();
 	}
 
 	public function return_order_after_cancelation()
 	{
-		$trxId = $this->input->post('trxId');
-		$this->M_waitress->clear_order_after_cancelation($this->outlet, $trxId);
+		$trx_id = $this->input->post('trxId');
+		$this->M_waitress->clear_order_after_cancelation($this->outlet, $trx_id);
 
-		redirect('pos/pesanan/clear_transaksi/' . $trxId);
+		redirect("pos/pesanan/clear_transaksi/$trx_id");
 	}
 }

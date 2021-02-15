@@ -76,15 +76,15 @@ class Pos extends MY_Controller
 			}
 
 			(isset($data_order)) && $this->cart->insert($data_order);
-			$data_trx = $this->M_crud->select('tbl_trx_pos_' . $this->outlet, 'trx_id', $tbl_pelanggan['plg_order']);
+			$data_trx = $this->M_crud->select("tbl_trx_pos_$this->outlet", 'trx_id', $tbl_pelanggan['plg_order']);
 			$data_trx['is_mobile'] = 'false';
 		}
 
 		//if customer dine in
 		if ($this->input->post('meja_id')) {
 			$meja = $this->input->post('meja_id');
-			$this->M_crud->update('tbl_meja_' . $this->outlet, array('meja_pelanggan' => $tbl_pelanggan['plg_id']), 'meja_id', $meja);
-			$table = $this->M_crud->select('tbl_meja_' . $this->outlet, 'meja_id', $meja);
+			$this->M_crud->update("tbl_meja_$this->outlet", array('meja_pelanggan' => $tbl_pelanggan['plg_id']), 'meja_id', $meja);
+			$table = $this->M_crud->select("tbl_meja_$this->outlet", 'meja_id', $meja);
 			$attr_trx = [
 				'trx_tipe_nama' => $table['meja_nama'],
 				'plg_id' => $tbl_pelanggan['plg_id'],
@@ -264,7 +264,7 @@ class Pos extends MY_Controller
 			$stock_inv = $this->M_stock->get_qty_diff($items['id'], $items['qty'], $this->outlet);
 			foreach ($stock_inv as $potong_stock) {
 				$data_stock['stock_qty'] = $potong_stock['stock_qty'];
-				$this->M_crud->update('tbl_stock_' . $this->outlet, $data_stock, 'stock_id', $potong_stock['stock_id']);
+				$this->M_crud->update("tbl_stock_$this->outlet", $data_stock, 'stock_id', $potong_stock['stock_id']);
 			}
 		}
 		$insertBulk = $this->M_crud->insert_bulk("tbl_order_$this->outlet", $data_order);

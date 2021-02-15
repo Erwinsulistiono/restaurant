@@ -50,7 +50,7 @@ class Kitchen extends MY_Controller
 		foreach ($ingredient as $items) {
 			$this->M_crud->update("tbl_stock_$this->outlet", ["stock_qty" => $items["stock_qty"]], "stock_id",  $items["stock_id"]);
 		}
-		redirect('pos/pesanan/clear_transaksi/' . $trx_id);
+		redirect("pos/pesanan/clear_transaksi/$trx_id");
 	}
 
 	public function end_proses_kitchen()

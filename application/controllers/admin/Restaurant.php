@@ -94,7 +94,7 @@ class Restaurant extends MY_Controller
 
       $this->M_log->simpan_log($reff_id, "MEJA OUT ${outlet}", null, $log_newval);
       $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Menu <b>' . $data['meja_nama'] . '</b> Berhasil disimpan ke database.</div>');
-      redirect('admin/restaurant/meja/' . $outlet);
+      redirect("admin/restaurant/meja/$outlet");
     }
     $data_old = $this->M_crud->select("tbl_meja_${outlet}", 'meja_id', $meja_id);
     $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
@@ -102,7 +102,7 @@ class Restaurant extends MY_Controller
     $this->M_log->simpan_log($meja_id, "MEJA OUT $outlet", $log_oldval, $log_newval);
     $this->M_crud->update("tbl_meja_$outlet", $data, 'meja_id', $meja_id);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Menu <b>' . $data['meja_nama'] . '</b> Berhasil disimpan ke database.</div>');
-    redirect('admin/restaurant/meja/' . $outlet);
+    redirect("admin/restaurant/meja/$outlet");
   }
 
   public function hapus_meja($outlet, $meja_id)
@@ -113,6 +113,6 @@ class Restaurant extends MY_Controller
     $this->M_log->simpan_log($meja_id, "MEJA OUT ${outlet}", $log_oldval);
     $this->M_crud->delete("tbl_meja_${outlet}", 'meja_id', $meja_id);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Meja Berhasil dihapus dari database.</div>');
-    redirect('admin/restaurant/meja/' . $outlet);
+    redirect("admin/restaurant/meja/$outlet");
   }
 }

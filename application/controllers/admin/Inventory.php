@@ -56,7 +56,7 @@ class Inventory extends MY_Controller
 
       $this->M_log->simpan_log($reff_id, 'INVENTORY', null, $log_newval);
       $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>' . $data['nm_brg'] . '</b> Berhasil ditambah/diupdate.</div>');
-      redirect('admin/inventory/outlet/' . $outlet_id);
+      redirect("admin/inventory/outlet/$outlet_id");
     }
     $data_old = $this->M_crud->select("tbl_stock_${outlet_id}", 'stock_id', $stock_id);
     $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
@@ -64,7 +64,7 @@ class Inventory extends MY_Controller
     $this->M_crud->update("tbl_stock_${outlet_id}", $data, 'stock_id', $stock_id);
     $this->M_log->simpan_log($stock_id, 'INVENTORY', $log_oldval, $log_newval);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>' . $data['nm_brg'] . '</b> Berhasil ditambah/diupdate.</div>');
-    redirect('admin/inventory/outlet/' . $outlet_id);
+    redirect("admin/inventory/outlet/$outlet_id");
   }
 
 
@@ -76,7 +76,7 @@ class Inventory extends MY_Controller
     $this->M_log->simpan_menu($stock_id, 'INVENTORY', $log_oldval);
     $this->M_crud->delete("tbl_stock_${outlet_id}", 'stock_id', $stock_id);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Berhasil di hapus.</div>');
-    redirect('admin/inventory/outlet/' . $outlet_id);
+    redirect("admin/inventory/outlet/$outlet_id");
   }
 
 
@@ -93,7 +93,7 @@ class Inventory extends MY_Controller
 
     $this->M_log->simpan_log($stock_id, 'INVENTORY (TAMBAH STOCK)', $log_oldval, $log_newval);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Berhasil di hapus.</div>');
-    redirect('admin/inventory/outlet/' . $outlet_id);
+    redirect("admin/inventory/outlet/$outlet_id");
   }
 
 
@@ -124,6 +124,6 @@ class Inventory extends MY_Controller
 
     $this->M_log->simpan_log($reff_id, 'INVENTORY TRANSFER STOCK', $log_oldval, $log_newval);
     $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Berhasil di transfer.</div>');
-    redirect('admin/inventory/outlet/' . $outlet_id);
+    redirect("admin/inventory/outlet/$outlet_id");
   }
 }
