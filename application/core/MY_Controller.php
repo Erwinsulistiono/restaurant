@@ -32,4 +32,13 @@ class MY_Controller extends CI_Controller
 			$this->load->view('layouts/v_footer');
 		}
 	}
+
+
+	function render_mobile($view, $data = null)
+	{
+		$title['title'] = 'Mi Resto';
+
+		$this->load->view('layouts/v_head', $title);
+		$this->load->view($view, $data);
+	}
 }

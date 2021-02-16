@@ -22,7 +22,7 @@ class Pos extends MY_Controller
 			'inventory' => $this->M_crud->read("tbl_stock_$outlet"),
 			'ingredient' => $this->M_stock->getIngredientAll($outlet),
 		];
-		$this->load->view('mobile/v_pos', $data);
+		$this->render_mobile('mobile/v_pos', $data);
 	}
 
 
@@ -34,7 +34,7 @@ class Pos extends MY_Controller
 			'taxresto' => $this->M_crud->select('tbl_tax', 'tax_id', '2')['tax_persen'],
 			'taxservice' => $this->M_crud->select('tbl_tax', 'tax_id', '1')['tax_persen'],
 		];
-		$this->load->view('mobile/v_cart', $data);
+		$this->render_mobile('mobile/v_cart', $data);
 	}
 
 

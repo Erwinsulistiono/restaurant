@@ -1,5 +1,5 @@
 <?php
-class Order extends CI_Controller
+class Order extends MY_Controller
 {
     public function __construct()
     {
@@ -20,12 +20,15 @@ class Order extends CI_Controller
             $data['trx_id'] = 3;
         } else if ($tipe_order == 'take_away') {
             $data['trx_id'] = 2;
+        } else if ($tipe_order == 'delivery') {
+            $data['trx_id'] = 4;
         }
+
 
         $data['data'] = $this->M_crud->left_join("tbl_meja_$outlet", 'tbl_area', "tbl_meja_$outlet.meja_lokasi=tbl_area.area_id");
         $data['outlet'] = $this->M_crud->select('tbl_outlet', 'out_id', $outlet);
         $data['method_of_order'] = $this->M_crud->read('tbl_tipe_transaksi');
-        $this->load->view('mobile/v_daftar', $data);
+        $this->render_mobile('mobile/v_daftar', $data);
     }
 
     public function view_order($outlet, $dataPost = null, $plg_id = null)
@@ -39,7 +42,7 @@ class Order extends CI_Controller
             $data['authPelanggan'] = $authPelanggan;
             $data['dataPost'] = $dataPost;
             $data['method_of_order'] = $this->M_crud->read('tbl_tipe_transaksi');
-            $this->load->view('mobile/v_cek_order', $data);
+            $this->render_mobile('mobile/v_cek_order', $data);
         }
     }
 
@@ -57,13 +60,13 @@ class Order extends CI_Controller
         }
 
         if (!$trx_id) {
-            return ($this->load->view('mobile/v_belum_order'));
+            return ($this->render_mobile('mobile/v_belum_order', $data));
         }
 
         $data['order_pelanggan'] = $this->get_data_order_by_trx_id($outlet, $trx_id);
         $data['trx_pelanggan'] = $this->M_crud->select("tbl_trx_pos_$outlet", "trx_id", $trx_id);
 
-        return ($this->load->view('mobile/v_sudah_order', $data));
+        return ($this->render_mobile('mobile/v_sudah_order', $data));
     }
 
     public function is_user_session_valid()
@@ -81,7 +84,6 @@ class Order extends CI_Controller
         if ($order) {
             return $order;
         }
-
         return false;
     }
 

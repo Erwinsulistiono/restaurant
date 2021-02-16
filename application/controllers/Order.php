@@ -1,5 +1,5 @@
 <?php
-class Order extends CI_Controller
+class Order extends MY_Controller
 {
     public function __construct()
     {
@@ -10,7 +10,7 @@ class Order extends CI_Controller
     public function index()
     {
         $data['outlet'] = $this->M_crud->read('tbl_outlet');
-        $this->load->view('v_mobile', $data);
+        $this->render_mobile('v_mobile', $data);
     }
 
     public function outlet($outlet)
