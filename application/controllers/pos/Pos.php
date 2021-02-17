@@ -339,7 +339,7 @@ class Pos extends MY_Controller
 		if (is_null($this->M_crud->select("tbl_order_$this->outlet", 'order_trx_reff', $trx_id))) {
 			$clear_table['meja_pelanggan'] = 0;
 			$clear_pelanggan = [
-				'plg_order' => 0,
+				'plg_order' => '0',
 				'plg_login_flg' => 'N',
 			];
 			$this->M_crud->delete("tbl_trx_pos_$this->outlet", 'trx_id', $trx_id);

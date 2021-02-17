@@ -246,43 +246,25 @@ class Parameter extends MY_Controller
   /*----------------- MODUL PELANGGAN ---------------------*/
   function pelanggan()
   {
-    $data['data'] = $this->M_crud->read('tbl_pelanggan');
+    $data['pelanggan'] = $this->M_crud->read('tbl_pelanggan');
+    $data['request_member'] = $this->M_crud->read('tmp_member');
     $this->render('admin/parameter/v_pelanggan', $data);
   }
 
   function simpan_pelanggan()
   {
-    if ($this->input->post('plg_password') !== $this->input->post('plg_password2')) {
-      $this->session->set_flashdata('msg', '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>Password dan Ulangi Password yang Anda masukan tidak sama.</div>');
-      redirect('admin/parameter/pelanggan');
-    }
     $plg_id = $this->input->post('plg_id');
-    if (!$plg_id) {
-      $this->form_validation->set_rules('plg_email', 'Email', 'required|valid_email');
-      if ($this->form_validation->run() == FALSE) {
-        $this->session->set_flashdata('msg', '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><b>Email tidak valid</b> Data tidak dapat disimpan</div>');
-        redirect('admin/parameter/pelanggan');
-      }
-    }
 
     $data =  [
       'plg_nama' => $this->input->post('plg_nama'),
-      'plg_alamat' => $this->input->post('plg_alamat'),
-      'plg_jenkel' => $this->input->post('plg_jenkel'),
       'plg_notelp' => $this->input->post('plg_notelp'),
-      'plg_email' => $this->input->post('plg_email'),
-      'plg_whatsapp' => $this->input->post('plg_whatsapp'),
-      'plg_password' => md5($this->input->post('plg_password')),
+      'plg_platno' => $this->input->post('plg_platno'),
+      'plg_alamat' => $this->input->post('plg_alamat'),
+      'plg_status' => $this->input->post('plg_status'),
+      'plg_socmed' => $this->input->post('plg_socmed'),
     ];
     $log_newval = strtr(json_encode($data), array(',' => ' | ', '{' => '', '}' => '', '"' => ' '));
 
-    if (!$plg_id) {
-      $this->M_crud->insert('tbl_pelanggan', $data);
-      $reff_id = $this->db->insert_id();
-      $this->M_log->simpan_log($reff_id, 'PELANGGAN', null, $log_newval);
-      $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>' . $data['plg_nama'] . '</b> Berhasil ditambah/diupdate.</div>');
-      redirect('admin/parameter/pelanggan');
-    }
     $data_old = $this->M_crud->select('tbl_pelanggan', 'plg_id', $plg_id);
     $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
     $reff_id = $plg_id;
@@ -293,19 +275,25 @@ class Parameter extends MY_Controller
     redirect('admin/parameter/pelanggan');
   }
 
-  function reset_pelanggan($plg_id)
+  function approve_member()
   {
-    $pass = 123456;
-    $pelanggan = $this->M_crud->select('tbl_pelanggan', 'plg_id', $plg_id);
-    $plg_password = $pelanggan['plg_password'];
-    $log_oldval = "plg_password : $plg_password";
+    $plg_id = $this->input->post('plg_id');
+    $this->M_crud->delete('tmp_member', 'plg_id', $plg_id);
 
-    $data['plg_password'] = md5($pass);
-    $plg_pass = $data['plg_password'];
-    $log_newval = "plg_password : $plg_pass";
-    $this->M_log->simpan_log($plg_id, 'PELANGGAN RESET PASS', $log_oldval, $log_newval);
-    $this->M_crud->update('tbl_pelanggan', $data, 'plg_id', $plg_id);
-    $this->session->set_flashdata('msg', '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>password pelanggan Berhasil direset.</div>');
+    $data =  [
+      'plg_nama' => $this->input->post('plg_nama'),
+      'plg_notelp' => $this->input->post('plg_notelp'),
+      'plg_platno' => $this->input->post('plg_platno'),
+      'plg_alamat' => $this->input->post('plg_alamat'),
+      'plg_status' => $this->input->post('plg_status'),
+      'plg_socmed' => $this->input->post('plg_socmed'),
+    ];
+    $log_newval = strtr(json_encode($data), array(',' => ' | ', '{' => '', '}' => '', '"' => ' '));
+
+    $this->M_crud->insert('tbl_pelanggan', $data);
+    $reff_id = $this->db->insert_id();
+    $this->M_log->simpan_log($reff_id, 'PELANGGAN', null, $log_newval);
+    $this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><b>' . $data['plg_nama'] . '</b> Berhasil diapprove.</div>');
     redirect('admin/parameter/pelanggan');
   }
 
