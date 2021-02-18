@@ -1,92 +1,107 @@
 <body class="full-content">
 
   <img id="loading-screen" src="<?= base_url('assets/img/loading.svg') ?>" class="img-responsive" alt="" style="display: block; position: fixed; top: 40%; left: 45%;" />
-  <form role="form" id="order_form" method="post" action="<?= base_url('mobile/pos/confirm_order/'); ?>">
-    <div id="base" style="display: none;">
-      <!-- BEGIN BASE-->
-      <section class="style-default no-margin" style="padding-bottom: 7vh;">
-        <div class="card-head style-primary" style="position:fixed; top:0; left:0; right:0; z-index:10001">
+  <div id="base" style="display: none;">
 
-          <button onclick="window.history.back()" class="btn btn-primary"><span class="fa fa-chevron-left" aria-hidden="true"></span> Back</button>
-        </div>
-        <div class="container-fluid no-padding" style="min-height:89vh; margin-top:5vh;">
-          <div class="col-md-12 col-xs-12 col-sm-12 no-padding">
-            <table class="table no-margin">
-              <div class="caption">
-                <tbody id="detail-cart">
-
-                </tbody>
-                </tfoot>
-                <tr>
-                  <td style="text-align:left;" colspan="3">Sub Total</td>
-                  <th colspan="3"><input style="text-align:center;" class="form-control" id="subTotal" name="subtotal" readonly>
-                  </th>
-                </tr>
-                <div class="form-group">
-                  <tr>
-                    <td style="text-align:left;" colspan="1">Discount
-                    <th style="text-align:right;" colspan="2">
-                      <a href="#" style="color:#1a0dab;" data-toggle="modal" data-target="#modal_add_voucher"><strong><ins>Voucher</ins></strong></a>
-                    <th colspan="3">
-                      <input style="text-align:center;" type="text" class="form-control" id="discount" onkeyup="calculateGrandTotal()" name="discount" readonly>
-                      </td>
-                  </tr>
-                </div>
-                <div class="form-group">
-                  <tr>
-                    <td style="text-align:left;" colspan="3">Service Charge (<?= $taxservice ?>%)</td>
-                    <th colspan="3">
-                      <input style="text-align:center;" class="form-control" id="totalService" name="totalservice" readonly>
-                    </th>
-                  </tr>
-                </div>
-                <div class="form-group">
-                  <tr>
-                    <td style="text-align:left;" colspan="3">Pajak Resto (<?= $taxresto ?>%)</td>
-                    <th colspan="3">
-                      <input style="text-align:center;" class="form-control" id="totalPph" name="totalpph" readonly>
-                    </th>
-                  </tr>
-                </div>
-                <div class="form-group">
-                  <tr>
-                    <td style="text-align:left;" colspan="3">Grand Total</td>
-                    <th colspan="3">
-                      <input style="text-align:center;" class="form-control" id="grandTotal" name="grandtotal" readonly>
-                    </th>
-                  </tr>
-                </div>
-                <!-- <div class="form-group">
-                  <tr>
-                    <th></th>
-                  </tr>
-                </div> -->
-                </tfoot>
+    <section class="style-default no-padding no-margin">
+      <div class="card-head style-primary" style="position:fixed; top:0; left:0; right:0; z-index:10001">
+        <button onclick="window.history.back()" class="btn btn-primary"><span class="fa fa-chevron-left "></span> Back</button>
+      </div>
+      <div class="container-fluid no-padding" style="min-height:89vh; margin-top:9vh;">
+        <div class="col-xs-12 col-sm-12 no-padding">
+          <div class="card no-margin" style="min-height:89vh;">
+            <div class="card-body" style="overflow-y:scroll; height:90vh; margin-top:7vh;">
+              <div class="pull-right">
+                <h4></h4>
               </div>
-            </table>
+              <form role="form" id="order_form" method="post" action="<?= base_url('mobile/pos/confirm_order/'); ?>">
+                <table class="table no-margin no-padding">
+                  <div class="caption">
+                    <thead>
+                      <tr>
+                        <th>Menu</th>
+                        <th>Harga</th>
+                        <th>Qty</th>
+                        <th>Jumlah</th>
+                        <th class="text-right">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody id="detail-cart">
+
+                    </tbody>
+                    </tfoot>
+                    <tr>
+                      <th style="text-align:left;" colspan="3">Sub Total</th>
+                      <th style="text-align:center;" colspan="3"><input class="form-control" id="subTotal" name="subtotal" readonly>
+                      </th>
+                    </tr>
+                    <div class="form-group">
+                      <tr>
+                        <th style="text-align:left;" colspan="3">Discount
+                        <th style="text-align:center;" colspan="3">
+                          <input type="text" class="form-control" id="discount" onkeyup="calculateGrandTotal()" name="discount" readonly>
+                        </th>
+                      </tr>
+                    </div>
+                    <div class="form-group">
+                      <tr>
+                        <th style="text-align:left;" colspan="3">Service Charge (<?= $taxservice ?>%)
+                        <th style="text-align:center;" colspan="3">
+                          <input class="form-control" id="totalService" name="totalservice" readonly>
+                        </th>
+                      </tr>
+                    </div>
+                    <div class="form-group">
+                      <tr>
+                        <th style="text-align:left;" colspan="3">Pajak Resto (<?= $taxresto ?>%)
+                        <th style="text-align:center;" colspan="3">
+                          <input class="form-control" id="totalPph" name="totalpph" readonly>
+                        </th>
+                      </tr>
+                    </div>
+                    <div class="form-group">
+                      <tr>
+                        <th style="text-align:left;" colspan="3">Grand Total</th>
+                        <th style="text-align:center;" colspan="3">
+                          <input class="form-control" id="grandTotal" name="grandtotal" readonly>
+                        </th>
+                      </tr>
+                    </div>
+                    </tfoot>
+                  </div>
+                </table>
+            </div>
           </div>
         </div>
-      </section>
-      <div class="row" style="position:fixed; bottom:0; left:0; right:0;">
-        <div class="btn-raised dropup">
-          <button type="button" class="btn btn-block btn-primary dropdown-toggle" data-toggle="dropdown" tabindex="-1">
-            Confirm Order<div class="pull-right"><span class="caret"></span></div>
-          </button>
-          <ul class="dropdown-menu pull-right" role="menu">
-            <li><a class="simpanPembayaran" id="openTable">Open Table</a></li>
-            <?php
-            foreach ($payment as $k) :
-              $k_id = $k['payment_id'];
-              $k_nama = $k['payment_nama'];
-            ?>
-              <li><a href="#" data-toggle="modal" data-target="#modal_bayar<?= $k_id ?>"><?= $k_nama; ?></a></li>
-            <?php endforeach; ?>
-          </ul>
+        <div class="card-body no-padding" style="height:10vh; position:fixed; bottom: 0; left:0; right:0">
+          <div class="row">
+            <div class="col-xs-6 no-padding" id="methodOfPayment">
+              <div class="btn-raised dropup">
+                <button type="button" class="btn btn-block btn-primary dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                  Confirm Order<div class="pull-right"><span class="caret"></span></div>
+                </button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                  <li><a class="simpanPembayaran" id="openTable">Open Table</a></li>
+                  <?php
+                  foreach ($payment as $k) :
+                    $k_id = $k['payment_id'];
+                    $k_nama = $k['payment_nama'];
+                  ?>
+                    <li><a href="#" data-toggle="modal" data-target="#modal_bayar<?= $k_id ?>"><?= $k_nama; ?></a></li>
+                  <?php endforeach; ?>
+                </ul>
+              </div>
+            </div>
+            <div class="col-xs-6 no-padding">
+              <a href="#" class="btn btn-block btn-default-dark btn-raised" data-toggle="modal" data-target="#modal_add_voucher">Add Voucher</a>
+            </div>
+          </div>
         </div>
+        </form>
       </div>
-    </div>
-  </form>
 
+  </div>
+  </section>
 
   <?php
   foreach ($payment as $k) :
@@ -231,6 +246,7 @@
       </div>
     </div>
   </div>
+  </div>
 
   <script>
     const clearFormating = (value) => Number(value.value.replace(/[($)\s\._\-]+/g, ''))
@@ -250,11 +266,15 @@
         subTotal += Number(cart.price)
         el +=
           `<tr>
-            <th colspan="3" style="width:95%; font-weight:bold; padding-left:1em;"><em> ${Number(cart.count)} x </em> &nbsp;&nbsp;&nbsp; 
-            <b><strong>${cart.name} ${cart.notes && ' - (' + cart.notes + ')'} </strong></b><br/>
-            <p style="color:#1a0dab;"><strong><ins>(Edit)</strong></ins></p>
-            </th>
-            <th colspan="2" class="text-right" style="padding-right:2em;"> ${Number(cart.count * cart.price)}</th>
+            <td> ${cart.name} - ${cart.notes} </td>
+            <td> ${Number(cart.price)} </td>
+            <td> ${Number(cart.count)} </td>
+            <td> ${Number(cart.count * cart.price)} </td>
+            <td class="text-right">
+              <a href="#" class="text-danger btn btn-icon-toggle btn-raised delete-item"
+                data-id="${cart.id}" title="hapus pesanan" data-notes="${cart.notes}" data-name="${cart.name}">
+                <i class="fa fa-trash"></i></a>
+            </td>
           <tr>`;
       })
 
@@ -512,7 +532,6 @@
 
   <script src="<?= base_url('assets/js/jquery-3.4.1.min.js'); ?>"></script>
   <script src="<?= base_url('assets/js/bootstrap/bootstrap.min.js'); ?>"></script>
-
 </body>
 
 </html>

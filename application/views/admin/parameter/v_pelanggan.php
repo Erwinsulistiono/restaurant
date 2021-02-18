@@ -3,9 +3,7 @@
 
   <!-- BEGIN OFFCANVAS LEFT -->
   <div class="offcanvas">
-
   </div>
-  <!--end .offcanvas-->
   <!-- END OFFCANVAS LEFT -->
 
   <!-- BEGIN CONTENT-->
@@ -107,7 +105,7 @@
                     <th>Alamat</th>
                     <th>Status</th>
                     <th>Socmed</th>
-                    <th>Jam & Tgl Kedatangan</th>
+                    <th>Jam & Tgl Daftar</th>
                     <th class="text-right">Actions</th>
                   </tr>
                 </thead>
@@ -191,19 +189,19 @@ foreach ($pelanggan as $table_content) :
             <div class="form-group">
               <label class="col-sm-3 control-label">Kontak / No Telp <sup style="color: red;">&#10038<sup></label>
               <div class="col-sm-8">
-                <input type="number" name="plg_notelp" class="form-control" value="<?= $table_content['plg_notelp'] ?>" required>
+                <input type="text" name="plg_notelp" class="form-control" value="<?= $table_content['plg_notelp'] ?>" required>
               </div>
             </div>
             <div class="form-group">
               <label class="col-sm-3 control-label">Platno <sup style="color: red;">&#10038<sup></label>
               <div class="col-sm-8">
-                <input type="number" name="plg_notelp" class="form-control" value="<?= $table_content['plg_notelp'] ?>" required>
+                <input type="text" name="plg_platno" class="form-control" value="<?= $table_content['plg_platno'] ?>" required>
               </div>
             </div>
             <div class="form-group">
               <label class="col-sm-3 control-label">Alamat <sup style="color: red;">&#10038<sup></label>
               <div class="col-sm-8">
-                <input type="" name="plg_alamat" class="form-control" value="<?= $table_content['plg_alamat'] ?>" required>
+                <input type="text" name="plg_alamat" class="form-control" value="<?= $table_content['plg_alamat'] ?>" required>
               </div>
             </div>
             <div class="form-group">
@@ -212,22 +210,24 @@ foreach ($pelanggan as $table_content) :
                 <select id="select13" name="plg_status" class="form-control" required>
 
                   <option value="">&nbsp;</option>
+                  <?php $status_member = "" ?>
+                  <?php $status_pelanggan = "" ?>
                   <?php if ($table_content['plg_status'] == 'member') : ?>
-                    <?php $member = "selected" ?>
+                    <?php $status_member = "selected" ?>
                   <?php endif; ?>
                   <?php if ($table_content['plg_status'] == 'pelanggan') : ?>
-                    <?php $pelanggan = "selected" ?>
+                    <?php $status_pelanggan = "selected" ?>
                   <?php endif; ?>
 
-                  <option value="member" <?= $member ?>>Member</option>
-                  <option value="pelanggan" <?= $pelanggan ?>>Pelanggan</option>
+                  <option value="member" <?= $status_member ?>>Member</option>
+                  <option value="pelanggan" <?= $status_pelanggan ?>>Pelanggan</option>
                 </select>
               </div>
             </div>
             <div class="form-group">
               <label class="col-sm-3 control-label">Social Media <sup style="color: red;">&#10038<sup></label>
               <div class="col-sm-8">
-                <input type="" name="plg_socmed" class="form-control" value="<?= @$table_content['plg_socmed'] ?>" required>
+                <input type="text" name="plg_socmed" class="form-control" value="<?= @$table_content['plg_socmed'] ?>" required>
               </div>
             </div>
 

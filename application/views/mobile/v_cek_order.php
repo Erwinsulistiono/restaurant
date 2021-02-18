@@ -1,7 +1,7 @@
 <body class="full-content">
 
     <img id="loading-screen" src="<?= base_url('assets/img/loading.svg') ?>" class="img-responsive" alt="" style="display: block; position: fixed; top: 40%; left: 45%;" />
-    <div id="base" style="display: none;">
+    <div id="base" style="display: none; height: 100vh; overflow-y: scroll;">
 
         <section class="style-default no-padding">
             <div class="card" style="min-height:100vh">

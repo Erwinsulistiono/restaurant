@@ -102,12 +102,12 @@ class Pos extends MY_Controller
 		$data_pelanggan = [
 			'plg_nama' => strip_tags(str_replace("'", "", $data['cust_nama'])),
 			'plg_notelp' => $data['cust_telp'],
-			'plg_whatsapp' => $data['cust_telp'],
-			'plg_email' => '',
 			'plg_platno' => $data['cust_platno'],
 			'plg_alamat' => $data['cust_alamat'],
 			'plg_login_flg' => 'Y',
 			'plg_meja' => $data['cust_meja'],
+			'plg_socmed' => '',
+			'plg_status' => 'pelanggan',
 		];
 		if ($data['customerId'] == 0) {
 			$this->M_crud->insert('tbl_pelanggan', $data_pelanggan);

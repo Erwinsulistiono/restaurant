@@ -6,7 +6,8 @@
 
     <!-- BEGIN META -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no, maximum-scale=0.8, initial-scale=1.0">
+
     <!-- END META -->
     <link rel="shorcut icon" href="<?= base_url('assets/img/logo.png') ?>">
     <!-- BEGIN STYLESHEETS -->
@@ -21,7 +22,7 @@
 <body class="full-content">
 
     <img id="loading-screen" src="<?= base_url('assets/img/loading.svg') ?>" class="img-responsive" alt="" style="display: block; position: fixed; top: 40%; left: 45%;" />
-    <div id="base" style="display: none;">
+    <div id="base" style="display: none; height: 100vh;">
 
         <section class="style-default no-padding">
             <div class="card" style="min-height:100vh">
@@ -57,8 +58,8 @@
                                 </a>
                             </div>
 
-                            <button onclick="redirectPage()" class="btn btn-raised" style="margin-left: 10%; width: 80%; transform: translateY(-14vh); color: #ffffff; background: #08867e">Order</button>
-                            <a onclick="redirectCheckOrder()" id="view_order" class="btn btn-flat btn-block btn-primary btn-raised" type="submit" style="background: #ffffff; color: #08867e; margin-left: 10%; width: 80%; transform: translateY(-12vh); border:solid; border-width:1px; border-color:#08867e">View Order</a>
+                            <button onclick="redirectPage()" class="btn btn-raised" style="margin-left: 10%; width: 80%; transform: translateY(-21vh); color: #ffffff; background: #08867e">Order</button>
+                            <a onclick="redirectCheckOrder()" id="view_order" class="btn btn-flat btn-block btn-primary btn-raised" type="submit" style="background: #ffffff; color: #08867e; margin-left: 10%; width: 80%; transform: translateY(-19vh); border:solid; border-width:1px; border-color:#08867e">View Order</a>
                         </div>
                     </div>
                 </div>
