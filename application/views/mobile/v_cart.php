@@ -56,11 +56,7 @@
                     </th>
                   </tr>
                 </div>
-                <!-- <div class="form-group">
-                  <tr>
-                    <th></th>
-                  </tr>
-                </div> -->
+
                 </tfoot>
               </div>
             </table>

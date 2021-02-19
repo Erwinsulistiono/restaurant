@@ -10,10 +10,17 @@
     <!-- END META -->
     <link rel="shorcut icon" href="<?= base_url('assets/img/logo.png') ?>">
     <!-- BEGIN STYLESHEETS -->
-    <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/bootstrap.css') ?>" />
-    <link type="text/css" rel="stylesheet" href="<?= base_url('assets/font-awesome/css/font-awesome.css') ?>" />
-    <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/bootstrap.min.css') ?>" />
-    <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/materialadmin.css') ?>" />
-    <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/style-material.css') ?>" />
-    <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/style.css') ?>" />
+    <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/style-material.css'); ?>" />
+    <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/bootstrap.css'); ?>" />
+    <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/materialadmin.css'); ?>" />
+    <link type="text/css" rel="stylesheet" href="<?= base_url('assets/font-awesome/css/font-awesome.css'); ?>" />
+    <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/material-design-iconic-font.min.css'); ?>" />
+    <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/style.css'); ?>">
+
+    <!-- <link type="text/css" rel="stylesheet" href="?= base_url('assets/css/bootstrap.min.css') ?>" />
+    <link type="text/css" rel="stylesheet" href="?= base_url('assets/css/materialadmin.css') ?>" />
+    <link type="text/css" rel="stylesheet" href="?= base_url('assets/font-awesome/css/font-awesome.min.css') ?>" />
+    <link type="text/css" rel="stylesheet" href="?= base_url('assets/font-awesome/css/material-design-iconic-font.min.css') ?>" />
+    <link type="text/css" rel="stylesheet" href="?= base_url('assets/css/style-material.css') ?>" />
+    <link type="text/css" rel="stylesheet" href="?= base_url('assets/css/style.css') ?>" /> -->
 </head>

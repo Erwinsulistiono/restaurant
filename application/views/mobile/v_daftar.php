@@ -37,9 +37,9 @@
 
                                             <?php (isset($trx_id)) ? $readonly = 'disabled' : $readonly = '' ?>
                                             <?php if (isset($trx_id)) : ?>
-                                                <input type="hidden" class="form-control dirty" id="plg_notelp" name="tipe_transaksi" value="<?= $trx_id ?>">
+                                                <input type="hidden" class="form-control dirty" id="plg_notelp" name="tipe_transaksi" value="<?= $trx_id ?>" required>
                                             <?php endif; ?>
-                                            <select id="selectMethodOfTable" name="tipe_transaksi" class="form-control dirty" <?= $readonly ?>>
+                                            <select id="selectMethodOfTable" name="tipe_transaksi" class="form-control dirty" <?= $readonly ?> required>
                                                 <option value="">&nbsp;</option>
                                                 <?php foreach ($method_of_order as $row) : ?>
                                                     <?php ((isset($trx_id)) && ($row['tipe_transaksi_id'] == $trx_id) ? $selected = 'selected' : $selected = ''); ?>
@@ -89,9 +89,9 @@
                                         <?php endif; ?>
 
                                         <br />
-                                        <div class="section-action" <?= $disabled ?>>
-                                            <button class="btn btn-block btn-primary btn-raised" type="submit"><span class="fa fa-receipt"></span> Order</button>
-                                        </div>
+                                        <!-- <div class="section-action no-padding" <?= $disabled ?>> -->
+                                        <button class="btn btn-block btn-primary btn-raised" style="position:fixed; bottom:0; left:0" type="submit"><span class="fa fa-receipt"></span> Order</button>
+                                        <!-- </div> -->
                                     </form>
                                 </div>
                             </div>

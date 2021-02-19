@@ -6071,7 +6071,8 @@ body.offcanvas-expanded {
 }
 .offcanvas:first-child {
   left: 0;
-  right: auto;
+  /* right: auto; */
+  right: -64vw !important;
 }
 .offcanvas-pane {
   position: absolute;

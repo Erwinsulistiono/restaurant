@@ -2,27 +2,29 @@
 
   <img id="loading-screen" src="<?= base_url('assets/img/loading.svg') ?>" class="img-responsive" alt="" style="display: block; position: fixed; top: 40%; left: 45%;" />
   <div id="base" style="display: none;">
+    <!-- BEGIN CONTENT-->
+
     <!-- BEGIN BASE-->
     <section class="style-default no-padding no-margin">
-      <div class="card-head style-primary" style="position:fixed; top:0; left:0; right:0; z-index:10001">
-
+      <div class="card-head style-primary" style="position:fixed; top:0; left:0; right:0; z-index:1002">
         <button onclick="window.history.back()" class="btn btn-primary"><span class="fa fa-chevron-left" aria-hidden="true"></span> Back</button>
+        <a href="#offcanvas-kategori" data-toggle="offcanvas" class="btn filter btn-primary pull-right" style="margin-top:3%;">Kategori &nbsp;<i class="fa fa-filter "></i></a>
       </div>
-      <div class="container-fluid no-padding" style="min-height:89vh; margin-top:9vh;">
+      <div class="container-fluid no-padding" style="min-height:89vh; margin-top:8vh;">
         <div class="col-md-12 col-xs-12 col-sm-12 no-padding">
-          <div class="card" style="min-height:89vh;">
-            <div class="tab-slider">
+          <div class="card" style="min-height:89vh; padding-top: 2vh">
+            <!-- <div class="tab-slider">
               <div class="wrap">
                 <ul class="nav nav-tabs" id="menus" role="tablist" id="example-tabs" data-tabs>
                   <li role="presentation" class="active"><a href="#panel-all" aria-controls="home" role="tab" data-toggle="tab">Semua</a></li>
-                  <?php foreach ($kategori as $index => $tab) : ?>
-                    <li role="presentation"><a href="#panel-<?= $index; ?>" role="tab" data-toggle="tab"><?= $tab['kategori_nama']; ?></a></li>
-                  <?php endforeach; ?>
+                  <php foreach ($kategori as $index => $tab) : ?>
+                    <li role="presentation"><a href="#panel-<= $index; ?>" role="tab" data-toggle="tab"><= $tab['kategori_nama']; ?></a></li>
+                  <php endforeach; ?>
                 </ul>
               </div>
               <button id="goPrev" class="btn btn-default btn-icon"><i class="fa fa-chevron-left "></i></button>
               <button id="goNext" class="btn btn-default btn-icon"><i class="fa fa-chevron-right "></i></button>
-            </div>
+            </div> -->
             <div class="msg" style="position:fixed; top:10vh; left:0; right:0; z-index:10001"></div>
             <div class="tabs-content" data-tabs-content="example-tabs" style="overflow-y:scroll">
               <div role="tabpanel" class="tab-pane active" id="panel-all">
@@ -30,7 +32,7 @@
                   $menu_gambar = $table_content['menu_gambar'];
                 ?>
                   <div class="col-md-2 col-xs-6 col-sm-3">
-                    <div class="no-padding card thumbnail" style="box-shadow: 1px 1px 4px 1px #e5e0e0">
+                    <div class="no-padding card thumbnail" style="box-shadow: 1px 1px 4px 1px #e5e0e0;">
                       <a data-toggle="modal" class="modal_add_cart btn-raised" data-itemid="<?= $table_content['menu_id'] ?>" data-target="#option_menu<?= $table_content['menu_id'] ?>" data-itemname="<?= $table_content['menu_nama'] ?>">
                         <td>
                           <img loading="lazy" style="width:auto;height:13rem;border-radius:4px;" class="width-1 img-responsive rounded" src="<?= base_url("assets/gambar/${menu_gambar}"); ?>" alt="" />
@@ -135,6 +137,42 @@
       </div>
     </div>
   <?php endforeach; ?>
+
+  <div class="offcanvas">
+    <!-- BEGIN OFFCANVAS DEMO LEFT -->
+    <div id="offcanvas-kategori" class="offcanvas-pane width-6">
+      <div class="offcanvas-head">
+        <!-- <header>Left off-canvas</header> -->
+        <div class="offcanvas-tools">
+          <a class="btn btn-icon-toggle btn-default-light pull-right" data-dismiss="offcanvas">
+            <i class="fa fa-times text-danger"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="offcanvas-body">
+        <ul class="list divider-full-bleed">
+          <li class="tile">
+            <a class="tile-content ink-reaction" onclick="setFilterName(this)" href="#panel-all" role="tab" data-toggle="tab" data-dismiss="offcanvas">
+              <div class="tile-text">
+                All
+              </div>
+            </a>
+          </li>
+          <?php foreach ($kategori as $index => $tab) : ?>
+            <li class="tile">
+              <a class="tile-content ink-reaction" onclick="setFilterName(this)" href="#panel-<?= $index; ?>" role="tab" data-toggle="tab" data-dismiss="offcanvas">
+                <div class="tile-text">
+                  <?= $tab['kategori_nama']; ?>
+                </div>
+              </a>
+            </li>
+          <?php endforeach; ?>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- END OFFCANVAS LEFT -->
 
   <script src="<?= base_url('assets/js/jquery-3.4.1.min.js'); ?>"></script>
   <script type="text/javascript">
@@ -351,35 +389,41 @@
       })
     });
 
+    function setFilterName(e) {
+      let tag = e.querySelector('.tile-text').innerHTML.trim();
+      document.querySelector('.filter').innerHTML = `${tag} &nbsp;<i class="fa fa-filter "></i>`;
+    }
+
     $(() => {
       setTimeout(() => {
         document.querySelector('#loading-screen').style.display = 'none';
         document.querySelector('#base').style.display = 'block';
 
-        //Button Prev Next Category
-        let menus = $("#menus"),
-          menuWidth = menus.parent().outerWidth();
-        let menupage = Math.ceil(menus[0].scrollWidth / menuWidth),
-          currPage = 1;
-        if (menupage > 1) {
-          $('#goPrev').click(function() {
-            $('.wrap').animate({
-              scrollLeft: '-=100'
-            }, 200);
-          });
+        //   //Button Prev Next Category
+        //   let menus = $("#menus"),
+        //     menuWidth = menus.parent().outerWidth();
+        //   let menupage = Math.ceil(menus[0].scrollWidth / menuWidth),
+        //     currPage = 1;
+        //   if (menupage > 1) {
+        //     $('#goPrev').click(function() {
+        //       $('.wrap').animate({
+        //         scrollLeft: '-=100'
+        //       }, 200);
+        //     });
 
-          $('#goNext').click(function() {
-            $('.wrap').animate({
-              scrollLeft: '+=100'
-            }, 200);
-          });
-          $(window).on("resize", function() {
-            menuWidth = menus.parent().outerWidth();
-            menupage = Math.ceil(menus[0].scrollWidth / menuWidth);
-            currPage = Math.ceil(-parseInt(menus.css("left")) / menuWidth) + 1;
-          });
-        }
+        //     $('#goNext').click(function() {
+        //       $('.wrap').animate({
+        //         scrollLeft: '+=100'
+        //       }, 200);
+        //     });
+        //     $(window).on("resize", function() {
+        //       menuWidth = menus.parent().outerWidth();
+        //       menupage = Math.ceil(menus[0].scrollWidth / menuWidth);
+        //       currPage = Math.ceil(-parseInt(menus.css("left")) / menuWidth) + 1;
+        //     });
+        //   }
       }, 2000)
+
       let qtyViewCartButton = 0;
       let subTotalViewCartButton = 0;
       if (isEmptyObj(cart)) {
@@ -394,9 +438,15 @@
       $('#grandTotalViewCart').html(`Rp ${Number(subTotalViewCartButton).toLocaleString('id-ID')}`);
     });
   </script>
-  </div>
-  </div>
+  <script src="<?= base_url('assets/js/jquery-3.4.1.min.js'); ?>"></script>
   <script src="<?= base_url('assets/js/bootstrap/bootstrap.min.js'); ?>"></script>
+  <script src="<?= base_url('assets/js/source/App.js'); ?>"></script>
+  <script src="<?= base_url('assets/js/source/AppNavigation.js'); ?>"></script>
+  <script src="<?= base_url('assets/js/source/AppOffcanvas.js'); ?>"></script>
+  <script src="<?= base_url('assets/js/source/AppCard.js'); ?>"></script>
+  <script src="<?= base_url('assets/js/source/AppForm.js'); ?>"></script>
+  <script src="<?= base_url('assets/js/source/AppNavSearch.js'); ?>"></script>
+  <script src="<?= base_url('assets/js/source/AppVendor.js') ?>"></script>
 </body>
 
 </html>
