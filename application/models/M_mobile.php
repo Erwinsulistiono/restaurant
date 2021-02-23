@@ -40,4 +40,15 @@ class M_mobile extends CI_Model
 
         return $query->row_array();
     }
+
+    function check_member($plg_notelp, $plg_socmed)
+    {
+        $query = $this->db->select()
+            ->from('tbl_pelanggan')
+            ->like('plg_socmed', $plg_socmed)
+            ->like('plg_notelp', $plg_notelp)
+            ->get();
+
+        return $query->row_array();
+    }
 }

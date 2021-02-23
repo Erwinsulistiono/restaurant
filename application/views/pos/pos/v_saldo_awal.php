@@ -1,6 +1,5 @@
 <div id="base">
-  <div class="offcanvas">
-  </div>
+
   <div id="content">
     <br />
     <section class="section-account">
@@ -12,12 +11,10 @@
               <span class="text-lg text-bold text-primary">Input Saldo Awal</span>
               <br />
 
-              <form class='form floating-label' action='<?= base_url('pos/saldo/simpan_saldo_outlet'); ?>'
-                accept-charset='utf-8' method='post'>
+              <form class='form floating-label' action='<?= base_url('pos/saldo/simpan_saldo_outlet'); ?>' accept-charset='utf-8' method='post'>
                 <div class="form-group">
                   <div class="col-xs-8">
-                    <input type="text" data-type="currency" name="kas_saldo_awal" class="form-control" 
-                      required>
+                    <input type="text" data-type="currency" name="kas_saldo_awal" class="form-control" required>
                   </div>
                 </div>
                 <div class="row">

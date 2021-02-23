@@ -241,7 +241,6 @@
           itemCopy = {};
           for (p in item) {
             itemCopy[p] = item[p];
-
           }
           itemCopy.total = Number(item.price * item.count).toFixed(2);
           cartCopy.push(itemCopy)
@@ -443,10 +442,6 @@
   <script src="<?= base_url('assets/js/source/App.js'); ?>"></script>
   <script src="<?= base_url('assets/js/source/AppNavigation.js'); ?>"></script>
   <script src="<?= base_url('assets/js/source/AppOffcanvas.js'); ?>"></script>
-  <script src="<?= base_url('assets/js/source/AppCard.js'); ?>"></script>
-  <script src="<?= base_url('assets/js/source/AppForm.js'); ?>"></script>
-  <script src="<?= base_url('assets/js/source/AppNavSearch.js'); ?>"></script>
-  <script src="<?= base_url('assets/js/source/AppVendor.js') ?>"></script>
 </body>
 
 </html>

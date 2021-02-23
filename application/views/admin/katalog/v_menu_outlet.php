@@ -1,5 +1,4 @@
 <div id="base">
-  <div class="offcanvas"></div>
 
   <div id="content">
     <section>

@@ -1,9 +1,8 @@
 <img id="loading-screen" src="<?= base_url('assets/img/loading.svg'); ?>" class="img-responsive" alt="" style="display: block; position: fixed; top: 40%; left: 45%; z-index: 1001;" />
-<!-- BEGIN BASE-->
-<div id="base" style="display:none;">
-  <div class="offcanvas"></div>
-  <div id="content">
 
+<div id="base" style="display:none;">
+
+  <div id="content">
     <section>
       <div class="section-header">
         <h2><span class="fa fa-cutlery"></span> Point of Sale</h2>

@@ -25,7 +25,7 @@
                                                     <option value="<?= $row['tipe_transaksi_id']; ?>"><?= $row['tipe_transaksi_nama']; ?></option>
                                                 <?php endforeach; ?>
                                             </select>
-                                            <label for="selectMethodOfTable">Jenis Order : *</label>
+                                            <label for="selectMethodOfTable">Jenis Order : <sup style="color: red;">&#10038<sup></label>
                                         </div>
                                         <div class="form-group floating-label dirty" id="selectInput"></div>
                                         <div class="form-group floating-label dirty" id="plg_notelp"></div>
@@ -61,31 +61,31 @@
                 })
                 div +=
                     `</select>
-                    <label for="selectInput">Pilih Meja : *</label>`;
+                    <label for="selectInput">Pilih Meja : <sup style="color: red;">&#10038<sup></label>`;
                 divTelp +=
                     `<input type="text" class="form-control dirty" id="plg_nama" name="plg_nama">
-                    <label for="plg_nama">Nama : *</label>`;
+                    <label for="plg_nama">Nama : <sup style="color: red;">&#10038<sup></label>`;
             }
 
             if (methodType == 2) {
                 divTelp +=
                     `<input type="text" class="form-control dirty" id="plg_notelp" name="plg_notelp">
-                    <label for="plg_notelp">No Telp : *</label>`;
+                    <label for="plg_notelp">No Telp : <sup style="color: red;">&#10038<sup></label>`;
             }
 
             if (methodType == 3) {
                 div +=
                     `<input type="text" class="form-control dirty" id="plg_platno" name="plg_platno" required>
-                    <label >Nomor Plat Kendaraan : *</label>`;
+                    <label >Nomor Plat Kendaraan : <sup style="color: red;">&#10038<sup></label>`;
                 divTelp +=
                     `<input type="text" class="form-control dirty" id="plg_notelp" name="plg_notelp">
-                    <label for="plg_notelp">No Telp : *</label>`;
+                    <label for="plg_notelp">No Telp : <sup style="color: red;">&#10038<sup></label>`;
             }
 
             if (methodType == 4) {
                 divTelp +=
                     `<input type="text" class="form-control dirty" id="plg_notelp" name="plg_notelp">
-                    <label for="plg_notelp">No Telp : *</label>`;
+                    <label for="plg_notelp">No Telp : <sup style="color: red;">&#10038<sup></label>`;
             }
 
             document.querySelector('#selectInput').innerHTML = div

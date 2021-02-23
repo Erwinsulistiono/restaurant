@@ -42,8 +42,8 @@ class Pos extends MY_Controller
 	{
 		$data_post = json_decode(file_get_contents('php://input'), true);
 		$data_pelanggan = $this->proses_pelanggan($data_post);
-		$this->prosesPesanan($data_post, $data_pelanggan['plg_id']);
 
+		$this->prosesPesanan($data_post, $data_pelanggan['plg_id']);
 		$this->session->set_flashdata('msg', '<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Terimakasih Sudah Memesan di resto kami.</div>');
 		$data_pelanggan['hashed'] = md5($data_pelanggan['plg_id'] . '-' . $data_post['db']);
 		echo json_encode($data_pelanggan);
@@ -99,24 +99,38 @@ class Pos extends MY_Controller
 
 	function proses_pelanggan($data)
 	{
-		$data_pelanggan = [
-			'plg_nama' => strip_tags(str_replace("'", "", $data['cust_nama'])),
-			'plg_notelp' => $data['cust_telp'],
-			'plg_platno' => $data['cust_platno'],
-			'plg_alamat' => $data['cust_alamat'],
-			'plg_login_flg' => 'Y',
-			'plg_meja' => $data['cust_meja'],
-			'plg_socmed' => '',
-			'plg_status' => 'pelanggan',
-		];
 		if ($data['customerId'] == 0) {
+			$data_pelanggan = [
+				'plg_nama' => strip_tags(str_replace("'", "", $data['cust_nama'])),
+				'plg_notelp' => $data['cust_telp'],
+				'plg_platno' => $data['cust_platno'],
+				'plg_alamat' => $data['cust_alamat'],
+				'plg_login_flg' => 'Y',
+				'plg_meja' => $data['cust_meja'],
+				'plg_socmed' => $data['cust_meja'] ? $data['cust_meja'] : '',
+				'plg_status' => $data['cust_meja'] ? 'member' : 'pelanggan',
+			];
+
 			$this->M_crud->insert('tbl_pelanggan', $data_pelanggan);
 			$data_pelanggan['plg_id'] = $this->db->insert_id();
 			return $data_pelanggan;
+		} else {
+			$data_table = $this->M_crud->select('tbl_pelanggan', 'plg_id', $data['customerId']);
+			$data_pelanggan = [
+				'plg_id' => $data['customerId'],
+				'plg_nama' => strip_tags(str_replace("'", "", $data['cust_nama'])),
+				'plg_notelp' => $data_table['plg_notelp'],
+				'plg_platno' => $data['cust_platno'],
+				'plg_alamat' => $data['cust_alamat'],
+				'plg_login_flg' => 'Y',
+				'plg_meja' => $data['cust_meja'],
+				'plg_socmed' => $data_table['plg_socmed'],
+				'plg_status' => $data_table['plg_status'],
+			];
+
+			$this->M_crud->update('tbl_pelanggan', $data_pelanggan, 'plg_id', $data['customerId']);
+			return $data_pelanggan;
 		}
-		$this->M_crud->update('tbl_pelanggan', $data_pelanggan, 'plg_id', $data['customerId']);
-		$data_pelanggan['plg_id'] = $data['customerId'];
-		return $data_pelanggan;
 	}
 
 

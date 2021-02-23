@@ -9,7 +9,7 @@
 
           <button onclick="window.history.back()" class="btn btn-primary"><span class="fa fa-chevron-left" aria-hidden="true"></span> Back</button>
         </div>
-        <div class="container-fluid no-padding" style="min-height:89vh; margin-top:5vh;">
+        <div class="container-fluid no-padding" style="min-height:87vh; margin-top:5vh;">
           <div class="col-md-12 col-xs-12 col-sm-12 no-padding">
             <table class="table no-margin">
               <div class="caption">
@@ -149,7 +149,7 @@
                 <div class="form-group" style="visibility:<?= $type ?>">
                   <div class="row">
                     <div class="col-xs-12">
-                      <label for="nomorKartu" class="col-xs-4 control-label">No.HP/Kartu *</label>
+                      <label for="nomorKartu" class="col-xs-4 control-label">No.HP/Kartu <sup style="color: red;">&#10038<sup></label>
                       <div class="col-xs-7">
                         <input type="<?= $type ?>" name="trx_cardno" class="form-control" id="nomorKartu<?= $k_id ?>" required>
                       </div>
@@ -182,7 +182,7 @@
               </div>
               <div class="card-body">
                 Silahkan scan qrcode dan lakukan pembayaran.
-                Masukan no-reff transaksi dan no-handphone pada kolom yang telah disediakan. (Required*)
+                Masukan no-reff transaksi dan no-handphone pada kolom yang telah disediakan. (Required<sup style="color: red;">&#10038<sup>)
               </div>
               <div class="modal-footer">
                 <a class="simpanPembayaran btn btn-success btn-raised" data-paymentid="<?= $k_id; ?>" data-paymentnama="<?= $k_nama; ?>">Ok</a>
@@ -272,7 +272,6 @@
               carts.splice(item, 1)
             }
           }
-          console.log(carts)
           saveCart()
           displayCart()
         });
@@ -388,6 +387,7 @@
       const url = '<?= base_url('mobile/pos/confirm_order'); ?>';
       const customer = JSON.parse(sessionStorage.getItem('order'));
       const db = JSON.parse(sessionStorage.getItem('db'));
+      customerId = customer.plg_id ? customer.plg_id : customerId;
       let nomor_kartu = document.querySelector(`#nomorKartu${payment_id}`) ? document.querySelector(`#nomorKartu${payment_id}`).value : '';
       let nomor_reff = document.querySelector(`#nomorReff${payment_id}`) ? document.querySelector(`#nomorReff${payment_id}`).value : '';
       const data = {
@@ -458,11 +458,11 @@
         const result = await response.json();
         if (result) {
           (result) && alert(result);
-
+          alert("berhasil bayar");
           window.location.href = "<?= base_url('order/outlet/') ?>" + db;
           return false;
         } else {
-          alert('gagal');
+          alert('gagal bayar');
         }
       }
 

@@ -297,6 +297,17 @@ class Parameter extends MY_Controller
     redirect('admin/parameter/pelanggan');
   }
 
+  function delete_request_member($plg_id)
+  {
+    $data_old = $this->M_crud->select('tmp_member', 'plg_id', $plg_id);
+    $log_oldval = strtr(json_encode($data_old), array(',' => ' | ', '{' => '', '}' => '', '"' => ''));
+
+    $this->M_log->simpan_log($plg_id, 'PELANGGAN', $log_oldval);
+    $this->M_crud->delete('tmp_member', 'plg_id', $plg_id);
+    $this->session->set_flashdata('msg', '<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>Member Request berhasil dibatalkan.</div>');
+    redirect('admin/parameter/pelanggan');
+  }
+
   function hapus_pelanggan($plg_id)
   {
     $data_old = $this->M_crud->select('tbl_pelanggan', 'plg_id', $plg_id);

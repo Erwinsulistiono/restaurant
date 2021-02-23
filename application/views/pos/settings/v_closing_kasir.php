@@ -1,6 +1,5 @@
 <div id="base">
-  <div class="offcanvas">
-  </div>
+
   <div id="content">
     <br />
     <section class="section-account">

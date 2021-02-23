@@ -1,9 +1,6 @@
 <!-- BEGIN BASE-->
 <div id="base">
 
-  <!-- BEGIN OFFCANVAS LEFT -->
-  <div class="offcanvas"></div>
-
   <div id="content">
     <section>
       <div class="section-header">

@@ -1,12 +1,5 @@
-<!-- BEGIN BASE-->
 <div id="base">
 
-  <!-- BEGIN OFFCANVAS LEFT -->
-  <div class="offcanvas">
-  </div>
-  <!-- END OFFCANVAS LEFT -->
-
-  <!-- BEGIN CONTENT-->
   <div id="content">
     <section>
       <div class="section-header">
@@ -144,7 +137,7 @@
                         </td>
                         <td class="text-right">
                           <button type="submit" class="btn btn-icon btn-primary btn-flat"><i class="fa fa-check" aria-hidden="true"></i></button>
-                          <a href="<?= base_url("admin/parameter/delete_request_member/") ?>" class="btn btn-icon btn-danger btn-flat"><i class="fa fa-times" aria-hidden="true"></i></a>
+                          <a href="<?= base_url("admin/parameter/delete_request_member/$plg_id") ?>" class="btn btn-icon btn-danger btn-flat"><i class="fa fa-times" aria-hidden="true"></i></a>
                         </td>
                       </form>
                     </tr>

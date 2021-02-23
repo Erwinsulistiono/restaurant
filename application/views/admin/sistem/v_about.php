@@ -1,13 +1,5 @@
-<!-- BEGIN BASE-->
 <div id="base">
 
-  <!-- BEGIN OFFCANVAS LEFT -->
-  <div class="offcanvas">
-  </div>
-  <!--end .offcanvas-->
-  <!-- END OFFCANVAS LEFT -->
-
-  <!-- BEGIN CONTENT-->
   <div id="content">
     <section>
       <div class="section-body">

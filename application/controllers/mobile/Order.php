@@ -8,27 +8,37 @@ class Order extends MY_Controller
         $this->load->model('M_mobile');
     }
 
-    public function register($outlet, $tipe_order = null)
+    public function register($outlet, $tipe_order = null, $plg = null, $encode = null)
     {
-        if ($tipe_order == 'meja') {
-            $query = parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY);
-            parse_str($query, $params);
-            ($params) && $meja_id = $params['id'];
-            ($params) && $data['trx_id'] = 1;
-            ($params) && $data['meja_id'] = $meja_id;
-        } else if ($tipe_order == 'mobil') {
-            $data['trx_id'] = 3;
-        } else if ($tipe_order == 'take_away') {
-            $data['trx_id'] = 2;
-        } else if ($tipe_order == 'delivery') {
-            $data['trx_id'] = 4;
+        switch ($tipe_order) {
+            case 'meja':
+                $query = parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY);
+                parse_str($query, $params);
+                ($params) && $meja_id = $params['id'];
+                ($params) && $data['trx_id'] = 1;
+                ($params) && $data['meja_id'] = $meja_id;
+                break;
+            case 'mobil':
+                $data['trx_id'] = 3;
+                break;
+            case 'take_away':
+                $data['trx_id'] = 2;
+                break;
+            case 'delivery':
+                $data['trx_id'] = 4;
+                break;
+            default:
+                break;
         }
 
+        if (isset($plg) && (md5($plg) == $encode)) {
+            $data['pelanggan'] = $this->M_crud->select('tbl_pelanggan', 'plg_id', $plg);
+        }
 
         $data['data'] = $this->M_crud->left_join("tbl_meja_$outlet", 'tbl_area', "tbl_meja_$outlet.meja_lokasi=tbl_area.area_id");
         $data['outlet'] = $this->M_crud->select('tbl_outlet', 'out_id', $outlet);
         $data['method_of_order'] = $this->M_crud->read('tbl_tipe_transaksi');
-        $this->render_mobile('mobile/v_daftar', $data);
+        $this->render_mobile('mobile/v_form_daftar_diri', $data);
     }
 
     public function view_order($outlet, $dataPost = null, $plg_id = null)
@@ -42,7 +52,7 @@ class Order extends MY_Controller
             $data['authPelanggan'] = $authPelanggan;
             $data['dataPost'] = $dataPost;
             $data['method_of_order'] = $this->M_crud->read('tbl_tipe_transaksi');
-            $this->render_mobile('mobile/v_cek_order', $data);
+            $this->render_mobile('mobile/v_form_cek_order', $data);
         }
     }
 
@@ -66,7 +76,7 @@ class Order extends MY_Controller
         $data['order_pelanggan'] = $this->get_data_order_by_trx_id($outlet, $trx_id);
         $data['trx_pelanggan'] = $this->M_crud->select("tbl_trx_pos_$outlet", "trx_id", $trx_id);
 
-        return ($this->render_mobile('mobile/v_sudah_order', $data));
+        return ($this->render_mobile('mobile/v_timeline_order', $data));
     }
 
     public function is_user_session_valid()

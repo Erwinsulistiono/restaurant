@@ -27,7 +27,7 @@
         <section class="style-default no-padding">
             <div class="card" style="min-height:100vh">
                 <div class="card-head style-primary" style="position:fixed; top:0; left:0; right:0; z-index:10001">
-                    <button onclick="window.history.back()" class="btn" style="color: #ffffff; background: #0aa89e"><span class="fa fa-chevron-left "></span> Back</button>
+                    <!-- <button onclick="window.history.back()" class="btn" style="color: #ffffff; background: #0aa89e"><span class="fa fa-chevron-left "></span> Back</button> -->
                 </div>
                 <!--end .card-head -->
                 <div class="card-body no-padding" style="min-height:89vh; padding-top:2vh;">
@@ -67,66 +67,61 @@
         </section>
     </div>
 
-    <script src="<?= base_url('assets/js/bootstrap/bootstrap.min.js'); ?>"></script>
-    <script src="<?= base_url('assets/js/spin/spin.min.js'); ?>"></script>
-    <script src="<?= base_url('assets/js/autosize/jquery.autosize.min.js'); ?>"></script>
-    <script src="<?= base_url('assets/js/moment/moment.min.js'); ?>"></script>
-    <script src="<?= base_url('assets/js/jquery-ui.js'); ?>"></script>
     <script src="<?= base_url('assets/js/jquery-3.4.1.min.js'); ?>"></script>
     <script src="<?= base_url('assets/js/bootstrap.bundle.js'); ?>"></script>
-    <script src="<?= base_url('assets/js/bootstrap-select.js'); ?>"></script>
 
     <script>
         dataPelanggan = (JSON.parse(sessionStorage.getItem('dataPelanggan')));
+        outlet = (JSON.parse(sessionStorage.getItem('db')));
         let redirectPage = () => {
             if (!dataPelanggan) {
                 return document.location = '<?= base_url("order/outlet/") ?>';
             }
-            // redirectPageIfUserSessionValid();
+            redirectPageIfUserSessionValid();
         }
 
-        // const redirectPageIfUserSessionValid = async () => {
-        //     const response = await fetch('<= base_url('mobile/order/is_user_session_valid') ?>', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Accept': 'application/json, text/plain, */*',
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify(dataPelanggan),
-        //     })
-        //     const isValid = await response.json();
-        //     if (isValid) {
-        //         document.location = '<= base_url("mobile/pos/display_pos/${outlet}") ?>';
-        //     } else {
-        //         sessionStorage.removeItem('dataPelanggan');
-        //         document.location = '<= base_url("mobile/order/register/${outlet}") ?>';
-        //     }
-        // }
+        const redirectPageIfUserSessionValid = async () => {
+            const response = await fetch('<?= base_url('mobile/order/is_user_session_valid') ?>', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dataPelanggan),
+            })
+            const isValid = await response.json();
+            if (isValid) {
+                document.location = '<?= base_url("mobile/pos/display_pos/") ?>' + outlet;
+            } else {
+                sessionStorage.removeItem('dataPelanggan');
+                document.location = '<?= base_url("mobile/order/register/") ?>' + outlet;
+            }
+        }
 
-        // let redirectCheckOrder = () => {
-        //     if (!dataPelanggan) {
-        //         return document.location = '<= base_url("mobile/order/view_order/${outlet}") ?>';
-        //     }
-        //     redirectCheckOrderIfUserSessionValid();
-        // }
+        let redirectCheckOrder = () => {
+            if (!dataPelanggan) {
+                return document.location = '<?= base_url("mobile/order/view_order/") ?>' + outlet;
+            }
+            redirectCheckOrderIfUserSessionValid();
+        }
 
-        // const redirectCheckOrderIfUserSessionValid = async () => {
-        //     const response = await fetch('<= base_url('mobile/order/is_user_session_valid') ?>', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Accept': 'application/json, text/plain, */*',
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify(dataPelanggan),
-        //     })
-        //     const isValid = await response.json();
-        //     if (isValid) {
-        //         document.location = '<= base_url("mobile/order/view_order/${outlet}/") ?>' + dataPelanggan.hashed + '/' + dataPelanggan.plg_id;
-        //     } else {
-        //         sessionStorage.removeItem('dataPelanggan');
-        //         document.location = '<= base_url("mobile/order/view_order/${outlet}") ?>';
-        //     }
-        // }
+        const redirectCheckOrderIfUserSessionValid = async () => {
+            const response = await fetch('<?= base_url('mobile/order/is_user_session_valid') ?>', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dataPelanggan),
+            })
+            const isValid = await response.json();
+            if (isValid) {
+                document.location = '<?= base_url("mobile/order/view_order/") ?>' + outlet + '/' + dataPelanggan.hashed + '/' + dataPelanggan.plg_id;
+            } else {
+                sessionStorage.removeItem('dataPelanggan');
+                document.location = '<?= base_url("mobile/order/view_order/") ?>' + outlet;
+            }
+        }
 
 
         document.addEventListener('DOMContentLoaded', function() {

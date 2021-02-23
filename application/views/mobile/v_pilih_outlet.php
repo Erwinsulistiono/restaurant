@@ -1,24 +1,6 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <title>Mi Resto</title>
-
-  BEGIN META
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  END META
-  <link rel="shorcut icon" href="<?= base_url('assets/img/logo.png'); ?>">
-  BEGIN STYLESHEETS
-  <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/bootstrap.css'); ?>" />
-  <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/materialadmin.css'); ?>" />
-  <link type="text/css" rel="stylesheet" href="<?= base_url('assets/font-awesome/css/font-awesome.css'); ?>" />
-  <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/style-material.css'); ?>" />
-  <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/style.css'); ?>" />
-</head> -->
-
 <img id="loading-screen" src="<?= base_url('assets/img/loading.svg') ?>" class="img-responsive" alt="" style="display: block; position: fixed; top: 40%; left: 45%;" />
 <div id="base" style="display: none; height: 100vh; overflow-y: auto;">
+
   <section class="style-default no-padding">
     <div class="card" style="min-height:100vh">
       <div class="card-head style-primary" style="position:fixed; top:0; left:0; right:0; z-index:10001">
@@ -35,7 +17,7 @@
                 <?php $closed = "" ?>
                 <?php $disabled = "" ?>
               <?php endif ?>
-              <a class="text-lg text-medium" href="<?= base_url("order/outlet/$out_id"); ?>" <?= $disabled ?>>
+              <a class="text-lg text-medium" href="<?= base_url("mobile/order/register/$out_id"); ?>" <?= $disabled ?>>
                 <div class="col-xs-12 col-lg-6 hbox-xs" style="border-bottom:solid; border-width:1px; border-color:#b6b6b6">
                   <div class="hbox-column v-top">
                     <div class="clearfix">
