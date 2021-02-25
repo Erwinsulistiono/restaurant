@@ -9,23 +9,12 @@
       <div class="card-head style-primary" style="position:fixed; top:0; left:0; right:0; z-index:1002">
         <button onclick="window.history.back()" class="btn btn-primary"><span class="fa fa-chevron-left" aria-hidden="true"></span> Back</button>
         <a href="#offcanvas-kategori" data-toggle="offcanvas" class="btn filter btn-primary pull-right" style="margin-top:3%;">Kategori &nbsp;<i class="fa fa-filter "></i></a>
+        <a href="#offcanvas-cart" data-toggle="offcanvas" class="btn filter btn-primary pull-right" style="margin-top:3%;">Kategori &nbsp;<i class="fa fa-filter "></i></a>
       </div>
       <div class="container-fluid no-padding" style="min-height:89vh; margin-top:8vh;">
         <div class="col-md-12 col-xs-12 col-sm-12 no-padding">
           <div class="card" style="min-height:89vh; padding-top: 2vh">
-            <!-- <div class="tab-slider">
-              <div class="wrap">
-                <ul class="nav nav-tabs" id="menus" role="tablist" id="example-tabs" data-tabs>
-                  <li role="presentation" class="active"><a href="#panel-all" aria-controls="home" role="tab" data-toggle="tab">Semua</a></li>
-                  <php foreach ($kategori as $index => $tab) : ?>
-                    <li role="presentation"><a href="#panel-<= $index; ?>" role="tab" data-toggle="tab"><= $tab['kategori_nama']; ?></a></li>
-                  <php endforeach; ?>
-                </ul>
-              </div>
-              <button id="goPrev" class="btn btn-default btn-icon"><i class="fa fa-chevron-left "></i></button>
-              <button id="goNext" class="btn btn-default btn-icon"><i class="fa fa-chevron-right "></i></button>
-            </div> -->
-            <div class="msg" style="position:fixed; top:10vh; left:0; right:0; z-index:10001"></div>
+            <div id="msgPos" style="position:fixed; top:10vh; left:0; right:0; z-index:10001"></div>
             <div class="tabs-content" data-tabs-content="example-tabs" style="overflow-y:scroll">
               <div role="tabpanel" class="tab-pane active" id="panel-all">
                 <?php foreach ($data as $index => $table_content) :
@@ -76,7 +65,7 @@
         </div>
       </div>
     </section>
-    <a style="position:fixed; bottom:0" href="<?= base_url('mobile/pos/display_table_cart/'); ?>" class="btn btn-block btn-primary btn-raised">
+    <a style="position:fixed; bottom:0" href="<?= base_url('mobile/pos/display_table_cart/'); ?>" id="viewCart" class="btn btn-block btn-primary btn-raised">
       <div class="row">
         <div class="col-xs-4">View cart</div>
         <div class="col-xs-4" id="qtyViewCart">0 Items</div>
@@ -115,15 +104,15 @@
                 <div class="row">
 
                   <div class="col-xs-5 text-right no-padding">
-                    <a class="minusQtyItems btn btn-default btn-icon btn-raised" data-itemname="<?= $table_content['menu_nama']; ?>" data-itemid="<?= $table_content['menu_id']; ?>" data-itemharga="<?= $table_content['menu_harga_baru']; ?>"><i class="fa fa-minus"></i></a>
+                    <a class="minusQtyItems btn btn-default btn-icon btn-raised" data-itemname="<?= $table_content['menu_nama']; ?>" data-itemid="<?= $table_content['menu_id']; ?>" data-itemharga="<?= $table_content['menu_harga_baru']; ?>"><span class="fa fa-minus"></span></a>
                   </div>
                   <div class="col-xs-2">
                     <div class="form-group">
-                      <input type="number" class="form-control text-center" id="qty-<?= $table_content['menu_id']; ?>" name="qty" value="0" required>
+                      <input type="number" class="form-control text-center" id="qty-<?= $table_content['menu_id']; ?>" name="qty" value="0" required readonly>
                     </div>
                   </div>
                   <div class="col-xs-5 text-left no-padding">
-                    <a class="addQtyItems btn btn-default btn-icon btn-raised" data-itemname="<?= $table_content['menu_nama']; ?>" data-itemid="<?= $table_content['menu_id']; ?>" data-itemharga="<?= $table_content['menu_harga_baru']; ?>"><i class="fa fa-plus"></i></a>
+                    <a class="addQtyItems btn btn-default btn-icon btn-raised" data-itemname="<?= $table_content['menu_nama']; ?>" data-itemid="<?= $table_content['menu_id']; ?>" data-itemharga="<?= $table_content['menu_harga_baru']; ?>"><span class="fa fa-plus"></span></a>
                   </div>
 
                 </div>
@@ -171,14 +160,67 @@
         </ul>
       </div>
     </div>
+
+    <div id="offcanvas-cart" class="offcanvas-pane width-6">
+      <div class="offcanvas-head">
+        <!-- <header>Left off-canvas</header> -->
+        <div class="offcanvas-tools">
+          <a class="btn btn-icon-toggle btn-default-light pull-right" data-dismiss="offcanvas">
+            <i class="fa fa-times text-danger"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="offcanvas-body">
+        <ul class="list divider-full-bleed">
+          <li class="tile">
+            <a class="tile-content ink-reaction" onclick="setFilterName(this)" href="#panel-all" role="tab" data-toggle="tab" data-dismiss="offcanvas">
+              <div class="tile-text">
+                All
+              </div>
+            </a>
+          </li>
+          <?php foreach ($kategori as $index => $tab) : ?>
+            <li class="tile">
+              <a class="tile-content ink-reaction" onclick="setFilterName(this)" href="#panel-<?= $index; ?>" role="tab" data-toggle="tab" data-dismiss="offcanvas">
+                <div class="tile-text">
+                  <?= $tab['kategori_nama']; ?>
+                </div>
+              </a>
+            </li>
+          <?php endforeach; ?>
+        </ul>
+      </div>
+    </div>
   </div>
   <!-- END OFFCANVAS LEFT -->
 
-  <script src="<?= base_url('assets/js/jquery-3.4.1.min.js'); ?>"></script>
   <script type="text/javascript">
-    var data = JSON.parse('<?= json_encode($data) ?>')
-    var ingredient = JSON.parse('<?= json_encode($ingredient) ?>')
-    var inventory = JSON.parse('<?= json_encode($inventory) ?>')
+    var data = JSON.parse('<?= json_encode($data) ?>');
+    var ingredient = JSON.parse('<?= json_encode($ingredient) ?>');
+    var inventory = JSON.parse('<?= json_encode($inventory) ?>');
+    let viewCartBtn = document.querySelector('#viewCart');
+    let addToCartBtn = document.querySelectorAll('.add_cart');
+    let modalMenuBtn = document.querySelectorAll('.modal_add_cart')
+      .forEach(btn => {
+        btn.addEventListener('click', (event) => {
+          openModal(this);
+        })
+      });
+
+    let addQtyBtn = document.querySelectorAll('.addQtyItems')
+      .forEach(btn => {
+        btn.addEventListener('click', (event) => {
+          addQtyItemsToAddToCartBtn(this);
+        })
+      });
+
+    let minusQtyBtn = document.querySelectorAll('.minusQtyItems')
+      .forEach(btn => {
+        btn.addEventListener('click', (event) => {
+          minusQtyItemsToAddToCartBtn(this);
+        })
+      });
 
     var shoppingCart = (function() {
       // =============================
@@ -205,7 +247,7 @@
       function loadCart() {
         cart = JSON.parse(sessionStorage.getItem('shoppingCart'));
       }
-      if (sessionStorage.getItem("shoppingCart") != null) {
+      if (sessionStorage.getItem("shoppingCart")) {
         loadCart();
       }
 
@@ -252,61 +294,47 @@
     })();
 
 
+    addToCartBtn.forEach(btn => {
+      btn.addEventListener('click', (event) => {
+        let id = event.target.dataset.itemid;
+        let name = event.target.dataset.itemname;
+        let qty = document.querySelector(`#qty-${id}`).value;
+        let price = Number(event.target.dataset.itemharga) * qty;
+        let notes = document.querySelector(`#notes_pesanan${id}`).value;
 
-    $('.add_cart').click(function(event) {
-      event.preventDefault();
-      var id = $(this).data('itemid')
-      var name = $(this).data('itemname');
-      var qty = $(`#qty-${id}`).val();
-      var price = Number($(this).data('itemharga')) * qty;
-      var notes = $('#notes_pesanan' + $(this).data("itemid")).val();
+        var recipe = {
+          ...ingredient
+          .filter(ing => ing.ing_menu_id == id)
+          .reduce((nm, currnm) => {
+            nm[currnm.ing_inv_id] = (currnm.ing_qty * currnm.satuan_val);
+            return nm
+          }, {})
+        }
 
-      var recipe = {
-        ...ingredient
-        .filter(ing => ing.ing_menu_id == id)
-        .reduce((nm, currnm) => {
-          nm[currnm.ing_inv_id] = (currnm.ing_qty * currnm.satuan_val);
-          return nm
-        }, {})
-      }
+        if (isEmptyObj(recipe)) {
+          let msg = 'Belum Buat Resep Menu';
+          messageAndResetButton(msg, id);
+          return true;
+        }
 
-      if (isEmptyObj(recipe)) {
-        var msg = `<div class="alert alert-warning animate">
-      <button type="button" class="close" data-dismiss="alert">&times;</button>
-      Belum Buat Stock</div>`
-        $('.msg').html(msg);
-        setTimeout(() => {
-          $('.msg').html('');
-        }, 3000)
-        $(`#qty-${id}`).val(0);
-        $(`#add_cart_${id}`).html('add to cart')
-        return true;
-      }
+        if (isStockZero(recipe)) {
+          let nullRecipe = isStockZero(recipe);
+          let msg = 'Stock Bahan ';
+          nullRecipe.forEach(r => msg += `<strong> ${r.stock_nama} Kosong, </strong>`);
 
-      if (isStockZero(recipe)) {
-        var nullRecipe = isStockZero(recipe)
-        var msg = `<div class="alert alert-warning animate">
-      <button type="button" class="close" data-dismiss="alert">&times;</button>
-      Stock Bahan `
-        nullRecipe.forEach(r => msg += `<strong>Menu Kosong </strong></div>`)
-
-        $('.msg').html(msg);
-        setTimeout(() => {
-          $('.msg').html('');
-        }, 3000)
-        $(`#qty-${id}`).val(0);
-        $(`#add_cart_${id}`).html('add to cart')
-        return true;
-      }
-      shoppingCart.addItemToCart(id, name, price, qty, notes, recipe)
-      calculateItemTotalPriceButtonViewCart()
+          messageAndResetButton(msg, id);
+          return true;
+        }
+        shoppingCart.addItemToCart(id, name, price, qty, notes, recipe)
+        calculateItemTotalPriceButtonViewCart()
+      })
     });
 
-    var isEmptyObj = Obj => {
+    let isEmptyObj = Obj => {
       return ((Object.keys(Obj).length == 0) ? true : false)
     }
 
-    var isStockZero = Obj => {
+    let isStockZero = Obj => {
       let nullInventory =
         inventory.filter(inv => (Object.keys(Obj)
           .includes(inv.stock_id)) && parseInt(inv.stock_qty) === 0)
@@ -314,51 +342,67 @@
       return ((nullInventory.length > 0) ? nullInventory : false)
     }
 
+    let messageAndResetButton = (Obj, id) => {
+      let el = document.querySelector('#msgPos');
+      let qtyBtn = document.querySelector(`#qty-${id}`);
+      let addToCartBtnById = document.querySelector(`#add_cart_${id}`);
+      let msg = `
+        <div class="alert alert-warning animate">
+          <button type="button" class="close" data-dismiss="alert">&times;</button> ${Obj} 
+        </div>`;
+      el.innerHTML = msg;
+      qtyBtn.value = 0;
+      addToCartBtnById.innerHTML = 'add to cart';
+
+      setTimeout(() => {
+        el.innerHTML = '';
+      }, 3000);
+    }
+
     //button add minus qty
-    $('.addQtyItems').click(function(e) {
-      e.preventDefault();
+    let addQtyItemsToAddToCartBtn = e => {
+      event.preventDefault();
       if (!event.detail || event.detail == 1) {
-        let id = $(this).data("itemid");
-        let harga = $(this).data("itemharga");
-        let qty = Number($(`#qty-${id}`).val());
+        let id = e.event.target.closest('a').dataset.itemid;
+        let harga = e.event.target.closest('a').dataset.itemharga;
+        let qty = Number(document.querySelector(`#qty-${id}`).value);
+
         if (qty == 0) {
-          $('.add_cart').css("background-color", "#0aa89e");
+          addToCartBtn.forEach(btn => btn.style.backgroundColor = '#0aa89e');
         };
         qty += 1;
         calculateItemTotalPriceButtonAddCart(id, harga, qty)
       };
-    });
+    }
 
-    $('.minusQtyItems').click(function(e) {
-      e.preventDefault();
+    let minusQtyItemsToAddToCartBtn = e => {
+      event.preventDefault();
       if (!event.detail || event.detail == 1) {
-        let id = $(this).data("itemid");
-        let harga = $(this).data("itemharga");
-        let qty = Number($(`#qty-${id}`).val());
+        let id = e.event.target.closest('a').dataset.itemid;
+        let harga = e.event.target.closest('a').dataset.itemharga;
+        let qty = Number(document.querySelector(`#qty-${id}`).value);
         if (qty > 0) {
           qty -= 1;
           calculateItemTotalPriceButtonAddCart(id, harga, qty);
         };
       };
-    });
+    }
 
     let calculateItemTotalPriceButtonAddCart = (id, harga, qty) => {
+      let qtyBtn = document.querySelector(`#qty-${id}`);
+      let addToCartBtnById = document.querySelector(`#add_cart_${id}`);
+      qtyBtn.value = qty;
+      addToCartBtnById.innerHTML = 'add to cart';
+
       if (qty > 0) {
         harga *= qty;
-        $(`#qty-${id}`).val(qty);
-        $('.add_cart').html(`add to cart - ${Intl.NumberFormat().format(harga)}`);
-        return
-      }
-      harga = 0;
-      $(`#qty-${id}`).val(qty);
-      $('.add_cart').html('add to cart')
-      if (isEmptyObj(cart)) {
-        return
-      }
-      for (var item in cart) {
-        if (cart[item].id === id) {
-          $(`#add_cart_${cart[item].id}`).html(`Delete Item`);
-          $(`#add_cart_${cart[item].id}`).css("background-color", "red");
+        addToCartBtnById.innerHTML += ` - ${Intl.NumberFormat().format(harga)}`;
+      } else {
+        for (var item in cart) {
+          if (parseInt(cart[item].id) === parseInt(id)) {
+            addToCartBtnById.innerHTML = 'Delete Item';
+            addToCartBtnById.style.backgroundColor = 'red';
+          }
         }
       }
     }
@@ -371,56 +415,37 @@
         qtyViewCartButton += Number(cart[item].count);
         subTotalViewCartButton += cart[item].price;
       }
-      $('#qtyViewCart').html(`${qtyViewCartButton} ITEMS`);
-      $('#grandTotalViewCart').html(`Rp ${Number(subTotalViewCartButton).toLocaleString('id-ID')}`);
+
+      viewCartBtn.querySelector('#qtyViewCart').innerHTML = `${qtyViewCartButton} ITEMS`;
+      viewCartBtn.querySelector('#grandTotalViewCart').innerHTML = `Rp ${Number(subTotalViewCartButton).toLocaleString('id-ID')}`;
     }
 
-    $('.modal_add_cart').click(function() {
-      $('.add_cart').css("background-color", "#0aa89e");
-      $('.add_cart').html(`add to cart`);
-      let id = $(this).data("itemid");
+    let openModal = e => {
+      addToCartBtn.forEach(btn => {
+        btn.style.backgroundColor = '#0aa89e';
+        btn.innerHTML = 'add to cart';
+      });
+      let id = e.event.target.parentNode.dataset.itemid;
+      let qtyBtn = document.querySelector(`#qty-${id}`);
+      let addCartBtn = document.querySelector(`#add_cart_${id}`);
 
       cart.forEach(c => {
-        if (c.id === id) {
-          $(`#qty-${id}`).val(c.count);
-          $(`#add_cart_${c.id}`).html(`add to cart - ${(c.price).toLocaleString('id-ID')}`);
+        if (parseInt(c.id) === parseInt(id)) {
+          qtyBtn.value = c.count;
+          addCartBtn.innerHTML = `add to cart - ${(c.price).toLocaleString('id-ID')}`;
         }
       })
-    });
+    }
 
     function setFilterName(e) {
       let tag = e.querySelector('.tile-text').innerHTML.trim();
       document.querySelector('.filter').innerHTML = `${tag} &nbsp;<i class="fa fa-filter "></i>`;
     }
 
-    $(() => {
+    document.addEventListener('DOMContentLoaded', function() {
       setTimeout(() => {
         document.querySelector('#loading-screen').style.display = 'none';
         document.querySelector('#base').style.display = 'block';
-
-        //   //Button Prev Next Category
-        //   let menus = $("#menus"),
-        //     menuWidth = menus.parent().outerWidth();
-        //   let menupage = Math.ceil(menus[0].scrollWidth / menuWidth),
-        //     currPage = 1;
-        //   if (menupage > 1) {
-        //     $('#goPrev').click(function() {
-        //       $('.wrap').animate({
-        //         scrollLeft: '-=100'
-        //       }, 200);
-        //     });
-
-        //     $('#goNext').click(function() {
-        //       $('.wrap').animate({
-        //         scrollLeft: '+=100'
-        //       }, 200);
-        //     });
-        //     $(window).on("resize", function() {
-        //       menuWidth = menus.parent().outerWidth();
-        //       menupage = Math.ceil(menus[0].scrollWidth / menuWidth);
-        //       currPage = Math.ceil(-parseInt(menus.css("left")) / menuWidth) + 1;
-        //     });
-        //   }
       }, 2000)
 
       let qtyViewCartButton = 0;
@@ -433,15 +458,16 @@
         qtyViewCartButton += Number(cart[item].count);
         subTotalViewCartButton += cart[item].price;
       }
-      $('#qtyViewCart').html(`${qtyViewCartButton} ITEMS`);
-      $('#grandTotalViewCart').html(`Rp ${Number(subTotalViewCartButton).toLocaleString('id-ID')}`);
+      viewCartBtn.querySelector('#qtyViewCart').innerHTML = `${qtyViewCartButton} ITEMS`
+      viewCartBtn.querySelector('#grandTotalViewCart').innerHTML = `Rp ${Number(subTotalViewCartButton).toLocaleString('id-ID')}`
     });
   </script>
+
   <script src="<?= base_url('assets/js/jquery-3.4.1.min.js'); ?>"></script>
   <script src="<?= base_url('assets/js/bootstrap/bootstrap.min.js'); ?>"></script>
-  <script src="<?= base_url('assets/js/source/App.js'); ?>"></script>
-  <script src="<?= base_url('assets/js/source/AppNavigation.js'); ?>"></script>
-  <script src="<?= base_url('assets/js/source/AppOffcanvas.js'); ?>"></script>
+  <script src="<?= base_url('assets/js/source/App.min.js'); ?>"></script>
+  <script src="<?= base_url('assets/js/source/AppNavigation.min.js'); ?>"></script>
+  <script src="<?= base_url('assets/js/source/AppOffcanvas.min.js'); ?>"></script>
 </body>
 
 </html>

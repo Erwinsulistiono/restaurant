@@ -25,7 +25,7 @@
                                             <label for="plg_nama">Nama : <sup style="color: red;">&#10038<sup></label>
                                         </div>
                                         <div class="form-group floating-label">
-                                            <input type="number" class="form-control dirty" id="plg_notelp" name="plg_notelp" value="<?= $plg_notelp ? '0' . @$plg_notelp : '' ?>">
+                                            <input type="number" class="form-control dirty" id="plg_notelp" name="plg_notelp" value="<?= isset($plg_notelp) ? '0' . @$plg_notelp : '' ?>">
                                             <label for="plg_notelp">No Telp : <sup style="color: red;">&#10038<sup></label>
                                         </div>
                                         <div class="form-group floating-label">

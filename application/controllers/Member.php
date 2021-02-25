@@ -49,14 +49,20 @@ class Member extends MY_Controller
         $plg_telp = $this->input->post('plg_notelp');
         $plg_socmed = $this->input->post('plg_socmed');
 
+        //check field empty
         if (!$plg_telp || !$plg_socmed) {
             $this->session->set_flashdata('msg', '<div class="alert alert-warning"><button type="button" class="close" data-dismiss="alert">&times;</button>Silahkan isi nomor hp dan akun social media anda.</div>');
             redirect("member/login_member/$out_id/");
         };
 
-        ($plg_telp && $plg_socmed) &&
-            $member = $this->M_mobile->check_member('0' . $plg_telp, '@' . $plg_socmed)['plg_id'];
+        //check apakah sudah menjadi member
+        if ($plg_telp && $plg_socmed) {
+            ($plg_telp[0] != '0') && $plg_telp = '0' . $plg_telp;
+            ($plg_socmed[0] != '@') && $plg_socmed = '@' . $plg_socmed;
+            $member = $this->M_mobile->check_member($plg_telp, $plg_socmed)['plg_id'];
+        }
 
+        //redirect ke halaman pilih jenis pesanan jika member
         $encode = md5($member);
         if (isset($member)) {
             redirect("mobile/order/register/$out_id/0/$member/$encode");
