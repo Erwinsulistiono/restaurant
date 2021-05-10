@@ -100,7 +100,7 @@
 
         let redirectCheckOrder = () => {
             if (!dataPelanggan) {
-                return document.location = '<?= base_url("mobile/order/view_order/") ?>' + outlet;
+                return document.location = '<?= base_url("mobile/order/view_order/") ?>' + 1;
             }
             redirectCheckOrderIfUserSessionValid();
         }

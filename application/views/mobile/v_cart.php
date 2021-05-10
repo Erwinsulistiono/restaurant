@@ -1,16 +1,15 @@
 <body class="full-content">
 
   <img id="loading-screen" src="<?= base_url('assets/img/loading.svg') ?>" class="img-responsive" alt="" style="display: block; position: fixed; top: 40%; left: 45%;" />
-  <form role="form" id="order_form" method="post" action="<?= base_url('mobile/pos/confirm_order/'); ?>">
-    <div id="base" style="display: none;">
-      <!-- BEGIN BASE-->
-      <section class="style-default no-margin" style="padding-bottom: 7vh;">
-        <div class="card-head style-primary" style="position:fixed; top:0; left:0; right:0; z-index:10001">
-
-          <button onclick="window.history.back()" class="btn btn-primary"><span class="fa fa-chevron-left" aria-hidden="true"></span> Back</button>
-        </div>
-        <div class="container-fluid no-padding" style="min-height:87vh; margin-top:5vh;">
-          <div class="col-md-12 col-xs-12 col-sm-12 no-padding">
+  <div id="base" style="display: none;">
+    <!-- BEGIN BASE-->
+    <section class="style-default no-margin" style="padding-bottom: 7vh;">
+      <div class="card-head style-primary" style="position:fixed; top:0; left:0; right:0; z-index:10001">
+        <button onclick="window.history.back()" class="btn btn-primary"><span class="fa fa-chevron-left" aria-hidden="true"></span> Back</button>
+      </div>
+      <div class="container-fluid no-padding" style="min-height:87vh; margin-top:5vh;">
+        <div class="col-md-12 col-xs-12 col-sm-12 no-padding">
+          <form role="form" id="order_form" method="post" action="<?= base_url('mobile/pos/confirm_order/'); ?>">
             <table class="table no-margin">
               <div class="caption">
                 <tbody id="detail-cart">
@@ -60,27 +59,27 @@
                 </tfoot>
               </div>
             </table>
-          </div>
-        </div>
-      </section>
-      <div class="row" style="position:fixed; bottom:0; left:0; right:0;">
-        <div class="btn-raised dropup">
-          <button type="button" class="btn btn-block btn-primary dropdown-toggle" data-toggle="dropdown" tabindex="-1">
-            Confirm Order<div class="pull-right"><span class="caret"></span></div>
-          </button>
-          <ul class="dropdown-menu pull-right" role="menu">
-            <li><a class="simpanPembayaran" id="openTable">Open Table</a></li>
-            <?php
-            foreach ($payment as $k) :
-              $k_id = $k['payment_id'];
-              $k_nama = $k['payment_nama'];
-            ?>
-              <li><a href="#" data-toggle="modal" data-target="#modal_bayar<?= $k_id ?>"><?= $k_nama; ?></a></li>
-            <?php endforeach; ?>
-          </ul>
         </div>
       </div>
+    </section>
+    <div class="row" style="position:fixed; bottom:0; left:0; right:0;">
+      <div class="btn-raised dropup">
+        <button type="button" class="btn btn-block btn-primary dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+          Confirm Order<div class="pull-right"><span class="caret"></span></div>
+        </button>
+        <ul class="dropdown-menu pull-right" role="menu">
+          <li><a class="simpanPembayaran" id="openTable">Open Table</a></li>
+          <?php
+          foreach ($payment as $k) :
+            $k_id = $k['payment_id'];
+            $k_nama = $k['payment_nama'];
+          ?>
+            <li><a href="#" data-toggle="modal" data-target="#modal_bayar<?= $k_id ?>"><?= $k_nama; ?></a></li>
+          <?php endforeach; ?>
+        </ul>
+      </div>
     </div>
+  </div>
   </form>
 
 
@@ -248,7 +247,7 @@
           `<tr>
             <th colspan="3" style="width:95%; font-weight:bold; padding-left:1em;"><em> ${Number(cart.count)} x </em> &nbsp;&nbsp;&nbsp; 
             <b><strong>${cart.name} ${cart.notes && ' - (' + cart.notes + ')'} </strong></b><br/>
-            <p style="color:#1a0dab;"><strong><ins>(Edit)</strong></ins></p>
+            <p style="color:#1a0dab;"><strong><ins>(Edit)</strong></ins></p> 
             </th>
             <th colspan="2" class="text-right" style="padding-right:2em;"> ${Number(cart.count * cart.price)}</th>
           <tr>`;
@@ -390,6 +389,7 @@
       customerId = customer.plg_id ? customer.plg_id : customerId;
       let nomor_kartu = document.querySelector(`#nomorKartu${payment_id}`) ? document.querySelector(`#nomorKartu${payment_id}`).value : '';
       let nomor_reff = document.querySelector(`#nomorReff${payment_id}`) ? document.querySelector(`#nomorReff${payment_id}`).value : '';
+      let discount = clearFormating(document.querySelector('#discount'));
       const data = {
         customerId: customerId,
         cart: carts,
@@ -399,6 +399,8 @@
         cust_notes: (customer.notes) ? customer.notes : '',
         cust_meja: (customer.meja_pelanggan) ? customer.meja_pelanggan : '',
         cust_alamat: (customer.plg_alamat) ? customer.plg_alamat : '',
+        cust_status: (customer.plg_status) ? customer.plg_status : '',
+        cust_discount: discount,
         tipe_transaksi: customer.tipe_transaksi,
         voucher_id: voucher_id,
         payment_id: payment_id,
@@ -423,7 +425,7 @@
           saveCart();
           sessionStorage.setItem('dataPelanggan', JSON.stringify(result));
           alert("berhasil order");
-          window.location.href = "<?= base_url('order/outlet/'); ?>" + db;
+          window.location.href = "<?= base_url('order/'); ?>";
           return false;
         }
       }
@@ -459,7 +461,7 @@
         if (result) {
           (result) && alert(result);
           alert("berhasil bayar");
-          window.location.href = "<?= base_url('order/outlet/') ?>" + db;
+          window.location.href = "<?= base_url('order/') ?>";
           return false;
         } else {
           alert('gagal bayar');
@@ -498,11 +500,18 @@
         })
       }
 
+      displayCart()
+
       setTimeout(() => {
         document.querySelector('#loading-screen').style.display = 'none';
         document.querySelector('#base').style.display = 'block';
-      }, 1000)
-      displayCart()
+
+        if (customer.plg_status == 'member') {
+          let subtotal = document.querySelector('#subTotal').value.replace('.', '');
+          assignFormatingValueToElement(document.querySelector('#discount'), (parseInt(subtotal) / 10));
+          displayCart();
+        }
+      }, 2000)
     })
   </script>
 

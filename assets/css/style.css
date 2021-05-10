@@ -10,17 +10,22 @@
   display: none;
 }
 
-.offcanvas {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  z-index: 1032;
+.cooking {
+  background-color: #dd4445;
+  color: #f3f3f3;
 }
-body.offcanvas-expanded {
-  overflow: hidden;
+
+.waitress {
+  background-color: #fbc134;
+  color: #f3f3f3;
 }
-.offcanvas:first-child {
-  left: 0;
-  right: -36vh !important;
+
+.delivered {
+  background-color: #50a746;
+  color: #f3f3f3;
+}
+
+.kasir {
+  background-color: #3ca2b8;
+  color: #f3f3f3;
 }

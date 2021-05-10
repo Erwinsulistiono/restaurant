@@ -14,7 +14,7 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <br />
-                                    <span class="text-lg text-bold text-primary">Masukan data order : </span>
+                                    <span class="text-lg text-bold text-primary">Masukan Data Order : </span>
                                     <br /><br />
                                     <?= $this->session->flashdata('msg'); ?>
                                     <form class="form" id='customer-form' action='<?= base_url("mobile/order/order_detail/${outlet}"); ?>' method="post">

@@ -30,4 +30,13 @@ class M_kitchen extends CI_Model
 
     return $query->result_array();
   }
+
+  function get_all_order_by_id($trx_id, $outlet_id)
+  {
+    $query = $this->db->where('order_trx_reff', $trx_id)
+      ->like('order_kitchen_flg', 'N')
+      ->count_all_results("tbl_order_$outlet_id");
+
+    return $query;
+  }
 }

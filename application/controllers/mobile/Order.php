@@ -70,6 +70,13 @@ class Order extends MY_Controller
         }
 
         if (!$trx_id) {
+            $data['order_id'] = $this->M_crud->select("cust_order_$outlet", 'order_userid', $plg_id)['order_id'];
+            $data['plg_id'] = $plg_id;
+
+            if ($data['order_id']) {
+                return ($this->render_mobile('mobile/v_belum_approval_kasir'));
+            }
+
             return ($this->render_mobile('mobile/v_belum_order', $data));
         }
 

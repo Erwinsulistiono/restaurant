@@ -11,9 +11,16 @@
                         <button onclick="window.history.back()" class="btn btn-primary"><span class="fa fa-refresh" aria-hidden="true"></span> Refresh</button>
                     </div>
                 </div>
+                <pre>
+                    <?= $order_id; ?>
+                    <?= $plg_id; ?>    
+                    <?php echo 'TEST' ?>
+                </pre>
                 <div class="card-body no-padding text-center" style="margin: 30% 10%">
-                    <img src="<?= base_url('assets/img/PC_Kasir.svg') ?>" class="img-responsive text-center" alt="" />
-                    <h3>Proses Penerimaan Kasir</h3>
+                    <img src="<?= base_url('assets/img/no_data.svg') ?>" class="img-responsive text-center" alt="" />
+                    <h3>Belum ada Order ni, Order Sekarang yuk</h3>
+                    <br/>
+                    <a href="<?= base_url('order') ?>" class="btn btn-primary">Order</a>
                 </div>
             </div>
         </section>

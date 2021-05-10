@@ -26,12 +26,6 @@
 <script src="<?= base_url('assets/js/bootstrap-select.js'); ?>"></script>
 <!-- END JAVASCRIPT -->
 
-<!-- <script type="text/javascript">
-  $('.datepicker').datepicker({
-    format: "yyyy/mm/dd",
-    autoclose: true,
-  });
-</script> -->
 
 <script type="text/javascript">
   $(document).ready(function() {

@@ -7,7 +7,7 @@
     </div>
     <div class="expanded">
       <a href="<?= base_url('login'); ?>">
-        <span class="text-lg text-bold text-primary">F1&nbsp;RESTAURANT</span>
+        <span class="text-lg text-bold text-primary">Mi&nbsp;Resto</span>
       </a>
     </div>
   </div>

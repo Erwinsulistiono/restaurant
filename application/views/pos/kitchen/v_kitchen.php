@@ -224,8 +224,6 @@
         let card = '';
         let isTrxCanceledByKasir = t.trx_cancel_flg;
         let isOrderCanceledByKitchen = t.order_cancel_flg;
-        console.log('t menu kitchen', t.menu_kitchen)
-        console.log(isChoosenKitchen)
 
         if (isDoneCooking == 'N' && isChoosenKitchen && (isTrxCanceledByKasir == 'N' || isOrderCanceledByKitchen == 'N')) {
           card +=
@@ -288,8 +286,7 @@
             orderId: id
           },
           dataType: 'json',
-          success: function(data) {
-            alert(data)
+          success: function() {
             form.remove();
           }
         })

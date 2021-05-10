@@ -18,7 +18,7 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <br />
-                                    <span class="text-lg text-bold text-primary">F1 Restaurant</span>
+                                    <span class="text-lg text-bold text-primary">Mi Resto</span>
                                     <br /><br />
                                     <?= $this->session->flashdata('msg'); ?>
                                     <?php $disabled = '' ?>
@@ -33,12 +33,13 @@
                                     <form class="form" id='customer-form' action='<?= base_url("mobile/pos/display_pos/$out_id"); ?>'>
                                         <div class="form-group floating-label">
                                             <input type="hidden" class="form-control dirty" id="plg_id" name="plg_id" value="<?= @$pelanggan['plg_id'] ?>" required>
+                                            <input type="hidden" class="form-control dirty" id="plg_status" name="plg_status" value="<?= isset($pelanggan['plg_id']) ? 'member' : 'pelanggan' ?>" required>
                                             <input type="text" class="form-control dirty" id="plg_nama" name="plg_nama" value="<?= @$pelanggan['plg_nama'] ?>" required>
                                             <label for="username">Nama : <sup style="color: red;">&#10038<sup></label>
                                         </div>
                                         <div class="form-group floating-label">
                                             <input type="number" class="form-control dirty" id="plg_notelp" value="<?= @$pelanggan['plg_notelp'] ?>" name="plg_notelp">
-                                            <label for="plg_notelp">No Telp : </label>
+                                            <label for="plg_notelp">No Handphone : </label>
                                         </div>
                                         <div class="form-group floating-label">
 
@@ -205,7 +206,6 @@
                 for (var key of formData.keys()) {
                     obj[key] = formData.get(key);
                 }
-                console.log(obj)
                 return obj;
             };
             sessionStorage.setItem('order', JSON.stringify(data()));

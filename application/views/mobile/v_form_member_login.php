@@ -15,7 +15,7 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <br />
-                                    <span class="text-lg text-bold text-primary">F1 Restaurant</span>
+                                    <span class="text-lg text-bold text-primary">Mi Resto</span>
                                     <br /><br /><br />
                                     <?= $this->session->flashdata('msg'); ?>
 
@@ -29,7 +29,7 @@
                                                     <input type="text" class="form-control dirty" id="plg_notelp" name="plg_notelp" placeholder="81287392684" required>
                                                 </div>
                                             </div>
-                                            <label for="plg_notelp">Nomor Telp : <sup style="color: red;">&#10038<sup><br /></label>
+                                            <label for="plg_notelp">Nomor Handphone : <sup style="color: red;">&#10038<sup><br /></label>
                                         </div>
                                         <div class="form-group floating-label" style="margin-bottom: 10px">
                                             <div class="row no-padding" style="margin-top: 10px">

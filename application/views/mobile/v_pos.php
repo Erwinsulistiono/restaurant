@@ -9,7 +9,6 @@
       <div class="card-head style-primary" style="position:fixed; top:0; left:0; right:0; z-index:1002">
         <button onclick="window.history.back()" class="btn btn-primary"><span class="fa fa-chevron-left" aria-hidden="true"></span> Back</button>
         <a href="#offcanvas-kategori" data-toggle="offcanvas" class="btn filter btn-primary pull-right" style="margin-top:3%;">Kategori &nbsp;<i class="fa fa-filter "></i></a>
-        <a href="#offcanvas-cart" data-toggle="offcanvas" class="btn filter btn-primary pull-right" style="margin-top:3%;">Kategori &nbsp;<i class="fa fa-filter "></i></a>
       </div>
       <div class="container-fluid no-padding" style="min-height:89vh; margin-top:8vh;">
         <div class="col-md-12 col-xs-12 col-sm-12 no-padding">

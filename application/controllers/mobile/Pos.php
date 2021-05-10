@@ -91,6 +91,7 @@ class Pos extends MY_Controller
 				'order_nomor_kartu' => $data_post['nomor_kartu'],
 				'order_nomor_reff' => $data_post['nomor_reff'],
 				'order_voucher_id' => $data_post['voucher_id'],
+				'order_discount' => $data_post['cust_discount'],
 			);
 		}
 		$this->M_mobile->insert_bulk_order($data, $data_post['db']);
@@ -108,7 +109,7 @@ class Pos extends MY_Controller
 				'plg_login_flg' => 'Y',
 				'plg_meja' => $data['cust_meja'],
 				'plg_socmed' => $data['cust_meja'] ? $data['cust_meja'] : '',
-				'plg_status' => $data['cust_meja'] ? 'member' : 'pelanggan',
+				'plg_status' => ($data['cust_status'] && $data['cust_status'] == 'member')  ? 'member' : 'pelanggan',
 			];
 
 			$this->M_crud->insert('tbl_pelanggan', $data_pelanggan);

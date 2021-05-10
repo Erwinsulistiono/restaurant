@@ -10,13 +10,11 @@
                 <div class="container-fluid no-padding" style="min-height:90vh; padding-top:9vh">
                     <div class="card contain-xs style-transparent no-padding no-margin">
                         <div class="card-body" style="padding-top:20%;">
-                            <!-- <h1><?= @$meja_id ?></h1> -->
-                            <!-- <h1><?php var_dump(@$pelanggan) ?></h1> -->
 
                             <div class="row">
                                 <div class="col-xs-12">
                                     <br />
-                                    <span class="text-lg text-bold text-primary">F1 Restaurant</span>
+                                    <span class="text-lg text-bold text-primary">Mi Resto</span>
                                     <br /><br />
                                     <?= $this->session->flashdata('msg'); ?>
                                     <form class="form" id="customer-form" role="form" method="post" action="<?= base_url("member/daftar_member"); ?>" enctype="multipart/form-data">
@@ -36,10 +34,18 @@
                                             <input type="text" class="form-control dirty" id="plg_email" name="plg_email">
                                             <label for="plg_email">E-Mail : </label>
                                         </div>
-                                        <div class="form-group floating-label">
+                                        <div class="text-center no-padding">
+                                            <a class="btn btn-block btn-primary" href="https://www.instagram.com/miustoree.id/" target="_blank">
+                                                Follow @PT_MIU
+                                            </a>
+                                            <a class="btn btn-block btn-primary" href="https://www.google.com/" target="_blank">
+                                                Follow @Instagram Client
+                                            </a>
+                                        </div>
+                                        <!-- <div class="form-group floating-label">
                                             <textarea name="plg_alamat" id="plg_alamat" class="form-control" rows="3" placeholder="&#10;lokasi parkir eg: lt2 No.2B &#10;patokan alamat kirim dll"></textarea>
                                             <label for="plg_alamat">Alamat : </label>
-                                        </div>
+                                        </div> -->
 
                                         <br />
                                         <button class="btn btn-block btn-primary btn-raised" style="position:fixed; bottom:0; left:0" type="submit">Daftar Member</button>
